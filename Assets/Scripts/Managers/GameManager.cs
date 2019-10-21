@@ -8,7 +8,7 @@ public class GameManager : Singleton<GameManager>
     private PlayerController m_Player;
     private int m_PlayerDistance = 0;
     [SerializeField]
-    private int m_Odds = 100;
+    private int m_Odds = 125;
 
     //Setter since we don't need all the player controller.
     public void PlayerController(PlayerController aPlayer)

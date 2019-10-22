@@ -6,7 +6,7 @@ using UnityEngine;
 public class CursorController : MonoBehaviour
 {
 
-    
+
 
     [SerializeField]
     private List<Transform> m_MainCursorTransform;
@@ -46,12 +46,12 @@ public class CursorController : MonoBehaviour
 
     public void CusorSelctor(int vertical, bool clicEnter)
     {
-  
-        if ( m_subMenu == 0 && (m_IndexVertical + vertical) >= 0 && (m_IndexVertical + vertical) < 4)
+
+        if (m_subMenu == 0 && (m_IndexVertical + vertical) >= 0 && (m_IndexVertical + vertical) < 4)
         {
             m_IndexVertical += vertical;
 
-            switch(m_IndexVertical)
+            switch (m_IndexVertical)
             {
                 case 0: // FIGHT -----------------------------------------------------------
                     transform.position = m_MainCursorTransform[m_IndexVertical].position;
@@ -93,7 +93,7 @@ public class CursorController : MonoBehaviour
                     Activator(5);
                     if (clicEnter)
                     {
-                        string lastScene = LevelManager.Instance.lastScene;
+                        string lastScene = LevelManager.Instance.LastScene;
                         LevelManager.Instance.ChangeLevel(lastScene, true, 1);
                         Debug.Log("FLEE.........");
                     }
@@ -153,7 +153,7 @@ public class CursorController : MonoBehaviour
                 m_ItemMenu.SetActive(false);
                 break;
             case 4: // ITEM
-                for(int i = 0; i < m_FightGameObject.Count; i++)
+                for (int i = 0; i < m_FightGameObject.Count; i++)
                 {
                     m_FightGameObject[i].SetActive(true);
                 }

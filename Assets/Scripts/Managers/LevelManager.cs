@@ -12,6 +12,12 @@ public class LevelManager : Singleton<LevelManager>
     private float m_CurrentTimer;
     private string m_SceneToLoad;
 
+    private string m_LastScene;
+    public string lastScene
+    {
+        get { return m_LastScene; }
+    }
+
     private bool m_SceneLoaded = false;
     private bool m_FadeIn = false;
     private bool m_FadeOut = false;
@@ -108,6 +114,8 @@ public class LevelManager : Singleton<LevelManager>
 
     public void ChangeLevel(string a_Scene, bool a_Fadding, float a_FixedDelay = -1)
     {
+        m_LastScene = SceneManager.GetActiveScene().name;
+
         m_SceneToLoad = a_Scene;
         m_CurrentTimer = (a_FixedDelay == -1) ? m_DelayLoading : a_FixedDelay;
         m_FadeIn = a_Fadding;

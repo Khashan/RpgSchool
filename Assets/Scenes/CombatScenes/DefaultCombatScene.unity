@@ -243,6 +243,13 @@ MonoBehaviour:
   - {fileID: 2114413211}
   - {fileID: 410606451}
   - {fileID: 1544528562}
+  m_FightGameObject:
+  - {fileID: 579729854}
+  - {fileID: 131615278}
+  - {fileID: 947071887}
+  - {fileID: 2114413210}
+  - {fileID: 410606450}
+  - {fileID: 1544528561}
   m_SpellMenu: {fileID: 117703879}
   m_SpellCursorTransform:
   - {fileID: 1102454981}

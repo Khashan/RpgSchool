@@ -17,7 +17,17 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 m_InitialPos;
     private Vector2 m_WantedPos;
+    private bool m_IsInCombat = false;
 
+    public void SetBool(bool aBool)
+    {
+        m_IsInCombat = aBool;
+    }
+    public bool GetBool()
+    {
+        return m_IsInCombat;
+    }
+    
     [SerializeField]
     private int m_DistanceTravelled = 0;
 
@@ -32,49 +42,48 @@ public class PlayerController : MonoBehaviour
     }
     private void Start()
     {
-        m_Speed = m_Data.m_Speed;
         m_Hp = m_Data.m_Hp;
     }
 
     private void Update()
     {
-        
-        float InputsX = Input.GetAxisRaw("Horizontal");
-        float InputsY = Input.GetAxisRaw("Vertical");
-        if(!m_IsMoving)
+        if(!m_IsInCombat)
         {
-            if (InputsX != 0)
+            float InputsX = Input.GetAxisRaw("Horizontal");
+            float InputsY = Input.GetAxisRaw("Vertical");
+            if(!m_IsMoving)
             {
-                m_IsMoving = true;
-                m_PercentageCompletion = 0f;
-                m_InitialPos = transform.position;
-                m_WantedPos = transform.position + new Vector3(InputsX,0,0);
+                if (InputsX != 0)
+                {
+                    m_IsMoving = true;
+                    m_PercentageCompletion = 0f;
+                    m_InitialPos = transform.position;
+                    m_WantedPos = transform.position + new Vector3(InputsX,0,0);
+                }
+
+                else if(InputsY != 0)
+                {
+                    m_IsMoving = true;
+                    m_PercentageCompletion = 0f;
+                    m_InitialPos = transform.position;
+                    m_WantedPos = transform.position + new Vector3(0,InputsY,0);
+                }
             }
 
-            else if(InputsY != 0)
+            if (m_IsMoving)
             {
-                m_IsMoving = true;
-                m_PercentageCompletion = 0f;
-                m_InitialPos = transform.position;
-                m_WantedPos = transform.position + new Vector3(0,InputsY,0);
-            }
-        }
+                m_PercentageCompletion += Time.fixedDeltaTime * m_Speed;
+                m_PercentageCompletion = Mathf.Clamp(m_PercentageCompletion, 0f, 1f);
 
-        if (m_IsMoving)
-        {
-            m_PercentageCompletion += Time.fixedDeltaTime * m_Speed;
-            m_PercentageCompletion = Mathf.Clamp(m_PercentageCompletion, 0f, 1f);
+                transform.position = Vector3.Lerp(m_InitialPos, m_WantedPos, m_PercentageCompletion);
 
-            transform.position = Vector3.Lerp(m_InitialPos, m_WantedPos, m_PercentageCompletion);
-
-            if (m_PercentageCompletion >= 1)
-            {
-                m_DistanceTravelled++;
-                GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
-                m_IsMoving = false;
+                if (m_PercentageCompletion >= 1)
+                {
+                    m_DistanceTravelled++;
+                    GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
+                    m_IsMoving = false;
+                }
             }
         }
     }
-
-
 }

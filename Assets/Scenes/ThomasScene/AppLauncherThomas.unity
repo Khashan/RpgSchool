@@ -155,7 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a703f8f2f908b0b408f0bf671e5dafe8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SceneToGo: ThomasScene
+  m_SceneToGo: MainMenu
 --- !u!1 &932570311
 GameObject:
   m_ObjectHideFlags: 0

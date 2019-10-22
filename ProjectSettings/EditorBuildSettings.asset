@@ -20,4 +20,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CombatScenes/DefaultCombatScene.unity
     guid: af062ac59ecebf14da45e344b6011c87
+  - enabled: 1
+    path: Assets/Scenes/DavidScenes/LoadingScene.unity
+    guid: 4fe53f3b1300a18478f1b6cbc47b1e9c
+  - enabled: 1
+    path: Assets/Scenes/DavidScenes/MainMenu.unity
+    guid: a79e021c0c163fb42be27606821a4051
   m_configObjects: {}

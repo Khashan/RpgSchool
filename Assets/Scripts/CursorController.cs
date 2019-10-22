@@ -41,7 +41,8 @@ public class CursorController : MonoBehaviour
     {
         HUDManager.Instance.ResetLayout();// WARNING...
         transform.position = m_MainCursorTransform[0].position;
-        Activator(4);
+        Activator(6);
+        
     }
 
     public void CusorSelctor(int vertical, bool clicEnter)
@@ -56,12 +57,14 @@ public class CursorController : MonoBehaviour
                 case 0: // FIGHT -----------------------------------------------------------
                     transform.position = m_MainCursorTransform[m_IndexVertical].position;
                     Activator(m_IndexVertical);
-                    Activator(4);
+                    Activator(6);
                     if (clicEnter)
                     {
                         m_subMenu = 1;
                         transform.position = m_FightCursorTransform[0].position;
-                        Debug.Log("FIGHT ***");
+                        Activator(5);
+                        m_FightGameObject[0].SetActive(true);
+                        //Debug.Log("FIGHT ***");
                     }
                     break;
 
@@ -72,7 +75,7 @@ public class CursorController : MonoBehaviour
                     if (clicEnter)
                     {
                         transform.position = m_SpellCursorTransform[0].position;
-                        Debug.Log("Spell selection");
+                        //Debug.Log("Spell selection");
                     }
                     break;
 
@@ -83,7 +86,7 @@ public class CursorController : MonoBehaviour
                     if (clicEnter)
                     {
                         transform.position = m_ItemCursorTransform[0].position;
-                        Debug.Log("Item selection");
+                        //Debug.Log("Item selection");
                     }
                     break;
 
@@ -100,29 +103,51 @@ public class CursorController : MonoBehaviour
                     break;
             }
         }
-        else if (m_subMenu == 1 && (m_IndexVertical + vertical) >= 0 && (m_IndexVertical + vertical) < 6)
+        else if (m_subMenu == 1 && (m_IndexVertical + vertical) >= 0 && (m_IndexVertical + vertical) < 3)
         {
-            switch (m_IndexVertical)
+            m_IndexVertical += vertical;
+
+            if (clicEnter)
             {
-                case 0: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
-                case 1: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
-                case 2: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
-                case 3: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
-                case 4: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
-                case 5: // frien 1 -----------------------------------------------------------  
-                    transform.position = m_FightCursorTransform[m_IndexVertical].position;
-                    break;
+                m_subMenu = 2;
+                Activator(7);
+                transform.position = m_FightCursorTransform[3].position;
+                return;
             }
+            transform.position = m_FightCursorTransform[m_IndexVertical].position;
+            Activator(5);
+            m_FightGameObject[m_IndexVertical].SetActive(true);
+
+        }
+        else if (m_subMenu == 2 && (m_IndexVertical + vertical) >= 0 && (m_IndexVertical + vertical) < 3)
+        {
+            m_IndexVertical += vertical;
+
+            //switch (m_IndexVertical)
+            //{
+            //    case 0: // FIGHT -----------------------------------------------------------
+            //        Debug.Log("fight enemy: " + (m_IndexVertical - 2));
+            //        break;
+
+            //    case 1: // SPELL -----------------------------------------------------------
+ 
+            //        Debug.Log("fight enemy: " + (m_IndexVertical - 2));
+            //        break;
+
+            //    case 2: // POTION -----------------------------------------------------------
+  
+            //        Debug.Log("fight enemy: " + (m_IndexVertical - 2));
+            //        break;
+            //}
+            if (clicEnter)
+            {
+                Debug.Log("fight enemy: " + (m_IndexVertical + 2));
+                return;
+            }
+            transform.position = m_FightCursorTransform[m_IndexVertical + 3].position;
+            Activator(5);
+            m_FightGameObject[m_IndexVertical + 3].SetActive(true);
+
         }
 
 
@@ -163,6 +188,22 @@ public class CursorController : MonoBehaviour
                 {
                     m_FightGameObject[i].SetActive(false);
                 }
+                break;
+            case 6: // ITEM
+                m_FightGameObject[0].SetActive(true);
+                m_FightGameObject[1].SetActive(true);
+                m_FightGameObject[2].SetActive(true);
+                m_FightGameObject[3].SetActive(false);
+                m_FightGameObject[4].SetActive(false);
+                m_FightGameObject[5].SetActive(false);
+                break;
+            case 7: // ITEM
+                m_FightGameObject[0].SetActive(false);
+                m_FightGameObject[1].SetActive(false);
+                m_FightGameObject[2].SetActive(false);
+                m_FightGameObject[3].SetActive(true);
+                m_FightGameObject[4].SetActive(false);
+                m_FightGameObject[5].SetActive(false);
                 break;
         }
     }

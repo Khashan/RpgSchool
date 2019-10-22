@@ -12,6 +12,18 @@ public class LevelManager : Singleton<LevelManager>
     private float m_CurrentTimer;
     private string m_SceneToLoad;
 
+    private string m_CurrentScene;
+    public string CurrentScene
+    {
+        get { return m_CurrentScene; }
+    }
+
+    private string m_LastScene;
+    public string LastScene
+    {
+        get { return m_LastScene; }
+    }
+
     private bool m_SceneLoaded = false;
     private bool m_FadeIn = false;
     private bool m_FadeOut = false;
@@ -72,7 +84,7 @@ public class LevelManager : Singleton<LevelManager>
         m_SceneLoaded = false;
         m_LoadingScreen.blocksRaycasts = true;
 
-        if(!m_FadeIn)
+        if (!m_FadeIn)
         {
             SceneManager.LoadScene(m_SceneToLoad);
         }
@@ -84,7 +96,7 @@ public class LevelManager : Singleton<LevelManager>
         m_LoadingScreen.blocksRaycasts = false;
         m_LoadingScreen.interactable = false;
 
-        if(m_OnLoadingFinished != null)
+        if (m_OnLoadingFinished != null)
         {
             m_OnLoadingFinished();
         }
@@ -108,6 +120,9 @@ public class LevelManager : Singleton<LevelManager>
 
     public void ChangeLevel(string a_Scene, bool a_Fadding, float a_FixedDelay = -1)
     {
+        m_LastScene = SceneManager.GetActiveScene().name;
+        m_CurrentScene = a_Scene;
+
         m_SceneToLoad = a_Scene;
         m_CurrentTimer = (a_FixedDelay == -1) ? m_DelayLoading : a_FixedDelay;
         m_FadeIn = a_Fadding;

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,27 +9,49 @@ public class GameManager : Singleton<GameManager>
     [SerializeField]
     private int m_Odds = 125;
 
-    //Setter since we don't need all the player controller.
+    private KeyValuePair<string, Vector3> m_PlayerOldScenePosition;
+    private KeyValuePair<string, Vector3> m_EmptyKeyValue = new KeyValuePair<string, Vector3>();
+
+    #region Player's functions Access
     public void PlayerController(PlayerController aPlayer)
     {
         m_Player = aPlayer;
     }
 
-    #region Player's functions Access
-    private PlayerController[] GetPlayerTeams()
+    private PlayerController Player
+    {
+        get { return m_Player; }
+    }
+
+    private object[] GetPlayerTeams()
     {
         throw new NotImplementedException("Require Player Controller!");
     }
     #endregion
 
 
+    private void Start()
+    {
+        LevelManager.Instance.m_OnLoadingFinished += OnSceneChanged;
+    }
+
+    private void OnSceneChanged()
+    {
+        if (!m_PlayerOldScenePosition.Equals(m_EmptyKeyValue) && m_PlayerOldScenePosition.Key == LevelManager.Instance.CurrentScene)
+        {
+            Player.transform.position = m_PlayerOldScenePosition.Value;
+        }
+    }
+
     public void GetPlayerDistance(int aInt)
     {
         m_PlayerDistance = aInt;
         System.Random rand = new System.Random();
         int tRandom = rand.Next(1, m_Odds);
-        if(m_PlayerDistance >= tRandom)
+        if (m_PlayerDistance >= tRandom)
         {
+            m_PlayerOldScenePosition = new KeyValuePair<string, Vector3>(LevelManager.Instance.CurrentScene, Player.transform.position);
+
             LevelManager.Instance.ChangeLevel("DefaultCombatScene", true, 0.5f);
             m_PlayerDistance = 0;
             m_Player.SetDistanceTravelled(0);

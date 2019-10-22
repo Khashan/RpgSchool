@@ -13,24 +13,23 @@ public class InputController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
         {
-            m_Cursor.CombatMenuSelector(-1);
+            m_Cursor.CusorSelctor(1, false);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
         {
-            m_Cursor.CombatMenuSelector(1);
+            m_Cursor.CusorSelctor(-1, false);
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
-            m_Cursor.CombatMenuSelector(-1);
+            m_Cursor.CusorSelctor(0, false);
         }
         else if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
-            m_Cursor.CombatMenuSelector(1);
+            m_Cursor.CusorSelctor(0, true);
         }
         else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
         {
-
-            Debug.Log(Input.anyKeyDown);
+            m_Cursor.CusorSelctor(0, true);
         }
     }
 }

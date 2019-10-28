@@ -9,6 +9,7 @@ public class LevelManager : Singleton<LevelManager>
     [SerializeField]
     private float m_DelayLoading = 4f;
 
+    private float m_LoadingSceneTimer;
     private float m_CurrentTimer;
     private string m_SceneToLoad;
 
@@ -60,7 +61,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void FadeIn()
     {
-        m_LoadingScreen.alpha += Time.deltaTime;
+        m_LoadingScreen.alpha += Time.deltaTime / m_LoadingSceneTimer;
 
         if (m_LoadingScreen.alpha == 1)
         {
@@ -71,7 +72,7 @@ public class LevelManager : Singleton<LevelManager>
 
     private void FadeOut()
     {
-        m_LoadingScreen.alpha -= Time.deltaTime;
+        m_LoadingScreen.alpha -= Time.deltaTime / m_LoadingSceneTimer;
 
         if (m_LoadingScreen.alpha == 0)
         {
@@ -124,8 +125,17 @@ public class LevelManager : Singleton<LevelManager>
         m_CurrentScene = a_Scene;
 
         m_SceneToLoad = a_Scene;
-        m_CurrentTimer = (a_FixedDelay == -1) ? m_DelayLoading : a_FixedDelay;
-        m_FadeIn = a_Fadding;
+        m_LoadingSceneTimer = (a_FixedDelay == -1) ? m_DelayLoading : a_FixedDelay;
+        m_CurrentTimer = m_LoadingSceneTimer;
+
+        if (a_FixedDelay > 0)
+        {
+            m_FadeIn = a_Fadding;
+        }
+        else
+        {
+            m_FadeIn = false;
+        }
 
         SceneManager.sceneLoaded += OnLoadingDone;
         StartLoading();

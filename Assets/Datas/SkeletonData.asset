@@ -15,4 +15,5 @@ MonoBehaviour:
   m_MaxHealth: 100
   m_CurrentHealth: 100
   m_AttackDamage: 40
-  m_CharacterVisualPrefab: {fileID: 0}
+  m_CharacterVisualPrefab: {fileID: 2240829662953771401, guid: 9b5d3635680dd48448b9bea81ec0ac6a,
+    type: 3}

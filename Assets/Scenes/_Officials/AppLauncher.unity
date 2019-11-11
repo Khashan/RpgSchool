@@ -112,6 +112,59 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &102337681
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 102337683}
+  - component: {fileID: 102337682}
+  m_Layer: 0
+  m_Name: CombatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &102337682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102337681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d66e84c619efe8842b0a98aec59b8e55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ListBackground: []
+  m_PossibleEnnemyList: []
+  m_PlayerTeam:
+  - {fileID: 11400000, guid: 11644b02bb46406438a9d3c30c201bf6, type: 2}
+  - {fileID: 11400000, guid: 1bf77f1b2a28c5040a5a4dccd3ea4a47, type: 2}
+  - {fileID: 11400000, guid: 9c26ceefcd1db574d9c1adcbdad625ce, type: 2}
+  m_EnnemyTeam:
+  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
+  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
+  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
+--- !u!4 &102337683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 102337681}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.753364, y: -0.42768496, z: -0.115234375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &376357863
 GameObject:
   m_ObjectHideFlags: 0
@@ -156,7 +209,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SceneToGo: MainMenu
-  m_Music: {fileID: 8300000, guid: 5ff2e6f1536b79648ac9707b8a694565, type: 3}
 --- !u!1 &932570311
 GameObject:
   m_ObjectHideFlags: 0

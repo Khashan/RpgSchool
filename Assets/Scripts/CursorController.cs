@@ -14,6 +14,8 @@ public class CursorController : MonoBehaviour
     private int m_IndexHorizontal = 0;
 
     private int m_subMenu = 0;
+    //MATHIEU**TEMP SELECTOR**
+    private int m_FriendlySelected = 0;
     // --- Fight
     [SerializeField]
     private GameObject m_FightMenu;
@@ -109,6 +111,9 @@ public class CursorController : MonoBehaviour
 
             if (clicEnter)
             {
+                //temp math
+                m_FriendlySelected = m_IndexVertical + 1;
+                Debug.Log(m_FriendlySelected);
                 m_subMenu = 2;
                 Activator(7);
                 transform.position = m_FightCursorTransform[3].position;
@@ -141,7 +146,11 @@ public class CursorController : MonoBehaviour
             //}
             if (clicEnter)
             {
-                Debug.Log("fight enemy: " + (m_IndexVertical + 2));
+                Debug.Log("fight enemy: " + (m_IndexVertical + 1));
+                CombatManager.Instance.Attack(m_FriendlySelected, m_IndexVertical + 1);
+                Activator(0);
+                m_subMenu = 0;
+
                 return;
             }
             transform.position = m_FightCursorTransform[m_IndexVertical + 3].position;

@@ -113,7 +113,7 @@ public class CursorController : MonoBehaviour
             {
                 //temp math
                 m_FriendlySelected = m_IndexVertical + 1;
-                Debug.Log(m_FriendlySelected);
+//                Debug.Log(m_FriendlySelected);
                 m_subMenu = 2;
                 Activator(7);
                 transform.position = m_FightCursorTransform[3].position;
@@ -146,7 +146,7 @@ public class CursorController : MonoBehaviour
             //}
             if (clicEnter)
             {
-                Debug.Log("fight enemy: " + (m_IndexVertical + 1));
+//                Debug.Log("FRIENDLY = " + m_FriendlySelected + "    fight enemy: " + (m_IndexVertical + 1));
                 CombatManager.Instance.Attack(m_FriendlySelected, m_IndexVertical + 1);
                 Activator(0);
                 m_subMenu = 0;

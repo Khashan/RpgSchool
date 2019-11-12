@@ -10,4 +10,5 @@ public class CharacterData : ScriptableObject
     public int m_CurrentHealth = 100;
     public int m_AttackDamage = 40;
     public GameObject m_CharacterPrefab;
+    //public int m_OrderInLayer = 8;
 }

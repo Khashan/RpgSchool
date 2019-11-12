@@ -35,15 +35,17 @@ public class CombatController : MonoBehaviour
     private bool m_isIdle = true;
     private int m_oldorderinlayer;
 
+    private bool m_isEnnemyTurn = false;
+
 
     private void Start()
     {
 
 
         CombatManager.Instance.CombatController = this;
+        CombatManager.Instance.InitEnnemyTeam();
         CombatManager.Instance.CombatSetup();
 
-        //CombatManager.Instance.InitEnnemyTeam();
         //CombatManager.Instance.CombatSetup(m_FriendlyList, m_EnnemyList);
 
         //m_FriendlyIdlePositions[0] = new Vector2(m_FriendlyList[0].transform.position.x, m_FriendlyList[0].transform.position.y);
@@ -119,6 +121,7 @@ public class CombatController : MonoBehaviour
                 {
                     m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentFriendlyGO, m_CurrentDestination, m_CurentIdle, m_TravelLerpDuration));
                 }
+                Debug.Log("not in begin pos");
 
             }
             else if(m_isDoneAttacking && m_CurrentFriendlyGO.transform.position == m_CurentIdle)
@@ -128,6 +131,7 @@ public class CombatController : MonoBehaviour
                 m_CurrentFriendlyAnim.SetBool("isIdle", true);
                 m_CurrentFriendlyAnim.StopPlayback();
                 m_IsFriendlyAttacking = false;
+
                 ClearCurrentTurn();
             }
             
@@ -146,6 +150,7 @@ public class CombatController : MonoBehaviour
 
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
+        Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyGO = m_EnnemyList[aAttackedPosition -1];
@@ -161,6 +166,10 @@ public class CombatController : MonoBehaviour
         m_oldorderinlayer = m_CurrentRend.sortingOrder;
         m_CurrentRend.sortingOrder = 12;
         //Debug.Log("ORIGIN = " + m_CurentIdle + "      DESTINATION: " + m_CurrentDestination);
+        if(!m_IsFriendlyAttacking)
+        {
+            Debug.LogError("STATS WERE NOT SET CORRECTLY");
+        }
     }
 
     public IEnumerator WaitForAttack(float aSecs)

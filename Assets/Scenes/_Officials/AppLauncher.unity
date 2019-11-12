@@ -142,15 +142,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ListBackground: []
-  m_PossibleEnnemyList: []
+  m_PossibleEnnemyList:
+  - {fileID: 11400000, guid: da2feb9d1823bb34889e826b96d427b8, type: 2}
+  - {fileID: 11400000, guid: 35ff175d606f0aa428397f639b6b6937, type: 2}
+  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
   m_PlayerTeam:
   - {fileID: 11400000, guid: 11644b02bb46406438a9d3c30c201bf6, type: 2}
   - {fileID: 11400000, guid: 1bf77f1b2a28c5040a5a4dccd3ea4a47, type: 2}
   - {fileID: 11400000, guid: 9c26ceefcd1db574d9c1adcbdad625ce, type: 2}
-  m_EnnemyTeam:
-  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
-  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
-  - {fileID: 11400000, guid: a9b2ed7edfa42ce4d8cf7620d3bb9638, type: 2}
 --- !u!4 &102337683
 Transform:
   m_ObjectHideFlags: 0

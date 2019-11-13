@@ -1,14 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = MENU_PATH + "AttackAbility")]
+[CreateAssetMenu(menuName = MENU_PATH + "Attack")]
 public class AttackAbility : BaseAbility
 {
     public enum AttackType
     {
-        INSTANT,
-        EFFECT
+        NONE,
+        ADD_INSTANT_DMG
     }
 
     public enum AttackTarget
@@ -39,12 +37,17 @@ public class AttackAbility : BaseAbility
     {
         base.CastAbilityTo(aTargets);
 
-        if (m_AttackType == AttackType.INSTANT)
+        if (m_AttackType == AttackType.ADD_INSTANT_DMG)
         {
-            for (int i = 0; i < aTargets.Length; i++)
-            {
-                aTargets[i].ReceiveDamage(m_AbilityFirstDamage);
-            }
+            ApplyInstantDamage(aTargets);
+        }
+    }
+
+    private void ApplyInstantDamage(IFighter[] aTargets)
+    {
+        for (int i = 0; i < aTargets.Length; i++)
+        {
+            aTargets[i].ReceiveDamage(m_AbilityFirstDamage);
         }
     }
 }

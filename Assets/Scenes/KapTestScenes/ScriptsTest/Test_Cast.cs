@@ -25,4 +25,14 @@ public class Test_Cast : MonoBehaviour, IFighter
     {
         Debug.Log("Heal received: " + aHeal);
     }
+
+    public void AddArmor(int aArmor)
+    {
+        Debug.Log("Armor received: " + aArmor);
+    }
+
+    public void Cleanse()
+    {
+        Debug.Log("Cleanse :)");
+    }
 }

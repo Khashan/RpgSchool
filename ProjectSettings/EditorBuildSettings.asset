@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SimonScenes/AbilityTestSc.unity
-    guid: 78b3753686db58e40816ab6c5d24ebaf
-  - enabled: 1
     path: Assets/Scenes/_Officials/AppLauncher.unity
     guid: 994913e47845eda49bb50289a408d087
   - enabled: 1

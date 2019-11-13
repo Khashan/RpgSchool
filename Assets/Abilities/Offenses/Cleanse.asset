@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1451dcbf3cee842a4c1820e52de4dc, type: 3}
+  m_Name: Cleanse
+  m_EditorClassIdentifier: 
+  m_ManaCost: 5
+  m_TurnCoolDown: 4
+  m_AbilityPrefab: {fileID: 0}
+  m_EffectScript: 
+  m_EffectLifeSpan: 0
+  m_EffectPower: 0
+  m_Selection: 0
+  m_AvailableTargets: 2
+  m_OffenseType: 2
+  m_AbilityFirstEffect: 0

@@ -1,4 +1,4 @@
-﻿public class PoisonEffect : BaseAbilityEffect
+﻿public class IgniteEffect : BaseAbilityEffect
 {
     public override void TurnStarts()
     {

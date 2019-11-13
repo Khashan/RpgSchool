@@ -9,12 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f90e46dc764ae5649b4401589f1f42a1, type: 3}
-  m_Name: ExampleAbilityData
+  m_Script: {fileID: 11500000, guid: 4c1451dcbf3cee842a4c1820e52de4dc, type: 3}
+  m_Name: fff
   m_EditorClassIdentifier: 
-  m_ManaCost: 15
-  m_TurnCoolDown: 1
-  m_AllyTargetable: 0
-  m_DamageDone: 255
-  m_HealingDone: 0
+  m_ManaCost: 0
+  m_TurnCoolDown: 0
   m_EffectPrefab: {fileID: 0}
+  m_AbilityScript: PoisonEffect
+  m_OnlyOnSelf: 0
+  m_DefenseType: 0

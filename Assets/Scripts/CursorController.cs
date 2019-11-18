@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class CursorController : MonoBehaviour
@@ -12,6 +13,8 @@ public class CursorController : MonoBehaviour
     private List<Transform> m_MainCursorTransform;
     private int m_IndexVertical = 0;
     private int m_IndexHorizontal = 0;
+    [SerializeField]
+    private Image m_image;
 
     private int m_subMenu = 0;
     //MATHIEU**TEMP SELECTOR**
@@ -43,8 +46,7 @@ public class CursorController : MonoBehaviour
     {
         HUDManager.Instance.ResetLayout();// WARNING...
         transform.position = m_MainCursorTransform[0].position;
-        Activator(6);
-        
+        Activator(6);       
     }
 
     public void CusorSelctor(int vertical, bool clicEnter)
@@ -67,6 +69,8 @@ public class CursorController : MonoBehaviour
                         Activator(5);
                         m_FightGameObject[0].SetActive(true);
                         //Debug.Log("FIGHT ***");
+
+                        //m_image.gameObject.SetActive(false);
                     }
                     break;
 
@@ -215,6 +219,21 @@ public class CursorController : MonoBehaviour
                 m_FightGameObject[5].SetActive(false);
                 break;
         }
+    }
+
+    public void CombatantQuantity(int allie, int ennemy)
+    {
+
+    }
+
+    public void EndRound()
+    {
+
+    }
+
+    public void EndFight()
+    {
+
     }
 
 }

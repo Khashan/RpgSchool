@@ -107,8 +107,8 @@ public class CombatController : MonoBehaviour
         {
             if(m_WaitForNextInput)
             {
-                
-
+                HUDManager.Instance.combatUI.StartRound();
+                m_WaitForNextInput = false;
             }
         }
 
@@ -218,6 +218,7 @@ public class CombatController : MonoBehaviour
                             m_isEnnemyTurnSet = false;
 
                             ClearCurrentTurn();
+                            m_WaitForNextInput = true;
                         }
                     }
                     else
@@ -241,12 +242,13 @@ public class CombatController : MonoBehaviour
         m_CurrentEnnemyAnim = null;
         m_CurrentRend = null;
         m_Coroutine = null;
+
         //m_StartEnnemyCombat = false;
     }
 
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
-        //Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
+        Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyGO = m_EnnemyList[aAttackedPosition -1];

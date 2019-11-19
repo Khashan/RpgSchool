@@ -1005,6 +1005,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7c7a3ca8c5faa4c86daf634ed34c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Name: 
+  m_EditorClassIdentifier: 
   m_Cursor: {fileID: 0}
 --- !u!1 &320411762
 GameObject:
@@ -2315,6 +2325,7 @@ MonoBehaviour:
   m_MainUI: {fileID: 1787576914}
   m_CaveUI: {fileID: 373865950}
   m_CombatUI: {fileID: 1864349680}
+  m_CombatUI_Controller: {fileID: 0}
 --- !u!4 &852291477
 Transform:
   m_ObjectHideFlags: 0
@@ -5253,16 +5264,15 @@ MonoBehaviour:
   - {fileID: 51011076}
   - {fileID: 1529621881}
   m_IndexPos: 0
-  m_TargetFriendPosition:
-  - {fileID: 1905435141}
-  - {fileID: 290712913}
-  - {fileID: 1821155280}
+  m_TargetFriendPosition: []
+  m_Alli01: {fileID: 1905435141}
+  m_Alli02: {fileID: 290712913}
+  m_Alli03: {fileID: 1821155280}
   m_TargetFriendIndexPos: 0
-  m_TargetEnemyPosition:
-  - {fileID: 522841645}
-  - {fileID: 433315076}
-  - {fileID: 1649065611}
-  m_MaxAllie: 0
+  m_TargetEnemyPosition: []
+  m_Enemy01: {fileID: 522841645}
+  m_Enemy02: {fileID: 433315076}
+  m_Enemy03: {fileID: 1649065611}
 --- !u!114 &1864349682
 MonoBehaviour:
   m_ObjectHideFlags: 0

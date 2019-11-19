@@ -14,6 +14,13 @@ public class HUDManager : Singleton<HUDManager>
     private GameObject m_CaveUI;
     [SerializeField]
     private GameObject m_CombatUI;
+    [SerializeField]
+    private CombatUI_Controller m_CombatUI_Controller;
+    public CombatUI_Controller combatUI
+    {
+        set { m_CombatUI_Controller = value; }
+        get { return m_CombatUI_Controller; }
+    }
 
     // fight ui
     // spell ui

@@ -19,33 +19,43 @@ public class CombatUI_Controller : MonoBehaviour
     private int m_LastIndexPos = 0;
 
     [SerializeField]
-    private List<Transform> m_TargetFriendPosition;
+    private List<Transform> m_TargetFriendPosition = new List<Transform>();
+    [SerializeField]
+    private Transform m_Alli01;
+    [SerializeField]
+    private Transform m_Alli02;
+    [SerializeField]
+    private Transform m_Alli03;
     [SerializeField]
     private int m_TargetFriendIndexPos = 0;
     private int m_LastTargetFriendIndexPos = 0;
 
     [SerializeField]
-    private List<Transform> m_TargetEnemyPosition;
+    private List<Transform> m_TargetEnemyPosition = new List<Transform>();
     [SerializeField]
-    //private int m_TargetEnemyIndexPos = 0;
-    //private int m_LastTargetEnemyIndexPos = 0;
+    private Transform m_Enemy01;
+    [SerializeField]
+    private Transform m_Enemy02;
+    [SerializeField]
+    private Transform m_Enemy03;
 
-
-    private int m_MaxAllie = 0;
-    private int m_MaxEnemy = 0;
-
+    private int m_RoundCount = 0;
     private bool m_EnemySelector = false;
 
 
 
     private void Start()
     {
+        HUDManager.Instance.combatUI = this;
+
         m_TargetImage = m_Target.GetComponent<Image>();
 
         m_Target.SetActive(false);
         m_Cursor.SetActive(false);
 
-        InitialiseCharacter(3, 3);
+
+
+        //InitialiseCharacter(1, 1);
     }
 
     private void Update()
@@ -95,13 +105,46 @@ public class CombatUI_Controller : MonoBehaviour
 
     public void InitialiseCharacter(int allie, int ennemy)
     {
-        m_MaxAllie += allie;
-        m_MaxEnemy += ennemy;
+        //Debug.Log(allie + " : " + ennemy);
+        switch(allie)
+        {
+            case 1:
+                m_TargetFriendPosition.Add(m_Alli01);
+                break;
+            case 2:
+                m_TargetFriendPosition.Add(m_Alli01);
+                m_TargetFriendPosition.Add(m_Alli02);
+                break;
+            case 3:
+                m_TargetFriendPosition.Add(m_Alli01);
+                m_TargetFriendPosition.Add(m_Alli02);
+                m_TargetFriendPosition.Add(m_Alli03);
+                break;
+        }
+
+        switch (ennemy)
+        {
+            case 1:
+                m_TargetEnemyPosition.Add(m_Enemy01);
+                break;
+            case 2:
+                m_TargetEnemyPosition.Add(m_Enemy01);
+                m_TargetEnemyPosition.Add(m_Enemy02);
+                break;
+            case 3:
+                m_TargetEnemyPosition.Add(m_Enemy01);
+                m_TargetEnemyPosition.Add(m_Enemy02);
+                m_TargetEnemyPosition.Add(m_Enemy03);
+                break;
+        }
+
+
         StartRound();
     }
 
     public void StartRound()
     {
+        m_TargetFriendIndexPos += m_RoundCount;
         m_Target.transform.position = m_TargetFriendPosition[m_TargetFriendIndexPos].position;
         m_Target.SetActive(true);
         m_Cursor.transform.position = m_CursorPosition[m_IndexPos].position;
@@ -120,6 +163,20 @@ public class CombatUI_Controller : MonoBehaviour
     public void StartFight(int allie, int enemy)
     {
         Debug.Log("Alli :" + allie + " attack -> " + enemy);
+
+        // les alli et enemy sont de 0 a 2
+        CombatManager.Instance.Attack(allie, enemy);
+
+        if (m_RoundCount +1 < m_TargetFriendPosition.Count)
+        {
+            m_RoundCount++;
+        }
+        else
+        {
+            m_RoundCount = 0;
+        }
+
+        StartRound();
     }
 
     private void CursorMove(int indexPos, bool enemySelector)
@@ -136,8 +193,6 @@ public class CombatUI_Controller : MonoBehaviour
 
     public void EndCombat()
     {
-        m_MaxAllie = 0;
-        m_MaxEnemy = 0;
         m_IndexPos = 0;
     }
 

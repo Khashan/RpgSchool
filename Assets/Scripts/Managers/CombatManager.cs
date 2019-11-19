@@ -44,6 +44,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         Debug.Log("Setting Combat");
         m_CombatController.SetupCombat(m_PlayerTeam, m_EnnemyTeam);
+
+        HUDManager.Instance.combatUI.InitialiseCharacter(m_PlayerTeam.Count, m_EnnemyTeam.Count);
     }
 
     public void Attack(int aAttackingPosition, int aAttackedPosition)

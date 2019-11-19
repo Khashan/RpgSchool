@@ -7,9 +7,12 @@ public class NPCMover : MonoBehaviour
     [SerializeField]
     private PlayerData m_Data;
     [SerializeField]
-    private float m_Speed = 1f;
-    [SerializeField]
+    private GameObject m_Instructions;
+
+
+    private float m_Speed;
     private float m_Hp;
+
 
     private float m_PercentageCompletion;
 
@@ -25,6 +28,7 @@ public class NPCMover : MonoBehaviour
     private Vector3 m_Down = new Vector3(1,-1,0);
 
 
+
     public void SetBool(bool aBool)
     {
         m_IsInCombat = aBool;
@@ -36,6 +40,7 @@ public class NPCMover : MonoBehaviour
     
     private void Start()
     {
+        m_Speed = m_Data.m_Speed;
         m_Hp = m_Data.m_Hp;
     }
 
@@ -46,9 +51,9 @@ public class NPCMover : MonoBehaviour
             if(!m_IsMoving)
             {
                 System.Random rand = new System.Random();
-                int tRandom1 = rand.Next(-2, 2);
+                int tRandom1 = rand.Next(-4, 4);
                 System.Random tRand = new System.Random();
-                int tRandom2 = rand.Next(-2, 2);
+                int tRandom2 = rand.Next(-4, 4);
 
                 if (tRandom1 == 1)
                 {
@@ -90,5 +95,27 @@ public class NPCMover : MonoBehaviour
         m_PercentageCompletion = 0f;
         m_InitialPos = transform.position;
         m_WantedPos = transform.position + aOrientation;
+    }
+
+    private void OnTriggerEnter2D(Collider2D aTrig)
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = false;
+        m_IsInCombat = true;
+        PlayerController player = aTrig.GetComponent<PlayerController>();
+        if(player != null)
+        {
+            m_Instructions.SetActive(true);
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D aTrig)
+    {
+        gameObject.GetComponent<SpriteRenderer>().enabled = true;
+        m_IsInCombat = false;
+        PlayerController player = aTrig.GetComponent<PlayerController>();
+        if(player != null)
+        {
+            m_Instructions.SetActive(false);
+        }
     }
 }

@@ -6,9 +6,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerData m_Data;
-    [SerializeField]
     private float m_Speed;
-    [SerializeField]
     private float m_Hp;
 
     private float m_PercentageCompletion;
@@ -44,13 +42,16 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_Speed = m_Data.m_Speed;
         m_Hp = m_Data.m_Hp;
     }
 
     private void Update()
     {
+
         if(!m_IsInCombat)
         {
+            CollectPotion();
             float InputsX = Input.GetAxisRaw("Horizontal");
             float InputsY = Input.GetAxisRaw("Vertical");
             if(!m_IsMoving)
@@ -89,6 +90,21 @@ public class PlayerController : MonoBehaviour
                     m_IsMoving = false;
                 }
             }
+        }
+    }
+
+    private void CollectPotion()
+    {
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            //Collect Potion put it on inventory
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D aCol)
+    {
+        if(aCol.gameObject.layer == 10)
+        {
+            m_WantedPos = m_InitialPos;
         }
     }
 }

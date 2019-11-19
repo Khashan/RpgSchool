@@ -32,7 +32,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         //adding 3 random ennemies from the possible ennemies list
         //this will get called at the start of the combat scene
-        for(int i = 0; i < 3; i++)
+        int ennemycountrand = (int)UnityEngine.Random.Range(1, 4);
+        for(int i = 0; i < ennemycountrand; i++)
         {
             int rand = (int)UnityEngine.Random.Range(0, m_PossibleEnnemyList.Count);
             m_EnnemyTeam.Add(m_PossibleEnnemyList[rand]);

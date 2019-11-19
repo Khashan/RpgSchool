@@ -17781,7 +17781,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Music
       value: 
-      objectReference: {fileID: 8300000, guid: 5ff2e6f1536b79648ac9707b8a694565, type: 3}
+      objectReference: {fileID: 8300000, guid: b6a0d63b1ecf60d4a93123c5ad5e0af3, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: abc1738320fb53f4691811712796d5e4, type: 3}
 --- !u!1 &891415882
@@ -19514,7 +19514,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &956274661
 Transform:
   m_ObjectHideFlags: 0

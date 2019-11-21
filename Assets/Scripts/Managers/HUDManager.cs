@@ -53,7 +53,5 @@ public class HUDManager : Singleton<HUDManager>
                 m_CombatUI.SetActive(true);
                 break;
         }
-    }
-
-    
+    }   
 }

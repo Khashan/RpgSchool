@@ -1,31 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-
-[System.Serializable]
-public struct PoolStruct
-{
-    public GameObject m_Prefab;
-    public int m_Size;
-    [Tooltip("If the the pool already used all its GameObject, Re-Use the first active one")]
-    public bool m_LimitReachUseActiveObject;
-}
 
 public class PoolManager : Singleton<PoolManager>
 {
-    [SerializeField]
+    [System.Serializable]
+    public struct PoolStruct
+    {
+        public GameObject m_Prefab;
+        public int m_Size;
+        [Tooltip("If the the pool already used all its GameObject, Re-Use the first active one")]
+        public bool m_LimitReachUseActiveObject;
+    }
+
     private List<PoolStruct> m_Pools = new List<PoolStruct>();
 
     private Dictionary<GameObject, List<GameObject>> m_PoolsObjects = new Dictionary<GameObject, List<GameObject>>();
     private Dictionary<GameObject, List<GameObject>> m_PoolsActiveObjects = new Dictionary<GameObject, List<GameObject>>();
 
-    protected override void Awake()
+    public void InitalizePools(List<PoolStruct> a_Pools)
     {
-        base.Awake();
+        m_Pools = a_Pools;
+        ClearOlderPools();
         CreatePools();
     }
 
-    //Create Pools
+    private void ClearOlderPools()
+    {
+        //No need to delete, Unity will do it for us during a switch scene.
+        m_PoolsObjects.Clear();
+        m_PoolsActiveObjects.Clear();
+    }
+
     private void CreatePools()
     {
         for (int i = 0; i < m_Pools.Count; i++)
@@ -46,7 +51,6 @@ public class PoolManager : Singleton<PoolManager>
         return a_Pool.m_Prefab != null;
     }
 
-    //Create Pool's Objects
     private void GrowPool(PoolStruct a_Pool)
     {
         for (int i = 0; i < a_Pool.m_Size; i++)
@@ -55,10 +59,9 @@ public class PoolManager : Singleton<PoolManager>
         }
     }
 
-    //Create Object for the pool and config
     private void CreatePooledObject(GameObject a_PoolPrefab)
     {
-        GameObject pooledGameObject = Instantiate(a_PoolPrefab, transform);
+        GameObject pooledGameObject = Instantiate(a_PoolPrefab);
         PooledObject pooledScript = pooledGameObject.GetComponent<PooledObject>();
 
         if (pooledScript == null)
@@ -75,7 +78,12 @@ public class PoolManager : Singleton<PoolManager>
         }
     }
 
-    //Use a Pooled Object from a specific pool
+    public T UseObjectFromPool<T>(GameObject a_Prefab, Vector3 a_Position, Quaternion a_Rotation)
+    {
+        GameObject pooledObject = UseObjectFromPool(a_Prefab, a_Position, a_Rotation);
+        return pooledObject.GetComponent<T>();
+    }
+
     public GameObject UseObjectFromPool(GameObject a_Prefab, Vector3 a_Position, Quaternion a_Rotation)
     {
         GameObject pooledObject = GetObjectFromPool(a_Prefab);
@@ -129,7 +137,6 @@ public class PoolManager : Singleton<PoolManager>
         return null;
     }
 
-    //Get a Pool with a prefab
     private PoolStruct GetPoolStruct(GameObject a_PoolPrefab)
     {
         for (int i = 0; i < m_Pools.Count; i++)

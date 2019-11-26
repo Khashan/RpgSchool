@@ -10,6 +10,8 @@ public class CombatManager : Singleton<CombatManager>
     private List<GameObject> m_ListBackground = new List<GameObject>();
     [SerializeField]
     private List<CharacterData> m_PossibleEnnemyList = new List<CharacterData>();
+    [SerializeField]
+    private HealthBarController m_HealthBarController;
 
     //[SerializeField]
     //private List<>
@@ -26,6 +28,21 @@ public class CombatManager : Singleton<CombatManager>
     public CombatController CombatController
     {
         set{ m_CombatController = value;}
+    }
+
+    public void SetHealthBarController(HealthBarController aController)
+    {
+        m_HealthBarController = aController;
+    }
+
+    public int GetEnnemyTeamSize()
+    {
+        return m_EnnemyTeam.Count;
+    }
+
+    public void ChangeLifeValue(NPCController aNPCDATA, int aPosition)
+    {
+        m_HealthBarController.ChangeLifeValues(aNPCDATA, aPosition);
     }
 
     public void InitEnnemyTeam()

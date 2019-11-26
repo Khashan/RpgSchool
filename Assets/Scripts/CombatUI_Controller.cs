@@ -165,7 +165,7 @@ public class CombatUI_Controller : MonoBehaviour
         Debug.Log("Alli :" + allie + " attack -> " + enemy);
 
         // les alli et enemy sont de 0 a 2
-        CombatManager.Instance.Attack(allie, enemy);
+        CombatManager.Instance.Attack(allie + 1, enemy + 1);
 
         if (m_RoundCount +1 < m_TargetFriendPosition.Count)
         {

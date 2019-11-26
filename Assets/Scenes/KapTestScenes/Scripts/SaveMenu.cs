@@ -42,12 +42,12 @@ public class SaveMenu : MonoBehaviour
     private void ConfigButton(Button aBtn, int aIndex)
     {
         aBtn.interactable = aIndex < m_TotalSaves;
-        bool canBeLoaded = (aIndex < m_TotalSaves) ? SaveFiles.Saves[aIndex] != null : false;
+        bool canBeLoaded = (aIndex < m_TotalSaves) ? SaveFiles.Saves[aIndex].m_File != null : false;
 
         if (canBeLoaded)
         {
             aBtn.onClick.AddListener(() => LoadSave(aIndex));
-            aBtn.GetComponentInChildren<TextMeshProUGUI>()?.SetText("Temp");
+            aBtn.GetComponentInChildren<TextMeshProUGUI>()?.SetText(SaveFiles.Saves[aIndex].m_FileName);
         }
         else
         {
@@ -58,7 +58,7 @@ public class SaveMenu : MonoBehaviour
 
     private void LoadSave(int aId)
     {
-        if (SaveFiles.Load(aId))
+        if (SaveFiles.LoadSave(aId))
         {
 
         }

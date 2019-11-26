@@ -1,20 +1,31 @@
 ﻿using System.IO;
+using System.Text;
 using Newtonsoft.Json;
 using UnityEngine;
 
 public static class SaveFiles
 {
+    [System.Serializable]
+    public struct SaveData
+    {
+        [JsonIgnore]
+        public FileStream m_File;
+        public string m_FileName;
+    }
+
     private const int TOTAL_GAMES = 3;
     private const string SAVE_PATH_FORMAT = "{0}/Saves/save{1}.dat";
 
-    private static FileStream[] m_Saves = new FileStream[TOTAL_GAMES];
-    public static FileStream[] Saves
+    private static SaveData[] m_Saves = new SaveData[TOTAL_GAMES];
+    public static SaveData[] Saves
     {
         get { return m_Saves; }
     }
 
     private static FileStream m_CurrentSave;
     private static StreamWriter m_Writer = null;
+
+    private static string m_FileJson = "";
 
     public static void InitFiles()
     {
@@ -26,14 +37,14 @@ public static class SaveFiles
 
             if (File.Exists(savePath))
             {
-                m_Saves[i] = new FileStream(savePath, FileMode.Open);
+                m_Saves[i] = LoadFileData(savePath);
             }
         }
     }
 
     private static void CreateFolder()
     {
-        string folderPath = (Application.streamingAssetsPath + "/Saves");
+        string folderPath = (Application.persistentDataPath + "/Saves");
 
         if (!Directory.Exists(folderPath))
         {
@@ -41,56 +52,68 @@ public static class SaveFiles
         }
     }
 
-    public static void StartNewGame(int aId, string aName)
+    private static SaveData LoadFileData(string savePath)
     {
-        m_CurrentSave = new FileStream(FormattingPath(aId), FileMode.CreateNew);
-        string json = JsonConvert.SerializeObject(aName, Formatting.None);
+        FileStream file = new FileStream(savePath, FileMode.Open);
+        SaveData save = new SaveData { m_File = file };
 
-        StreamWriter write = new StreamWriter(m_CurrentSave);
-        write.Write(json);
-        write.Close();
+        using (StreamReader reader = new StreamReader(file))
+        {
+            save = JsonConvert.DeserializeObject<SaveData>(reader.ReadToEnd());
+        }
+
+        return save;
     }
 
-    public static bool Load(int aId)
+    public static void StartNewGame(int aId, string aName)
+    {
+        SaveData data = new SaveData { m_File = new FileStream(FormattingPath(aId), FileMode.CreateNew), m_FileName = aName };
+        m_Saves[aId] = data;
+        LoadSave(aId);
+        SaveFile(data);
+    }
+
+    public static bool LoadSave(int aId)
     {
         bool success = false;
 
-        if (m_Saves[aId] != null)
+        if (m_Saves[aId].m_File != null)
         {
-            m_CurrentSave = m_Saves[aId];
+            m_CurrentSave = m_Saves[aId].m_File;
             success = true;
+
+            using (StreamReader reader = new StreamReader(m_CurrentSave))
+            {
+                m_FileJson = reader.ReadToEnd();
+            }
         }
 
         return success;
     }
 
-    public static object GetDataInCurrentSave(string aDataKey)
+    public static void SaveFile(object aObject)
     {
         if (m_CurrentSave != null)
         {
-            return JsonConvert.DeserializeObject(aDataKey);
-        }
-        else
-        {
-            return null;
+            using (StreamWriter writer = new StreamWriter(m_CurrentSave, Encoding.UTF8))
+            {
+                writer.Write(JsonConvert.SerializeObject(aObject, Formatting.Indented));
+            }
         }
     }
 
-    public static object GetDataInSaveFile(int aSaveId, string aDataKey)
+    public static T GetSaveData<T>()
     {
-        if (m_Saves[aSaveId] != null)
+        if (m_CurrentSave != null)
         {
-            return JsonConvert.DeserializeObject(aDataKey);
+            return JsonConvert.DeserializeObject<T>(m_FileJson);
         }
-        else
-        {
-            return null;
-        }
-    }
 
+        return default(T);
+    }
 
     private static string FormattingPath(int aId)
     {
-        return string.Format(SAVE_PATH_FORMAT, Application.streamingAssetsPath, aId);
+        return string.Format(SAVE_PATH_FORMAT, Application.persistentDataPath, aId);
     }
 }

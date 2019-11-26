@@ -67,10 +67,6 @@ public class LevelManager : Singleton<LevelManager>
         {
             SceneManager.LoadScene(m_SceneToLoad);
             m_FadeIn = false;
-
-            //----sorry je savait pas ou verifier la scene qui ce load---------
-            HUDManager.Instance.ActiveScenUI(m_SceneToLoad);
-            //-----------------------------------------------------------------
         }
     }
 
@@ -92,15 +88,12 @@ public class LevelManager : Singleton<LevelManager>
         if (!m_FadeIn)
         {
             SceneManager.LoadScene(m_SceneToLoad);
-
-            //----sorry je savait pas ou verifier la scene qui ce load---------
-            HUDManager.Instance.ActiveScenUI(m_SceneToLoad);
-            //-----------------------------------------------------------------
         }
     }
 
     private void EndLoading()
     {
+        HUDManager.Instance.ActiveScenUI(m_SceneToLoad);
         m_FadeOut = true;
         m_LoadingScreen.blocksRaycasts = false;
         m_LoadingScreen.interactable = false;

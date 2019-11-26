@@ -7,7 +7,10 @@ public class HUDManager : Singleton<HUDManager>
 {
     [SerializeField]
     private RectTransform m_Layout;// pêtit souci de sequence de layout WARNING
-
+    [SerializeField]
+    private GameObject m_GameOver;
+    [SerializeField]
+    private GameObject m_Win;
     [SerializeField]
     private GameObject m_MainUI;
     [SerializeField]
@@ -53,5 +56,15 @@ public class HUDManager : Singleton<HUDManager>
                 m_CombatUI.SetActive(true);
                 break;
         }
-    }   
+    }
+
+    public void ActivateWinHUD(bool aBool)
+    {
+        m_Win.SetActive(aBool);
+    }
+
+    public void ActivateGameOverHUD(bool aBool)
+    {
+        m_GameOver.SetActive(aBool);
+    }
 }

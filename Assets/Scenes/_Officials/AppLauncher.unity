@@ -1005,12 +1005,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f7c7a3ca8c5faa4c86daf634ed34c7c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: 
-  m_Name: 
-  m_Name: 
-  m_Name: 
-  m_Name: 
-  m_Cursor: {fileID: 0}
 --- !u!1 &320411762
 GameObject:
   m_ObjectHideFlags: 0
@@ -2317,6 +2311,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Layout: {fileID: 0}
+  m_GameOver: {fileID: 0}
+  m_Win: {fileID: 0}
   m_MainUI: {fileID: 1787576914}
   m_CaveUI: {fileID: 373865950}
   m_CombatUI: {fileID: 1864349680}
@@ -5203,10 +5199,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11ede5b4233a91644ba98e06b686bedb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Pools:
-  - m_Prefab: {fileID: 1892078723244562, guid: 46876a2780737ec45a19d62f88e5ce56, type: 3}
-    m_Size: 1
-    m_LimitReachUseActiveObject: 0
 --- !u!4 &1845282742
 Transform:
   m_ObjectHideFlags: 0
@@ -6737,7 +6729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2094799031
 RectTransform:
   m_ObjectHideFlags: 0

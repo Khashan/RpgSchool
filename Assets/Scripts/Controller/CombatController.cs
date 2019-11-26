@@ -42,6 +42,7 @@ public class CombatController : MonoBehaviour
     private bool m_isEnnemyTurnSet = false;
     private bool m_StartEnnemyCombat = false;
     private int m_CurrentFriendlyAttacked;
+    private int m_CurrentEnnemyAttacked;
 
     private bool m_WaitForNextInput = true;
 
@@ -249,6 +250,7 @@ public class CombatController : MonoBehaviour
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
+        m_CurrentEnnemyAttacked = aAttackedPosition + 3;
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition - 1].GetComponent<NPCController>();
         m_CurrentEnnemyGO = m_EnnemyList[aAttackedPosition -1];
@@ -419,6 +421,17 @@ public class CombatController : MonoBehaviour
     {
        int tDamage = m_CurrentFriendlyStats.Damage;
        m_CurrentEnnemyStats.CurrentHP -= tDamage;
+       CombatManager.Instance.ChangeLifeValue(m_CurrentEnnemyStats, m_CurrentEnnemyAttacked);
+       if(m_CurrentEnnemyStats.isDead == true)
+        {
+            m_CurrentEnnemyAnim.SetBool("isDead", true);
+            m_AliveEnnemies--;
+            if(m_AliveEnnemies == 0)
+            {
+                string LastScene = LevelManager.Instance.LastScene;
+                LevelManager.Instance.ChangeLevel(LastScene, true, 1);
+            }
+        }
        //Animator EAnim = m_CurrentEnnemyGO.GetComponent<Animator>();
        m_CurrentFriendlyAnim.SetTrigger("Attack");
     }
@@ -427,6 +440,17 @@ public class CombatController : MonoBehaviour
     {
         int tDamage = m_CurrentEnnemyStats.Damage;
         m_CurrentFriendlyStats.CurrentHP -= tDamage;
+        CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
+        if(m_CurrentFriendlyStats.isDead == true)
+        {
+            m_CurrentFriendlyAnim.SetBool("isDead", true);
+            m_AliveFriendlies--;
+            if(m_AliveFriendlies == 0)
+            {
+                string LastScene = LevelManager.Instance.LastScene;
+                LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+            }
+        }
         //m_CurrentFriendlyAnim.SetTrigger("TakeDamage");
         m_CurrentEnnemyAnim.SetTrigger("Attack");
     }

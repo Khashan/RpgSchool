@@ -17,3 +17,4 @@ MonoBehaviour:
   m_AttackDamage: 40
   m_CharacterPrefab: {fileID: 4726943285192644695, guid: c5eff125f74142b45a360ad6c9672e7a,
     type: 3}
+  m_IsDead: 0

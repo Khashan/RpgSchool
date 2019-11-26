@@ -151,6 +151,7 @@ public class CursorController : MonoBehaviour
             if (clicEnter)
             {
 //                Debug.Log("FRIENDLY = " + m_FriendlySelected + "    fight enemy: " + (m_IndexVertical + 1));
+
                 CombatManager.Instance.Attack(m_FriendlySelected, m_IndexVertical + 1);
                 Activator(0);
                 m_subMenu = 0;

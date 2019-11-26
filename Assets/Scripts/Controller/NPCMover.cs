@@ -8,7 +8,8 @@ public class NPCMover : MonoBehaviour
     private PlayerData m_Data;
     [SerializeField]
     private GameObject m_Instructions;
-
+    [SerializeField]
+    private GameObject m_Prefab;
 
     private float m_Speed;
     private float m_Hp;
@@ -104,6 +105,7 @@ public class NPCMover : MonoBehaviour
         PlayerController player = aTrig.GetComponent<PlayerController>();
         if(player != null)
         {
+            PoolManager.Instance.UseObjectFromPool(m_Prefab, transform.position, transform.rotation);
             m_Instructions.SetActive(true);
         }
     }

@@ -54,7 +54,7 @@ public static class SaveFiles
 
     private static SaveData LoadFileData(string savePath)
     {
-        FileStream file = new FileStream(savePath, FileMode.Open);
+        FileStream file = new FileStream(savePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
         SaveData save = new SaveData { m_File = file };
 
         using (StreamReader reader = new StreamReader(file))
@@ -67,7 +67,7 @@ public static class SaveFiles
 
     public static void StartNewGame(int aId, string aName)
     {
-        SaveData data = new SaveData { m_File = new FileStream(FormattingPath(aId), FileMode.CreateNew), m_FileName = aName };
+        SaveData data = new SaveData { m_File = new FileStream(FormattingPath(aId), FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite), m_FileName = aName };
         m_Saves[aId] = data;
         LoadSave(aId);
         SaveFile(data);
@@ -98,6 +98,7 @@ public static class SaveFiles
             using (StreamWriter writer = new StreamWriter(m_CurrentSave, Encoding.UTF8))
             {
                 writer.Write(JsonConvert.SerializeObject(aObject, Formatting.Indented));
+                writer.Close();
             }
         }
     }

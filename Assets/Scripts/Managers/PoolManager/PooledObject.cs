@@ -3,8 +3,13 @@ using UnityEngine.SceneManagement;
 
 public abstract class PooledObject : MonoBehaviour
 {
+    [Tooltip("Show the StackTrace to know the source of its destroy (Require DebugMode)")]
     [SerializeField]
     private bool m_DestroyErrorSourceOnly = false;
+
+    [Tooltip("Show Error Log in the console")]
+    [SerializeField]
+    private bool m_ActiveDebugMode = false;
 
     private GameObject m_PoolOwner;
     public GameObject PoolOwner
@@ -52,7 +57,11 @@ public abstract class PooledObject : MonoBehaviour
 #if UNITY_EDITOR
         if (!m_SceneHasBeenUnloaded)
         {
-            Debug.LogError(GetDestroyErrorMessage());
+            if (m_ActiveDebugMode)
+            {
+                Debug.LogError(GetDestroyErrorMessage());
+            }
+
             SceneManager.sceneUnloaded -= OnSceneUnloaded;
         }
 #endif
@@ -61,7 +70,7 @@ public abstract class PooledObject : MonoBehaviour
 #if UNITY_EDITOR
     private string GetDestroyErrorMessage()
     {
-        string errorMessage = "(Ignore it if you were stopping unity play)\nPooledObject should've never been destroyed! \n{0}";
+        string errorMessage = "(Ignore it if you were stopping unity play or changing scene)\nPooledObject should've never been destroyed! \n{0}";
 
         if (!m_DestroyErrorSourceOnly)
         {

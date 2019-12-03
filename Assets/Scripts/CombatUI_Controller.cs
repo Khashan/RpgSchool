@@ -50,7 +50,7 @@ public class CombatUI_Controller : MonoBehaviour
 
         m_TargetImage = m_Target.GetComponent<Image>();
 
-        m_Target.SetActive(false);
+        m_Target.SetActive(true);
         m_Cursor.SetActive(false);
 
 

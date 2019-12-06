@@ -43,6 +43,7 @@ public class CombatController : MonoBehaviour
     private bool m_StartEnnemyCombat = false;
     private int m_CurrentFriendlyAttacked;
     private int m_CurrentEnnemyAttacked;
+    private bool m_IsFirstTurn = true;
 
     private bool m_WaitForNextInput = true;
 
@@ -104,10 +105,11 @@ public class CombatController : MonoBehaviour
     private void Update()
     {
 
-        if(!m_IsFriendlyAttacking && !m_isEnnemyTurn)
+        if(!m_IsFriendlyAttacking && !m_isEnnemyTurn && !m_IsFirstTurn)
         {
             if(m_WaitForNextInput)
             {
+                Debug.Log("Calling next round");
                 HUDManager.Instance.combatUI.NextRound();
                 m_WaitForNextInput = false;
             }
@@ -249,6 +251,7 @@ public class CombatController : MonoBehaviour
 
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
+        m_IsFirstTurn = false;
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentEnnemyAttacked = aAttackedPosition + 3;
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition - 1].GetComponent<NPCController>();
@@ -293,6 +296,23 @@ public class CombatController : MonoBehaviour
 
     }
 
+    public List<int> GetAliveEnnemies()
+    {
+        List<int> tAliveEnnemyList = new List<int>();
+        for(int i = 0; i < m_EnnemyList.Count; i++)
+        {
+            NPCController tEnnemyC = m_EnnemyList[i].GetComponent<NPCController>();
+            if(tEnnemyC != null)
+            {
+                if(!tEnnemyC.isDead)
+                {
+                    tAliveEnnemyList.Add(i);
+                }
+            }
+        }
+        return tAliveEnnemyList;
+    }
+
     private int CheckEnnemyTurn()
     {
         if(m_AliveEnnemies == 3)
@@ -315,7 +335,8 @@ public class CombatController : MonoBehaviour
         }
         else if(m_AliveEnnemies == 1)
         {
-            for(int i = 0; i < 3; i++)
+            Debug.Log("ENEMY LIST COUNT " + m_EnnemyList.Count );
+            for(int i = 0; i < m_EnnemyList.Count; i++)
             {
                 NPCController tempEnnemy = m_EnnemyList[i].GetComponent<NPCController>();
                 if(!tempEnnemy.isDead)

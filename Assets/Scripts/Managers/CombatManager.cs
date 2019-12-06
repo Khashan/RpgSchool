@@ -57,6 +57,11 @@ public class CombatManager : Singleton<CombatManager>
         }
     }
 
+    public List<int> GetAliveEnnemies()
+    {
+        return m_CombatController.GetAliveEnnemies();
+    }
+
     public void CombatSetup()
     {
         Debug.Log("Setting Combat");

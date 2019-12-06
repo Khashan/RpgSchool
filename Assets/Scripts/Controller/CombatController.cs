@@ -108,7 +108,7 @@ public class CombatController : MonoBehaviour
         {
             if(m_WaitForNextInput)
             {
-                HUDManager.Instance.combatUI.StartRound();
+                HUDManager.Instance.combatUI.NextRound();
                 m_WaitForNextInput = false;
             }
         }

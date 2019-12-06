@@ -1,238 +1,145 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class CombatUI_Controller : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject m_Cursor;
-    [SerializeField]
-    private GameObject m_Target;
-    [SerializeField]
-    private Image m_TargetImage;
 
     [SerializeField]
-    private List<Transform> m_CursorPosition;
-    [SerializeField]
-    private int m_IndexPos = 0;
-    private int m_LastIndexPos = 0;
+    private Button m_FirstPos;
 
     [SerializeField]
-    private List<Transform> m_TargetFriendPosition = new List<Transform>();
+    private List<GameObject> m_ActivatedAllieTarget = new List<GameObject>();
     [SerializeField]
-    private Transform m_Alli01;
-    [SerializeField]
-    private Transform m_Alli02;
-    [SerializeField]
-    private Transform m_Alli03;
-    [SerializeField]
-    private int m_TargetFriendIndexPos = 0;
-    private int m_LastTargetFriendIndexPos = 0;
+    private List<GameObject> m_ActivatedEnemyButton = new List<GameObject>();
 
     [SerializeField]
-    private List<Transform> m_TargetEnemyPosition = new List<Transform>();
-    [SerializeField]
-    private Transform m_Enemy01;
-    [SerializeField]
-    private Transform m_Enemy02;
-    [SerializeField]
-    private Transform m_Enemy03;
+    private List<Slot> m_Inventory = new List<Slot>();
+    public List<Slot> CombatInventory
+    {
+        get { return m_Inventory; }
+    }
 
-    private int m_RoundCount = 0;
-    private bool m_EnemySelector = false;
-
-
+    private int m_Allie = 0;
+    private int m_AllieCount = 0;
+    private int m_Enemy = 0;
+    private int m_EnemyCount = 0;
 
     private void Start()
     {
         HUDManager.Instance.combatUI = this;
-
-        m_TargetImage = m_Target.GetComponent<Image>();
-
-        m_Target.SetActive(true);
-        m_Cursor.SetActive(false);
-
-
-
-        //InitialiseCharacter(1, 1);
+        ActivatedEnemyButton(false);
+        EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
 
-    private void Update()
-    {
-        if (!m_EnemySelector && m_IndexPos < m_CursorPosition.Count-1 && 
-            (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
-        {
-            m_IndexPos++;
-            CursorMove(m_IndexPos, false);      
-        }
-        else if(m_EnemySelector && m_IndexPos < m_TargetEnemyPosition.Count - 1 && 
-                (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)))
-        {
-            m_IndexPos++;
-            CursorMove(m_IndexPos, true);
-        }
-        else if(m_IndexPos > 0 &&  (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)))
-        {
-            m_IndexPos--;
 
-            if (!m_EnemySelector)
+    private void ActiveAllie(bool desableAll)
+    {
+        if (!desableAll)
+        {
+            Debug.Log("InActiveAllie Function:" + m_AllieCount);
+            for (int i = 0; i < m_ActivatedAllieTarget.Count; i++)
             {
-                CursorMove(m_IndexPos, false);
+                if (i == m_AllieCount)
+                {
+                    m_ActivatedAllieTarget[i].SetActive(true);
+                }
+                else
+                {
+                    m_ActivatedAllieTarget[i].SetActive(false);
+                }
+            }
+
+            EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);      
+        }
+        else
+        {
+            for (int i = 0; i < m_ActivatedAllieTarget.Count; i++)
+            {
+                m_ActivatedAllieTarget[i].SetActive(false);
+            }
+        }
+
+    }
+
+    private void ActivatedEnemyButton(bool activated)
+    {
+        for (int i = 0; i < m_ActivatedEnemyButton.Count; i++)
+        {
+            if (activated)
+            {
+                m_ActivatedEnemyButton[i].SetActive(true);
             }
             else
             {
-                CursorMove(m_IndexPos, true);
+                m_ActivatedEnemyButton[i].SetActive(false);
             }
-        }
-        else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Return))
-        {
-            if (m_EnemySelector)
-            {
-                StartFight(m_TargetFriendIndexPos, m_IndexPos);
-            }
-            else
-            {
-                m_LastIndexPos = m_IndexPos;
-                InputCursorAction(m_IndexPos);
-            }
-        }
-        else if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CursorMove(m_LastIndexPos, false);
         }
     }
 
     public void InitialiseCharacter(int allie, int ennemy)
     {
-        //Debug.Log(allie + " : " + ennemy);
-        switch(allie)
-        {
-            case 1:
-                m_TargetFriendPosition.Add(m_Alli01);
-                break;
-            case 2:
-                m_TargetFriendPosition.Add(m_Alli01);
-                m_TargetFriendPosition.Add(m_Alli02);
-                break;
-            case 3:
-                m_TargetFriendPosition.Add(m_Alli01);
-                m_TargetFriendPosition.Add(m_Alli02);
-                m_TargetFriendPosition.Add(m_Alli03);
-                break;
-        }
-
-        switch (ennemy)
-        {
-            case 1:
-                m_TargetEnemyPosition.Add(m_Enemy01);
-                break;
-            case 2:
-                m_TargetEnemyPosition.Add(m_Enemy01);
-                m_TargetEnemyPosition.Add(m_Enemy02);
-                break;
-            case 3:
-                m_TargetEnemyPosition.Add(m_Enemy01);
-                m_TargetEnemyPosition.Add(m_Enemy02);
-                m_TargetEnemyPosition.Add(m_Enemy03);
-                break;
-        }
-
-
-        StartRound();
+        m_Allie = allie;
+        m_Enemy = ennemy;
+        //Debug.Log("alli: " + m_Allie + " / Enemy:" + m_Enemy);
+        m_AllieCount = 0;
+        Debug.Log(m_AllieCount);
+        ActiveAllie(false);
     }
 
-    public void StartRound()
+    public void Fight(int enemy)
     {
-        m_TargetFriendIndexPos += m_RoundCount;
-        m_Target.transform.position = m_TargetFriendPosition[m_TargetFriendIndexPos].position;
-        m_Target.SetActive(true);
-        m_Cursor.transform.position = m_CursorPosition[m_IndexPos].position;
-        m_Cursor.SetActive(true);
+        ActiveAllie(true);
+        int allie = m_AllieCount + 1;
+        CombatManager.Instance.Attack(allie, enemy);
+        ActivatedEnemyButton(false);
+    }
 
-        m_IndexPos = 0;
-        m_LastIndexPos = 0;
-
-        m_TargetFriendIndexPos = 0;
-        m_LastTargetFriendIndexPos = 0;
-
-        //m_TargetEnemyIndexPos = 0;
-        //m_LastTargetEnemyIndexPos = 0;
-}
-
-    public void StartFight(int allie, int enemy)
+    public void NextRound()
     {
-        Debug.Log("Alli :" + allie + " attack -> " + enemy);
-
-        // les alli et enemy sont de 0 a 2
-        CombatManager.Instance.Attack(allie + 1, enemy + 1);
-
-        if (m_RoundCount +1 < m_TargetFriendPosition.Count)
+        if (m_AllieCount < m_Allie)
         {
-            m_RoundCount++;
+            m_AllieCount++;
         }
         else
         {
-            m_RoundCount = 0;
+            m_AllieCount = 0;
         }
 
-        StartRound();
+        ActiveAllie(false);
     }
 
-    private void CursorMove(int indexPos, bool enemySelector)
+    public void FightButton()
     {
-        if (!enemySelector)
+        for (int i = 0; i < m_ActivatedEnemyButton.Count; i++)
         {
-            m_Cursor.transform.position = m_CursorPosition[indexPos].position;
+            if (i < m_Enemy)
+            {
+                m_ActivatedEnemyButton[i].SetActive(true);
+            }
+            else
+            {
+                m_ActivatedEnemyButton[i].SetActive(false);
+            }
         }
-        else
-        {
-            m_Target.transform.position = m_TargetEnemyPosition[indexPos].position;
-        }
+
+        EventSystem.current.SetSelectedGameObject(m_ActivatedEnemyButton[0]);
+    }
+    public void FleeButton()
+    {
+        string lastScene = LevelManager.Instance.LastScene;
+        LevelManager.Instance.ChangeLevel(lastScene, true, 1);
+        ExitScene();
     }
 
-    public void EndCombat()
+    private void ExitScene()
     {
-        m_IndexPos = 0;
-    }
-
-    private void InputCursorAction(int index)
-    {
-        switch(index) // FIGHT
-        {
-            case 0:
-                if (m_EnemySelector)
-                {
-                    StartFight(0, 0);
-                }
-                else
-                {
-                    ActiveEnemySelector();
-                }
-                break;
-            case 1: // SPELL
-                break;
-            case 2: // ITEM
-                break;
-            case 3: // FLEE
-                string lastScene = LevelManager.Instance.LastScene;
-                LevelManager.Instance.ChangeLevel(lastScene, true, 1);
-                Debug.Log("FLEE.........");
-                break;
-        }
-    }
-
-    private void ActiveEnemySelector()
-    {
-        m_IndexPos = 0;
- 
-        m_EnemySelector = true;
-        m_Target.transform.position = m_TargetEnemyPosition[0].position;
-        m_TargetImage.color = Color.red;
-    }
-
-    private void ActiveTarget(int index)
-    {
-
+        m_Allie = 0;
+        m_AllieCount = 0;
+        m_Enemy = 0;
+        m_EnemyCount = 0;
     }
 }

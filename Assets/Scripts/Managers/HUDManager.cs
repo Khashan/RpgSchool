@@ -33,11 +33,11 @@ public class HUDManager : Singleton<HUDManager>
         {
             if (m_TradeUI.activeSelf)
             {
-                m_TradeUI.SetActive(false);
+                ActiveTrade(false);
             }
             else
             {
-                m_TradeUI.SetActive(true);
+                ActiveTrade(true);
             }
         }
     }
@@ -81,5 +81,17 @@ public class HUDManager : Singleton<HUDManager>
     public void ActivateGameOverHUD(bool aBool)
     {
         m_GameOver.SetActive(aBool);
+    }
+
+    public void ActiveTrade(bool active)
+    {
+        if (active)
+        {
+            m_TradeUI.SetActive(true);
+        }
+        else
+        {
+            m_TradeUI.SetActive(false);
+        }
     }
 }

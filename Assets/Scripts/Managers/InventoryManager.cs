@@ -16,17 +16,17 @@ public class InventoryManager : Singleton<InventoryManager>
 
     // ===  Player Inventory ===
     [SerializeField]
-    private List<Slot> m_PlayerInventory = new List<Slot>();
-    public List<Slot> PlayerInventory
+    private List<Slot> m_CombatSlot = new List<Slot>();
+    public List<Slot> CombatSlot
     {
-        get { return m_PlayerInventory; }
+        get { return m_CombatSlot; }
     }
     // =================================================
 
     // ===  slot ===
     [SerializeField]
     private List<Slot> m_Slot = new List<Slot>();
-    public List<Slot> slot
+    public List<Slot> Inventory
     {
         get { return m_Slot; }
     }
@@ -59,6 +59,7 @@ public class InventoryManager : Singleton<InventoryManager>
             if (slot != -1)
             {
                 m_Slot[slot].SetSlot(data);
+                HUDManager.Instance.combatUI.CombatInventory[slot].SetSlot(data);
                 TokenRefresh(-data.Value);
             }
         }
@@ -70,6 +71,7 @@ public class InventoryManager : Singleton<InventoryManager>
         {
             if (m_Slot[i] == data)
             {
+                HUDManager.Instance.combatUI.CombatInventory[i].ResetSlot();
                 m_Slot[i].ResetSlot();
             }
         }

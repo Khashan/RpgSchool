@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b26e3c08d53ab9844bc0d1cf37118bb5, type: 3}
-  m_Name: Potion
+  m_Name: Potion01
   m_EditorClassIdentifier: 
-  m_DataID: Potion
-  m_SlotID: 
-  m_Icon: {fileID: 0}
-  m_Item: {fileID: 0}
-  m_IsStackable: 1
+  m_DataID: Potion01
+  m_SlotID: 0
+  m_Value: 400
+  m_Icon: {fileID: 21300000, guid: 4a3ee551ca44eb244a07ba7f9912c476, type: 3}
+  m_IsEmpty: 0

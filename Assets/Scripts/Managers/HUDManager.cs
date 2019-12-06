@@ -18,6 +18,8 @@ public class HUDManager : Singleton<HUDManager>
     [SerializeField]
     private GameObject m_CombatUI;
     [SerializeField]
+    private GameObject m_TradeUI;
+    [SerializeField]
     private CombatUI_Controller m_CombatUI_Controller;
     public CombatUI_Controller combatUI
     {
@@ -25,10 +27,20 @@ public class HUDManager : Singleton<HUDManager>
         get { return m_CombatUI_Controller; }
     }
 
-    // fight ui
-    // spell ui
-    // potion ui
-    // item ui
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            if (m_TradeUI.activeSelf)
+            {
+                m_TradeUI.SetActive(false);
+            }
+            else
+            {
+                m_TradeUI.SetActive(true);
+            }
+        }
+    }
 
     // pêtit souci de sequence de layout WARNING dont touch
     public void ResetLayout()
@@ -43,16 +55,19 @@ public class HUDManager : Singleton<HUDManager>
             case "ThomasScene":
                 m_CaveUI.SetActive(false);
                 m_CombatUI.SetActive(false);
+                m_TradeUI.SetActive(false);
                 m_MainUI.SetActive(true);
                 break;
             case "CaveScene":
                 m_CombatUI.SetActive(false);
                 m_MainUI.SetActive(false);
+                m_TradeUI.SetActive(false);
                 m_CaveUI.SetActive(true);
                 break;
             case "DefaultCombatScene":
                 m_CaveUI.SetActive(false);
                 m_MainUI.SetActive(false);
+                m_TradeUI.SetActive(false);
                 m_CombatUI.SetActive(true);
                 break;
         }

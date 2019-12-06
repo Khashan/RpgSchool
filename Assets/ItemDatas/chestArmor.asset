@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26e3c08d53ab9844bc0d1cf37118bb5, type: 3}
+  m_Name: chestArmor
+  m_EditorClassIdentifier: 
+  m_DataID: chestArmor
+  m_SlotID: 775
+  m_Value: 0
+  m_Icon: {fileID: 21300002, guid: 6201a1d66c1954545ab941e19d7ed04b, type: 3}
+  m_IsEmpty: 0

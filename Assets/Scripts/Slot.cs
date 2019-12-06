@@ -10,11 +10,11 @@ public class Slot : MonoBehaviour
     private string m_SlotNameID;
 
     [SerializeField]
-    private string m_DataID;
-    public string dataID
+    private ItemData m_Data;
+    public ItemData data
     {
-        get { return m_DataID; }
-        set { m_DataID = value; }
+        get { return m_Data; }
+        set { m_Data = value; }
     }
 
     [SerializeField]
@@ -33,52 +33,32 @@ public class Slot : MonoBehaviour
         set { m_IsEmpty = value; }
     }
 
-    [SerializeField]
-    private int m_Counter;
-    public int counterModifior
-    {
-        get { return m_Counter; }
-        set { m_Counter = value; }
-    }
 
     [SerializeField]
     private Color m_BaseColor;
-    [SerializeField]
-    private Sprite m_BaseIcon;
-    [SerializeField]
-    private TextMeshProUGUI m_TMPcount;
-    string emptyString = "";
 
     public void InitSlot()
     {
         m_SlotNameID = name;
         m_Icon = GetComponent<Image>();
         m_BaseColor = m_Icon.color;
-        m_BaseIcon = m_Icon.sprite;
-        m_TMPcount = GetComponentInChildren<TextMeshProUGUI>();
     }
 
     public void ResetSlot()
     {
         m_Icon.color = m_BaseColor;
-        m_Icon.sprite = m_BaseIcon;
 
-        m_DataID = null;
+        m_Data = null;
 
         m_IsEmpty = true;
-
-        CounterDisappear();
     }
 
-    public void CounterAppear(int count)
+    public void SetSlot(ItemData data)
     {
-        m_Counter += count;
-        m_TMPcount.text = m_Counter.ToString();
+        m_Data = data;
+        m_Icon.color = Color.white;
+        m_Icon.sprite = data.Icon;
+        m_IsEmpty = false;
     }
 
-    public void CounterDisappear()
-    {
-        m_Counter = 0;
-        m_TMPcount.text = emptyString;
-    }
 }

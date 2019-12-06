@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3115281245491499204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3115281245491499202}
+  - component: {fileID: 3115281245491499205}
+  m_Layer: 0
+  m_Name: '----_ Inventory _----'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3115281245491499202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3115281245491499204}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1022.5173, y: 839.4496, z: 21.232199}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3115281245491499205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3115281245491499204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36305a14d9349224d9321c0e088d9ab2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AllItemData:
+  - {fileID: 11400000, guid: df7d785144e5ee6479387f9031bcaf27, type: 2}
+  - {fileID: 11400000, guid: 9c079b27218f95042a9ed01bda8dd1cf, type: 2}
+  - {fileID: 11400000, guid: d508f9232f8cf8043a1133bddcec6d5f, type: 2}
+  - {fileID: 11400000, guid: 76f372b76bacee8418bb584305062fb5, type: 2}
+  - {fileID: 11400000, guid: 527c1bac8f51fb642acdf3e186fe4fa2, type: 2}
+  - {fileID: 11400000, guid: 16bbb49ac34d3d043979f69538882bb8, type: 2}
+  - {fileID: 11400000, guid: 876817df7ab15974aa95794174c2cc31, type: 2}
+  - {fileID: 11400000, guid: c88db41ff05fe7f418b3ccebfb543cf6, type: 2}
+  m_PlayerInventory:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_Slot:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  m_PlayerTokenTMP: {fileID: 0}
+  m_PlayerToken: 2450

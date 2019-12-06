@@ -1,64 +1,95 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using TMPro;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
     // ***  ALL ITEM DATA is here ***
-    private Dictionary<string, ItemData> m_AllItemData = new Dictionary<string, ItemData>();
-    public Dictionary<string, ItemData> AllItemData
+    [SerializeField]
+    private List<ItemData> m_AllItemData = new List<ItemData>();
+    public List<ItemData> AllItemData
     {
-        get { return AllItemData; }
+        get { return m_AllItemData; }
     }
     // *************************************************
 
     // ===  Player Inventory ===
-    private Dictionary<string, ItemData> m_PlayerInventory = new Dictionary<string, ItemData>();
-    public Dictionary<string, ItemData> PlayerInventory
+    [SerializeField]
+    private List<Slot> m_PlayerInventory = new List<Slot>();
+    public List<Slot> PlayerInventory
     {
-        get { return PlayerInventory; }
+        get { return m_PlayerInventory; }
     }
     // =================================================
 
-    // ---  SLOT ---
+    // ===  slot ===
+    [SerializeField]
     private List<Slot> m_Slot = new List<Slot>();
-    public List<Slot> Slot
+    public List<Slot> slot
     {
         get { return m_Slot; }
     }
-    // --------------------------------------------------
+    // =================================================
+    [SerializeField]
+    private TextMeshProUGUI m_PlayerTokenTMP;
+    [SerializeField]
+    private int m_PlayerToken = 2400;
 
     protected override void Awake()
     {
         base.Awake();
-        InitData();
+
+        TokenRefresh(0);
     }
 
-    private void InitData()
+    private void InitInventory()
     {
-        // find all ItemData in path ... ( ressource.. Assets/Resources/"ItemDatas")    
-        // stock the array to list and....
-        List<ItemData> itemDatas = Resources.LoadAll<ItemData>("ItemDatas").ToList();
-        // stock List To DICTIONARY ...
-        for (int i = 0; i < itemDatas.Count; i++)
+        for (int i = 0; i < m_Slot.Count; i++)
         {
-            m_AllItemData.Add(itemDatas[i].dataID, itemDatas[i]);
+            m_Slot[i].InitSlot();
         }
     }
 
-    public void AddItem(string itemName)
+    public void AddItem(ItemData data)
     {
-
+        if (data.Value <= m_PlayerToken)
+        {
+            int slot = FindEmptySlot();
+            if (slot != -1)
+            {
+                m_Slot[slot].SetSlot(data);
+                TokenRefresh(-data.Value);
+            }
+        }
     }
 
-    public void UsedItem(string itemName)
+    public void UsedItem(ItemData data)
     {
-
+        for (int i = 0; i < m_Slot.Count; i++)
+        {
+            if (m_Slot[i] == data)
+            {
+                m_Slot[i].ResetSlot();
+            }
+        }
     }
 
-    private int FindItemInSlot(string itemName)
+    private int FindEmptySlot()
     {
+        for(int i = 0; i < m_Slot.Count; i++)
+        {
+            if (m_Slot[i].isEmpty)
+            {
+                return i;
+            }
+        }
         return -1;
+    }
+
+    public void TokenRefresh(int modify)
+    {
+        m_PlayerToken += modify;
+        m_PlayerTokenTMP.text = m_PlayerToken.ToString();
     }
 }

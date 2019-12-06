@@ -16,11 +16,20 @@ public class ItemData : ScriptableObject
 
     // item position SlotID in Ui slot
     [SerializeField]
-    private string m_SlotID;
-    public string slotID
+    private int m_SlotID;
+    public int slotID
     {
         get { return m_SlotID; }
         set { m_SlotID = value; }
+    }
+
+    // item position SlotID in Ui slot
+    [SerializeField]
+    private int m_Value;
+    public int Value
+    {
+        get { return m_Value; }
+        set { m_Value = value; }
     }
 
     [SerializeField]
@@ -31,38 +40,23 @@ public class ItemData : ScriptableObject
         //set { m_Icon = value; }
     }
 
-    // item préfabs
-    [SerializeField]
-    private Items m_Item;
-    public Items item
-    {
-        get { return m_Item; }
-        //set { m_Item = value; }
-    }
-
     // prefabs
     //private GameObject m_Prefabs;
 
     [SerializeField]
-    private bool m_IsStackable;
-    public bool IsStackable
+    private bool m_IsEmpty;
+    public bool IsEmpty
     {
-        get { return m_IsStackable; }
-        set { m_IsStackable = value; }
+        get { return m_IsEmpty; }
+        set { m_IsEmpty = value; }
     }
 
     // quand on crée un new Data soie il peut etre initialiser avec des param ou pas
     public ItemData() { }
-    public ItemData(Items item, string aDataID, string aSlotID, Sprite icon, bool isStackable, int aCount)
+    public ItemData(string aDataID, int aSlotID, Sprite icon, bool isStackable)
     {
-        m_Item = item;
         m_DataID = aDataID;
         m_SlotID = aSlotID;
         m_Icon = icon;
-        m_IsStackable = IsStackable;
-        if (IsStackable)
-        {
-            //m_Item.initCount += aCount;
-        }
     }
 }

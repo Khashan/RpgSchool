@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b26e3c08d53ab9844bc0d1cf37118bb5, type: 3}
+  m_Name: Potion02
+  m_EditorClassIdentifier: 
+  m_DataID: Potion02
+  m_SlotID: 0
+  m_Value: 600
+  m_Icon: {fileID: 21300002, guid: 4a3ee551ca44eb244a07ba7f9912c476, type: 3}
+  m_IsEmpty: 0

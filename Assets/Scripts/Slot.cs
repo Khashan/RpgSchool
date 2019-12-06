@@ -61,4 +61,9 @@ public class Slot : MonoBehaviour
         m_IsEmpty = false;
     }
 
+    public void AciveEffect(int effect)
+    {
+
+    }
+
 }

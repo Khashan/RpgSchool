@@ -23,6 +23,7 @@ public class ItemData : ScriptableObject
         set { m_SlotID = value; }
     }
 
+    
     // item position SlotID in Ui slot
     [SerializeField]
     private int m_Value;
@@ -40,9 +41,6 @@ public class ItemData : ScriptableObject
         //set { m_Icon = value; }
     }
 
-    // prefabs
-    //private GameObject m_Prefabs;
-
     [SerializeField]
     private bool m_IsEmpty;
     public bool IsEmpty
@@ -51,9 +49,30 @@ public class ItemData : ScriptableObject
         set { m_IsEmpty = value; }
     }
 
+    //---- ITEM EFFECT ----
+    [SerializeField]
+    private bool m_BoolEffect;
+    public bool BoolEffect
+    {
+        get { return m_BoolEffect; }
+    }
+    [SerializeField]
+    private int m_IntEffect;
+    public int IntEffect
+    {
+        get { return m_IntEffect; }
+    }
+    [SerializeField]
+    private float m_FloatEffect;
+    public float FloatEffect
+    {
+        get { return m_FloatEffect; }
+    }
+    //-------------------------
+
     // quand on crée un new Data soie il peut etre initialiser avec des param ou pas
     public ItemData() { }
-    public ItemData(string aDataID, int aSlotID, Sprite icon, bool isStackable)
+    public ItemData(string aDataID, int aSlotID, Sprite icon)
     {
         m_DataID = aDataID;
         m_SlotID = aSlotID;

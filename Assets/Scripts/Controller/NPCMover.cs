@@ -108,6 +108,10 @@ public class NPCMover : MonoBehaviour
             PoolManager.Instance.UseObjectFromPool(m_Prefab, transform.position, transform.rotation);
             m_Instructions.SetActive(true);
         }
+
+        //---- pour ouvrir linventaire --------
+        HUDManager.Instance.ActiveTrade(true);
+        //-------------------------------------
     }
 
     private void OnTriggerExit2D(Collider2D aTrig)

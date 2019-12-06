@@ -20,6 +20,8 @@ public class HUDManager : Singleton<HUDManager>
     [SerializeField]
     private GameObject m_TradeUI;
     [SerializeField]
+    private GameObject m_InGamePlayUI;
+    [SerializeField]
     private CombatUI_Controller m_CombatUI_Controller;
     public CombatUI_Controller combatUI
     {
@@ -56,18 +58,21 @@ public class HUDManager : Singleton<HUDManager>
                 m_CaveUI.SetActive(false);
                 m_CombatUI.SetActive(false);
                 m_TradeUI.SetActive(false);
+                m_InGamePlayUI.SetActive(true);
                 m_MainUI.SetActive(true);
                 break;
             case "CaveScene":
                 m_CombatUI.SetActive(false);
                 m_MainUI.SetActive(false);
                 m_TradeUI.SetActive(false);
+                m_InGamePlayUI.SetActive(true);
                 m_CaveUI.SetActive(true);
                 break;
             case "DefaultCombatScene":
                 m_CaveUI.SetActive(false);
                 m_MainUI.SetActive(false);
                 m_TradeUI.SetActive(false);
+                m_InGamePlayUI.SetActive(false); 
                 m_CombatUI.SetActive(true);
                 break;
         }

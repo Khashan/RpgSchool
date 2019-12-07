@@ -10,6 +10,10 @@ public class CombatUI_Controller : MonoBehaviour
 
     [SerializeField]
     private Button m_FirstPos;
+    [SerializeField]
+    private Button m_FirstItemButton;
+    [SerializeField]
+    private Button m_FirstSpellButton;
 
     [SerializeField]
     private List<GameObject> m_ActivatedAllieTarget = new List<GameObject>();
@@ -17,10 +21,24 @@ public class CombatUI_Controller : MonoBehaviour
     private List<GameObject> m_ActivatedEnemyButton = new List<GameObject>();
 
     [SerializeField]
-    private List<Slot> m_Inventory = new List<Slot>();
+    private List<Slot> m_CombatInventory = new List<Slot>();
     public List<Slot> CombatInventory
     {
-        get { return m_Inventory; }
+        get { return m_CombatInventory; }
+    }
+
+    [SerializeField]
+    private List<GameObject> m_SpellButton = new List<GameObject>();
+    public List<GameObject> ListSpellButton
+    {
+        get { return m_SpellButton; }
+    }
+
+    [SerializeField]
+    private List<GameObject> m_ItemButton = new List<GameObject>();
+    public List<GameObject> ListItemButton
+    {
+        get { return m_ItemButton; }
     }
 
     private int m_Allie = 0;
@@ -32,9 +50,20 @@ public class CombatUI_Controller : MonoBehaviour
     {
         HUDManager.Instance.combatUI = this;
         ActivatedEnemyButton(false);
+        ShowItem(false);
+        ShowSpell(false);
         EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
+            ShowItem(false);
+            ShowSpell(false);
+        }
+    }
 
     private void ActiveAllie(bool desableAll)
     {
@@ -128,6 +157,17 @@ public class CombatUI_Controller : MonoBehaviour
 
         EventSystem.current.SetSelectedGameObject(m_ActivatedEnemyButton[0]);
     }
+
+    public void ItemButton()
+    {
+        ShowItem(true);
+        EventSystem.current.SetSelectedGameObject(m_FirstItemButton.gameObject);
+    }
+    public void SpellButton()
+    {
+        ShowSpell(true);
+        EventSystem.current.SetSelectedGameObject(m_FirstSpellButton.gameObject);
+    }
     public void FleeButton()
     {
         string lastScene = LevelManager.Instance.LastScene;
@@ -141,5 +181,34 @@ public class CombatUI_Controller : MonoBehaviour
         m_AllieCount = 0;
         m_Enemy = 0;
         m_EnemyCount = 0;
+    }
+
+    private void ShowSpell(bool active)
+    {
+        for (int i = 0; i < m_SpellButton.Count; i++)
+        {
+            if (active)
+            {
+                m_SpellButton[i].SetActive(true);
+            }
+            else
+            {
+                m_SpellButton[i].SetActive(false);
+            }
+        }
+    }
+    private void ShowItem(bool active)
+    {
+        for (int i = 0; i < m_ItemButton.Count; i++)
+        {
+            if (active)
+            {
+                m_ItemButton[i].SetActive(true);
+            }
+            else
+            {
+                m_ItemButton[i].SetActive(false);
+            }
+        }
     }
 }

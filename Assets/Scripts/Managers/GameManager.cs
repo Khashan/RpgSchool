@@ -43,6 +43,12 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void StartBoss()
+    {
+        CombatManager.Instance.m_isBoss = true;
+        LevelManager.Instance.ChangeLevel("DefaultCombatScene", true, 0.5f);
+    }
+
     public void GetPlayerDistance(int aInt)
     {
         m_PlayerDistance = aInt;

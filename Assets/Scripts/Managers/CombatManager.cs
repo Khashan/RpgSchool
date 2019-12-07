@@ -11,7 +11,10 @@ public class CombatManager : Singleton<CombatManager>
     [SerializeField]
     private List<CharacterData> m_PossibleEnnemyList = new List<CharacterData>();
     [SerializeField]
+    private CharacterData m_BossData;
+    [SerializeField]
     private HealthBarController m_HealthBarController;
+    public bool m_isBoss = false;
 
     //[SerializeField]
     //private List<>
@@ -60,6 +63,13 @@ public class CombatManager : Singleton<CombatManager>
     public List<int> GetAliveEnnemies()
     {
         return m_CombatController.GetAliveEnnemies();
+    }
+
+    public void BossSetup()
+    {
+        m_CombatController.SetupBoss(m_PlayerTeam, m_BossData);
+        m_EnnemyTeam.Add(m_BossData);
+        HUDManager.Instance.combatUI.InitialiseCharacter(m_PlayerTeam.Count, m_EnnemyTeam.Count);
     }
 
     public void CombatSetup()

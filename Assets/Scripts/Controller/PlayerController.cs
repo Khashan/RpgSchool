@@ -48,6 +48,10 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if(Input.GetKeyDown(KeyCode.K))
+        {
+            GameManager.Instance.StartBoss();
+        }
 
         if(!m_IsInCombat)
         {

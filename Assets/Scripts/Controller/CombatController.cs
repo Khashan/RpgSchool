@@ -44,6 +44,9 @@ public class CombatController : MonoBehaviour
     private int m_CurrentFriendlyAttacked;
     private int m_CurrentEnnemyAttacked;
     private bool m_IsFirstTurn = true;
+    private bool m_IsBossFight = false;
+    private CharacterData m_BossData;
+    private string m_ChosenBossSpell;
 
     private bool m_WaitForNextInput = true;
 
@@ -58,8 +61,16 @@ public class CombatController : MonoBehaviour
 
 
         CombatManager.Instance.CombatController = this;
-        CombatManager.Instance.InitEnnemyTeam();
-        CombatManager.Instance.CombatSetup();
+        if(!CombatManager.Instance.m_isBoss)
+        {
+            CombatManager.Instance.InitEnnemyTeam();
+            CombatManager.Instance.CombatSetup();
+        }
+        else
+        {
+            m_IsBossFight = true;
+            CombatManager.Instance.BossSetup();
+        }
 
         m_EnnemyAttackingPositions.Add(new Vector2(m_FriendlyIdlePositions[0].x + 2, m_FriendlyIdlePositions[0].y));
         m_EnnemyAttackingPositions.Add(new Vector2(m_FriendlyIdlePositions[1].x + 2, m_FriendlyIdlePositions[1].y));
@@ -162,7 +173,7 @@ public class CombatController : MonoBehaviour
             
         }
 
-        if(m_isEnnemyTurn)
+        if(m_isEnnemyTurn && !m_IsBossFight)
         {
 
             if(m_AliveEnnemies > 0)
@@ -230,6 +241,108 @@ public class CombatController : MonoBehaviour
                     }
                 }
 
+            }
+        }
+
+        else if(m_isEnnemyTurn && m_IsBossFight)
+        {
+            if(!m_isEnnemyTurnSet)
+            {
+                Debug.Log("Setting boss setups");
+                if((float)(m_BossData.m_CurrentHealth/m_BossData.m_MaxHealth) < 0.3f)
+                {
+                    int tHealRand = Random.Range(0,2);
+                    if(tHealRand == 1)
+                    {
+                        SetupBossAttack("Heal");
+                    }
+                    else
+                    {
+                        if(m_AliveFriendlies == 3)
+                        {
+                            int tAoERand = Random.Range(0,2);
+                            if(tAoERand == 1)
+                            {
+                                SetupBossAttack("IceBurst");
+                            }
+                            else
+                            {
+                                SetupBossAttack("Lazer");
+                            }
+                        }
+                        else
+                        {
+                            SetupBossAttack("Lazer");
+                        }
+                    }
+                }
+                else
+                {
+                if(m_AliveFriendlies == 3)
+                    {
+                        int tAoERand = Random.Range(0,2);
+                        if(tAoERand == 1)
+                        {
+                            SetupBossAttack("IceBurst");
+                        }
+                        else
+                        {
+                            SetupBossAttack("Lazer");
+                        }
+                    }
+                    else
+                    {
+                        SetupBossAttack("Lazer");
+                    }  
+                }
+                m_isEnnemyTurnSet = true;
+            }
+            else if(m_StartEnnemyCombat)
+            {
+                if(m_CurrentEnnemyGO.transform.position != m_CurrentDestination && !m_isDoneAttacking)
+                {
+                    m_CurrentEnnemyAnim.SetBool("isIdle", false);
+                    m_CurrentEnnemyAnim.SetTrigger("Walk");
+                    if(m_Coroutine == null)
+                    {
+                        m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentEnnemyGO, m_CurentIdle, m_CurrentDestination, m_TravelLerpDuration));
+                    }
+                }
+                else if(m_CurrentEnnemyGO.transform.position == m_CurrentDestination && !m_isDoneAttacking)
+                {
+                    BossAttack();
+                    if(m_Coroutine == null)
+                    {
+                        m_Coroutine = StartCoroutine(WaitForAttack(m_TravelLerpDuration, false));
+                    }
+                    m_isDoneAttacking = true;
+                    Debug.Log("EnnemyAttacking");
+                }
+                else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position != m_CurentIdle)
+                {
+                    m_CurrentEnnemyAnim.SetTrigger("Walk");
+                    m_CurrentEnnemyAnim.SetBool("isIdle", false);
+                    if(m_Coroutine == null)
+                    {
+                        m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentEnnemyGO, m_CurrentDestination, m_CurentIdle, m_TravelLerpDuration));
+                    }
+                    Debug.Log("EnnemyGoingBack");
+
+                }
+                else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position == m_CurentIdle)
+                {
+                    m_CurrentRend.sortingOrder = m_oldorderinlayer;
+                    m_CurrentRend.flipX = true;
+                    m_CurrentEnnemyAnim.SetBool("isIdle", true);
+                    m_CurrentEnnemyAnim.StopPlayback();
+                    m_isEnnemyTurn = false;
+                    m_StartEnnemyCombat = false;
+                    m_isEnnemyTurnSet = false;
+
+                    ClearCurrentTurn();
+                    m_WaitForNextInput = true;
+                }
+                
             }
         }
     }
@@ -391,16 +504,19 @@ public class CombatController : MonoBehaviour
             {
                 int randennemyattack = (int)UnityEngine.Random.Range(0, m_PossibleEnnemyAttacks.Count);
                 finalennemyattack = m_PossibleEnnemyAttacks[randennemyattack];
+                m_PossibleEnnemyAttacks.Clear();
                 return finalennemyattack;
 
             }
             else
             {
                 finalennemyattack = m_PossibleEnnemyAttacks[0];
+                m_PossibleEnnemyAttacks.Clear();
                 return finalennemyattack;
             }
         }
 
+        m_PossibleEnnemyAttacks.Clear();
         Debug.LogError("ALL FRIENDLIES ARE DEAD");
         return 0;
 
@@ -474,5 +590,132 @@ public class CombatController : MonoBehaviour
         }
         //m_CurrentFriendlyAnim.SetTrigger("TakeDamage");
         m_CurrentEnnemyAnim.SetTrigger("Attack");
+    }
+
+    private void BossAttack()
+    {
+        Debug.Log(m_ChosenBossSpell);
+        switch(m_ChosenBossSpell)
+        {
+            case "IceBurst":
+            {
+                SpellData tChosenSpell = m_CurrentEnnemyStats.GetSpellData(m_ChosenBossSpell);
+                int tDamage = tChosenSpell.m_Damage;
+                for(int i = 0; i < m_AliveFriendlies; i++)
+                {
+                    Instantiate(tChosenSpell.m_SpellPrefab, m_FriendlyIdlePositions[i], Quaternion.identity);
+                    m_CurrentFriendlyStats = m_FriendlyList[i].GetComponent<NPCController>();
+                    m_CurrentFriendlyStats.CurrentHP -= tDamage;
+                    m_CurrentFriendlyAttacked = i;
+                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
+                    if(m_CurrentFriendlyStats.isDead == true)
+                    {
+                        m_CurrentFriendlyAnim.SetBool("isDead", true);
+                        m_AliveFriendlies--;
+                        if(m_AliveFriendlies == 0)
+                        {
+                            string LastScene = LevelManager.Instance.LastScene;
+                            LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+                        }
+                    }
+                    m_CurrentEnnemyAnim.SetTrigger("Attack");
+                    
+                }
+                break;
+            }
+            case "Heal":
+            {
+                SpellData tChosenSpell = m_CurrentEnnemyStats.GetSpellData(m_ChosenBossSpell);
+                int tHealAmmount = tChosenSpell.m_Damage;
+                m_CurrentEnnemyStats.CurrentHP += tHealAmmount;
+                m_CurrentEnnemyAnim.SetBool("isIdle", true);
+                CombatManager.Instance.ChangeLifeValue(m_CurrentEnnemyStats, m_CurrentEnnemyAttacked);
+                Vector2 tDest = m_CurrentEnnemyGO.transform.position;
+                tDest.x -= 1;
+                Instantiate(tChosenSpell.m_SpellPrefab, tDest, Quaternion.identity);
+                break;
+            }
+            case "Lazer":
+            {
+                SpellData tChosenSpell = m_CurrentEnnemyStats.GetSpellData(m_ChosenBossSpell);
+                int tDamage = tChosenSpell.m_Damage;
+                m_CurrentFriendlyStats.CurrentHP -= tDamage;
+                CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
+                if(m_CurrentFriendlyStats.isDead == true)
+                {
+                    m_CurrentFriendlyAnim.SetBool("isDead", true);
+                    m_AliveFriendlies--;
+                    if(m_AliveFriendlies == 0)
+                    {
+                        string LastScene = LevelManager.Instance.LastScene;
+                        LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+                    }
+                }
+                Vector2 tDest = m_CurrentEnnemyGO.transform.position;
+                tDest.x -= 5;
+                Instantiate(tChosenSpell.m_SpellPrefab, tDest, Quaternion.identity);
+                m_CurrentEnnemyAnim.SetTrigger("Attack");
+                break;
+            }
+        }
+    }
+
+    private void SetupBossAttack(string aSpell)
+    {
+        Animator tBossAnim = m_EnnemyList[0].GetComponent<Animator>();
+        m_CurrentEnnemyAnim = tBossAnim;
+        m_CurrentEnnemyGO = m_EnnemyList[0];
+        m_ChosenBossSpell = aSpell;
+        m_StartEnnemyCombat = true;
+        m_CurentIdle = m_EnnemyIdlePositions[1];
+        m_CurrentEnnemyStats = m_EnnemyList[0].GetComponent<NPCController>();
+        m_CurrentRend = m_EnnemyList[0].GetComponent<SpriteRenderer>();
+        
+        switch(aSpell)
+        {
+            case "IceBurst":
+            {
+                Vector2 tDest = m_FriendlyIdlePositions[1];
+                tDest.x += 4;
+                m_CurrentDestination = tDest;
+                break;
+            }
+            case "Lazer":
+            {
+                m_CurrentFriendlyAttacked = RandomizeEnnemyAttack();
+                m_CurrentFriendlyStats = m_FriendlyList[m_CurrentFriendlyAttacked - 1].GetComponent<NPCController>();
+                Vector2 tDest = m_FriendlyIdlePositions[m_CurrentFriendlyAttacked - 1];
+                tDest.x += 2;
+                m_CurrentDestination = tDest;
+                break;
+            }
+            case "Heal":
+            {
+                Vector2 tDest = m_EnnemyIdlePositions[1];
+                tDest.x -= 3;
+                m_CurrentDestination = tDest;
+                break;
+            }
+        }
+    }
+
+    public void SetupBoss(List<CharacterData> aFriendlyList, CharacterData aBossData)
+    {
+        m_TotalEnnemyCount = 1;
+        m_AliveEnnemies = 1;
+        m_AliveFriendlies = 3;
+
+        for(int i = 0; i< 3; i++)
+        {
+            GameObject FGO = Instantiate(aFriendlyList[i].m_CharacterPrefab, m_FriendlyIdlePositions[i], Quaternion.identity);
+            m_FriendlyList.Add(FGO);
+        }
+
+        GameObject tBoss = Instantiate(aBossData.m_CharacterPrefab, m_EnnemyIdlePositions[1], Quaternion.identity);
+        m_EnnemyList.Add(tBoss);
+        m_BossData = aBossData;
+        m_CurrentEnnemyStats = tBoss.GetComponent<NPCController>();
+        m_CurrentRend = tBoss.GetComponent<SpriteRenderer>();
+
     }
 }

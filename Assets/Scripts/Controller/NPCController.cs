@@ -11,6 +11,9 @@ public class NPCController : MonoBehaviour
     [SerializeField]
     private CharacterData m_NPCData;
 
+    [SerializeField]
+    private List<SpellData> m_SpellList;
+
     private int m_Damage;
     private int m_MaxHP;
     private int m_CurrentHP;
@@ -23,6 +26,19 @@ public class NPCController : MonoBehaviour
         m_MaxHP = m_NPCData.m_MaxHealth;
         m_CurrentHP = m_NPCData.m_CurrentHealth;
         m_IsDead = m_NPCData.m_IsDead;
+    }
+
+    public SpellData GetSpellData(string aName)
+    {
+        for(int i = 0; i < m_SpellList.Count; i++)
+        {
+            if(m_SpellList[i].m_SpellName == aName)
+            {
+                return m_SpellList[i];
+            }
+        }
+        Debug.LogError("Spell with this name doesnt exist");
+        return null;
     }
 
 

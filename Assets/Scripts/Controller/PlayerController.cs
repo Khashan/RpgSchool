@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         GameManager.Instance.PlayerController(this);
+
+        Vector3 lastPos = GameManager.Instance.GetLastPlayerPosition();
+        transform.position = lastPos != Vector3.zero ? lastPos : transform.position; 
     }
 
     private void Start()

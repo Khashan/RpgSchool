@@ -22,25 +22,22 @@ public class GameManager : Singleton<GameManager>
     {
         get { return m_Player; }
     }
-
-    private object[] GetPlayerTeams()
-    {
-        throw new NotImplementedException("Require Player Controller!");
-    }
     #endregion
 
 
     private void Start()
     {
-        LevelManager.Instance.m_OnLoadingFinished += OnSceneChanged;
+        //LevelManager.Instance.m_OnLoadingFinished += OnSceneChanged;
     }
 
-    private void OnSceneChanged()
+    public Vector3 GetLastPlayerPosition()
     {
         if (!m_PlayerOldScenePosition.Equals(m_EmptyKeyValue) && m_PlayerOldScenePosition.Key == LevelManager.Instance.CurrentScene)
         {
-            Player.transform.position = m_PlayerOldScenePosition.Value;
+            return m_PlayerOldScenePosition.Value;
         }
+
+        return Vector3.zero;
     }
 
     public void StartBoss()

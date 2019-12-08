@@ -18,3 +18,4 @@ MonoBehaviour:
   m_CharacterPrefab: {fileID: 197579813435756906, guid: 0a12796578bd6144f9a506b7bc1e1949,
     type: 3}
   m_IsDead: 0
+  m_EntityName: Ice Queen

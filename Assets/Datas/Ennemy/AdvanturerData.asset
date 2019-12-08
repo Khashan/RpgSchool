@@ -18,3 +18,4 @@ MonoBehaviour:
   m_CharacterPrefab: {fileID: 6377221669216030856, guid: d192628a454161343bc4549d61de25e7,
     type: 3}
   m_IsDead: 0
+  m_EntityName: Adventurer

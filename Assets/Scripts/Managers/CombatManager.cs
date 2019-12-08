@@ -33,9 +33,16 @@ public class CombatManager : Singleton<CombatManager>
         set{ m_CombatController = value;}
     }
 
-    public void SetHealthBarController(HealthBarController aController)
+    public List<string> GetEnnemyNames()
     {
-        m_HealthBarController = aController;
+        Debug.Log("Getting Names");
+        List<string> tNameList = new List<string>();
+        for(int i = 0; i < GetEnnemyTeamSize(); i++)
+        {
+            tNameList.Add( "- " + m_EnnemyTeam[i].m_EntityName);
+            Debug.Log("Adding " + m_EnnemyTeam[i].m_EntityName);
+        }
+        return tNameList;
     }
 
     public int GetEnnemyTeamSize()
@@ -58,6 +65,8 @@ public class CombatManager : Singleton<CombatManager>
             int rand = (int)UnityEngine.Random.Range(0, m_PossibleEnnemyList.Count);
             m_EnnemyTeam.Add(m_PossibleEnnemyList[rand]);
         }
+        m_HealthBarController.SetupCombat();
+        
     }
 
     public List<int> GetAliveEnnemies()
@@ -70,6 +79,7 @@ public class CombatManager : Singleton<CombatManager>
         m_CombatController.SetupBoss(m_PlayerTeam, m_BossData);
         m_EnnemyTeam.Add(m_BossData);
         HUDManager.Instance.combatUI.InitialiseCharacter(m_PlayerTeam.Count, m_EnnemyTeam.Count);
+        m_HealthBarController.SetupCombat();
     }
 
     public void CombatSetup()

@@ -123,6 +123,10 @@ public class CombatUI_Controller : MonoBehaviour
     {
         ActiveAllie(true);
         int allie = m_AllieCount + 1;
+        if(allie > 3)
+        {
+            allie = 1;
+        }
         CombatManager.Instance.Attack(allie, enemy);
         ActivatedEnemyButton(false);
     }

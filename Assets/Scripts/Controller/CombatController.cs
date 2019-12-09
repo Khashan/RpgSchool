@@ -358,21 +358,19 @@ public class CombatController : MonoBehaviour
         m_CurrentEnnemyAnim = null;
         m_CurrentRend = null;
         m_Coroutine = null;
-
-        //m_StartEnnemyCombat = false;
     }
 
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
         m_IsFirstTurn = false;
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
-        m_CurrentEnnemyAttacked = aAttackedPosition + 3;
-        m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition - 1].GetComponent<NPCController>();
-        m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition - 1].GetComponent<NPCController>();
-        m_CurrentEnnemyGO = m_EnnemyList[aAttackedPosition -1];
-        m_CurrentFriendlyGO = m_FriendlyList[aAttackingPosition - 1];
-        m_CurentIdle = m_FriendlyIdlePositions[aAttackingPosition - 1];
-        m_CurrentDestination = m_FriendlyAttackingPositions[aAttackedPosition -1];
+        m_CurrentEnnemyAttacked = aAttackedPosition + 4;
+        m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition].GetComponent<NPCController>();
+        m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition].GetComponent<NPCController>();
+        m_CurrentEnnemyGO = m_EnnemyList[aAttackedPosition];
+        m_CurrentFriendlyGO = m_FriendlyList[aAttackingPosition];
+        m_CurentIdle = m_FriendlyIdlePositions[aAttackingPosition];
+        m_CurrentDestination = m_FriendlyAttackingPositions[aAttackedPosition];
         m_CurrentFriendlyAnim = m_CurrentFriendlyGO.GetComponent<Animator>();
         m_CurrentEnnemyAnim = m_CurrentEnnemyGO.GetComponent<Animator>();
         m_CurrentRend = m_CurrentFriendlyGO.GetComponent<SpriteRenderer>();

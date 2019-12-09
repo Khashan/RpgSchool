@@ -453,11 +453,22 @@ public class CombatController : MonoBehaviour
             {
                 m_CurrentEnnemyTurn = 1;
             }
-            NPCController tempEnnemy = m_EnnemyList[m_CurrentEnnemyTurn - 1].GetComponent<NPCController>();
-            if(tempEnnemy.isDead)
+            if(m_EnnemyList.Count != 2)
             {
-                m_CurrentEnnemyTurn++;
+                NPCController tempEnnemy = m_EnnemyList[m_CurrentEnnemyTurn - 1].GetComponent<NPCController>();
+                if(tempEnnemy.isDead)
+                {
+                    m_CurrentEnnemyTurn++;
+                }
             }
+            else
+            {
+                if(m_CurrentEnnemyTurn == 3)
+                {
+                    m_CurrentEnnemyTurn = 1;
+                }
+            }
+            
             if(m_CurrentEnnemyTurn > 3)
             {
                 m_CurrentEnnemyTurn = 1;

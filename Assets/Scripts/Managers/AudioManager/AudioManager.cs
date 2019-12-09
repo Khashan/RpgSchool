@@ -36,7 +36,7 @@ public class AudioManager : Singleton<AudioManager>
     {
         if (m_IsMusicFadingOut)
         {
-            m_MusicPlayer.volume -= Time.deltaTime;
+            m_MusicPlayer.volume -= Time.unscaledDeltaTime;
 
             if (m_NextMusicToPlay != null && m_MusicPlayer.volume <= m_VolumeToSwitchToNewMusic)
             {
@@ -52,6 +52,7 @@ public class AudioManager : Singleton<AudioManager>
 
     private void TransitioningToAnotherMusic()
     {
+        m_MusicPlayer.Stop();
         m_MusicPlayer.clip = m_NextMusicToPlay;
         m_NextMusicToPlay = null;
         m_IsMusicFadingOut = false;
@@ -132,7 +133,7 @@ public class AudioManager : Singleton<AudioManager>
 
     private void OnSceneFinishedLoading()
     {
-        StopMusic();
+        //StopMusic();
     }
 
     #endregion

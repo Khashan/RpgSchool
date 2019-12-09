@@ -109,9 +109,8 @@ public class NPCMover : MonoBehaviour
             m_Instructions.SetActive(true);
         }
 
-        //---- pour ouvrir linventaire --------
-        HUDManager.Instance.ActiveTrade(true);
-        //-------------------------------------
+        HUDManager.Instance.MainUI.SetShopWindowVisibility(true);
+
     }
 
     private void OnTriggerExit2D(Collider2D aTrig)
@@ -123,5 +122,7 @@ public class NPCMover : MonoBehaviour
         {
             m_Instructions.SetActive(false);
         }
+
+        HUDManager.Instance.MainUI.SetShopWindowVisibility(false);
     }
 }

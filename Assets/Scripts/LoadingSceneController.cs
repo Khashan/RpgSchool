@@ -11,6 +11,8 @@ public class LoadingSceneController : MonoBehaviour
     private float m_Delay = 20f;
     [SerializeField]
     private int m_RandomDelay;
+    [SerializeField]
+    private string m_SceneToGo = "Level01Scene";
 
     [SerializeField]
     private Slider m_LoadingBar;
@@ -29,7 +31,7 @@ public class LoadingSceneController : MonoBehaviour
 
             if(m_LoadingBar.value >= 100)
             {
-                LevelManager.Instance.ChangeLevel("ThomasScene", true, 1f);
+                LevelManager.Instance.ChangeLevel(m_SceneToGo, true);
             }
         }
 

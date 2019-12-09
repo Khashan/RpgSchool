@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 4561604957462554908}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -115,3 +115,4 @@ MonoBehaviour:
   m_SelfPrefab: {fileID: 826234279895324392, guid: a707ba664fad5a54289b4a898c7cf1df,
     type: 3}
   m_NPCData: {fileID: 11400000, guid: 1bf77f1b2a28c5040a5a4dccd3ea4a47, type: 2}
+  m_SpellList: []

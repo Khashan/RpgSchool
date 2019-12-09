@@ -12,15 +12,15 @@ public class HUDManager : Singleton<HUDManager>
     [SerializeField]
     private GameObject m_Win;
     [SerializeField]
-    private GameObject m_MainUI;
+    private GamePlayUI m_MainUI;
+    public GamePlayUI MainUI
+    {
+        get {return m_MainUI;}
+    }
+    
     [SerializeField]
     private GameObject m_CaveUI;
-    [SerializeField]
-    private GameObject m_CombatUI;
-    [SerializeField]
-    private GameObject m_TradeUI;
-    [SerializeField]
-    private GameObject m_InGamePlayUI;
+
     [SerializeField]
     private CombatUI_Controller m_CombatUI_Controller;
     public CombatUI_Controller combatUI
@@ -29,20 +29,6 @@ public class HUDManager : Singleton<HUDManager>
         get { return m_CombatUI_Controller; }
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            if (m_TradeUI.activeSelf)
-            {
-                ActiveTrade(false);
-            }
-            else
-            {
-                ActiveTrade(true);
-            }
-        }
-    }
 
     // pêtit souci de sequence de layout WARNING dont touch
     public void ResetLayout()
@@ -54,26 +40,20 @@ public class HUDManager : Singleton<HUDManager>
     {
         switch(aScene)
         {
-            case "ThomasScene":
+            case "Level01Scene":
                 m_CaveUI.SetActive(false);
-                m_CombatUI.SetActive(false);
-                m_TradeUI.SetActive(false);
-                m_InGamePlayUI.SetActive(true);
-                m_MainUI.SetActive(true);
+                m_CombatUI_Controller.gameObject.SetActive(false);
+                m_MainUI.gameObject.SetActive(true);
                 break;
             case "CaveScene":
-                m_CombatUI.SetActive(false);
-                m_MainUI.SetActive(false);
-                m_TradeUI.SetActive(false);
-                m_InGamePlayUI.SetActive(true);
+                m_CombatUI_Controller.gameObject.SetActive(false);
+                m_MainUI.gameObject.SetActive(false);
                 m_CaveUI.SetActive(true);
                 break;
             case "DefaultCombatScene":
                 m_CaveUI.SetActive(false);
-                m_MainUI.SetActive(false);
-                m_TradeUI.SetActive(false);
-                m_InGamePlayUI.SetActive(false); 
-                m_CombatUI.SetActive(true);
+                m_MainUI.gameObject.SetActive(false);
+                m_CombatUI_Controller.gameObject.SetActive(true);
                 break;
         }
     }
@@ -86,17 +66,5 @@ public class HUDManager : Singleton<HUDManager>
     public void ActivateGameOverHUD(bool aBool)
     {
         m_GameOver.SetActive(aBool);
-    }
-
-    public void ActiveTrade(bool active)
-    {
-        if (active)
-        {
-            m_TradeUI.SetActive(true);
-        }
-        else
-        {
-            m_TradeUI.SetActive(false);
-        }
     }
 }

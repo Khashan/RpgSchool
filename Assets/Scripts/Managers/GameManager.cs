@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     private PlayerController m_Player;
-    private int m_PlayerDistance = 0;
+    private float m_PlayerDistance = 0;
     [SerializeField]
     private int m_Odds = 125;
 
@@ -46,7 +46,7 @@ public class GameManager : Singleton<GameManager>
         LevelManager.Instance.ChangeLevel("DefaultCombatScene", true, 0.5f);
     }
 
-    public void GetPlayerDistance(int aInt)
+    public void GetPlayerDistance(float aInt)
     {
         m_PlayerDistance = aInt;
         System.Random rand = new System.Random();

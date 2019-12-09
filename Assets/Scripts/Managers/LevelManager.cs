@@ -8,6 +8,8 @@ public class LevelManager : Singleton<LevelManager>
     private CanvasGroup m_LoadingScreen;
     [SerializeField]
     private float m_DelayLoading = 4f;
+    [SerializeField]
+    private float m_FadingSpeed = 3f;
 
     private float m_LoadingSceneTimer;
     private float m_CurrentTimer;
@@ -61,20 +63,20 @@ public class LevelManager : Singleton<LevelManager>
 
     private void FadeIn()
     {
-        m_LoadingScreen.alpha += Time.deltaTime / m_LoadingSceneTimer;
+        m_LoadingScreen.alpha += Time.deltaTime * m_FadingSpeed;
 
-        if (m_LoadingScreen.alpha == 1)
+        if (m_LoadingScreen.alpha >= 1)
         {
-            SceneManager.LoadScene(m_SceneToLoad);
+            UnityLoadScene();
             m_FadeIn = false;
         }
     }
 
     private void FadeOut()
     {
-        m_LoadingScreen.alpha -= Time.deltaTime / m_LoadingSceneTimer;
+        m_LoadingScreen.alpha -= Time.deltaTime * m_FadingSpeed;
 
-        if (m_LoadingScreen.alpha == 0)
+        if (m_LoadingScreen.alpha <= 0)
         {
             m_FadeOut = false;
         }
@@ -87,16 +89,23 @@ public class LevelManager : Singleton<LevelManager>
 
         if (!m_FadeIn)
         {
-            SceneManager.LoadScene(m_SceneToLoad);
+            UnityLoadScene();
         }
+
+    }
+
+    private void UnityLoadScene()
+    {
+        SceneManager.LoadScene(m_SceneToLoad);
+        HUDManager.Instance.ActiveScenUI(m_SceneToLoad);
     }
 
     private void EndLoading()
     {
-        HUDManager.Instance.ActiveScenUI(m_SceneToLoad);
         m_FadeOut = true;
         m_LoadingScreen.blocksRaycasts = false;
         m_LoadingScreen.interactable = false;
+
 
         if (m_OnLoadingFinished != null)
         {
@@ -126,17 +135,16 @@ public class LevelManager : Singleton<LevelManager>
         m_CurrentScene = a_Scene;
 
         m_SceneToLoad = a_Scene;
+        
         m_LoadingSceneTimer = (a_FixedDelay == -1) ? m_DelayLoading : a_FixedDelay;
         m_CurrentTimer = m_LoadingSceneTimer;
 
-        if (a_FixedDelay > 0)
+        if(m_LoadingSceneTimer == 0)
         {
-            m_FadeIn = a_Fadding;
+            a_Fadding = false;
         }
-        else
-        {
-            m_FadeIn = false;
-        }
+
+        m_FadeIn = a_Fadding;
 
         SceneManager.sceneLoaded += OnLoadingDone;
         StartLoading();

@@ -134,9 +134,24 @@ public class CombatUI_Controller : MonoBehaviour
             m_CurrentAlly = 0;
         }
 
+        if(m_AllyFighters[m_CurrentAlly].m_IsDead)
+        {
+            NextRound();
+            return;
+        }
+
         EnableCurrentPlayerIndicator();
         EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
+
+    public void FriendlyDead(int aAllyIndex)
+    {
+        if (aAllyIndex < m_AlliesCount)
+        {
+            m_AllyFighters[aAllyIndex] = new FigtherData { m_Position = m_AllyFighters[aAllyIndex].m_Position, m_IsDead = true };
+        }
+    }
+
 
     public void EnemyDead(int aIndexEnemy)
     {

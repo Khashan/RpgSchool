@@ -6,6 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
     private PlayerData m_Data;
+    [SerializeField]
+    private Rigidbody2D m_Rb;
     private float m_Speed;
     private float m_Hp;
 
@@ -16,7 +18,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_InitialPos;
     private Vector2 m_WantedPos;
     private bool m_IsInCombat = false;
-    private Vector3 m_Movement = new Vector3();
+    private Vector2 m_Velocity;
 
     public void SetBool(bool aBool)
     {
@@ -28,7 +30,7 @@ public class PlayerController : MonoBehaviour
     }
     
     [SerializeField]
-    private int m_DistanceTravelled = 0;
+    private float m_DistanceTravelled = 0;
 
     public void SetDistanceTravelled(int aDistance)
     {
@@ -59,45 +61,22 @@ public class PlayerController : MonoBehaviour
         if(!m_IsInCombat)
         {
             CollectPotion();
-            float InputsX = Input.GetAxisRaw("Horizontal");
-            float InputsY = Input.GetAxisRaw("Vertical");
-            if(!m_IsMoving)
+
+            m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
+            m_Velocity += (Vector2)transform.up * Input.GetAxisRaw("Vertical");
+            m_Velocity *= m_Speed;
+
+            if(m_Velocity != Vector2.zero)
             {
-                if (InputsX != 0)
-                {
-                    m_IsMoving = true;
-                    m_PercentageCompletion = 0f;
-                    m_InitialPos = transform.position;
-                    m_Movement.x = InputsX;
-                    m_WantedPos = transform.position + m_Movement;
-                }
-
-                else if(InputsY != 0)
-                {
-                    m_IsMoving = true;
-                    m_PercentageCompletion = 0f;
-                    m_InitialPos = transform.position;
-                    m_Movement.y = InputsY;
-                    m_WantedPos = transform.position + m_Movement;
-                }
-            }
-
-            if (m_IsMoving)
-            {
-                m_PercentageCompletion += Time.fixedDeltaTime * m_Speed;
-                m_PercentageCompletion = Mathf.Clamp(m_PercentageCompletion, 0f, 1f);
-
-                transform.position = Vector3.Lerp(m_InitialPos, m_WantedPos, m_PercentageCompletion);
-
-                if (m_PercentageCompletion >= 1)
-                {
-                    m_DistanceTravelled++;
-                    GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
-                    m_Movement = Vector3.zero;
-                    m_IsMoving = false;
-                }
+                m_DistanceTravelled += Time.deltaTime;
+                GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
             }
         }
+    }
+
+    private void FixedUpdate()
+    {
+        m_Rb.velocity = m_Velocity;
     }
 
     private void CollectPotion()

@@ -549,6 +549,18 @@ public class CombatController : MonoBehaviour
         }
     }
 
+    public IEnumerator Wait(float aSecs)
+    {
+        //Waits for a set amount of time before the friendly unit runs back
+        //to its original position
+        while(true)
+        {
+            yield return new WaitForSeconds(aSecs);
+            StopAllCoroutines();
+            m_Coroutine = null;
+        }
+    }
+
     public IEnumerator MoveToNPC(GameObject aMovingNPC, Vector3 aInitial, Vector3 aDestination, float aTime)
     {
         //moves the desired unit to the desired position over
@@ -574,11 +586,12 @@ public class CombatController : MonoBehaviour
        if(m_CurrentEnnemyStats.isDead == true)
         {
             m_CurrentEnnemyAnim.SetBool("isDead", true);
-            HUDManager.Instance.combatUI.EnemyDead( - 4);
+            HUDManager.Instance.combatUI.EnemyDead(m_CurrentEnnemyAttacked - 4);
             m_AliveEnnemies--;
             if(m_AliveEnnemies == 0)
             {
                 string LastScene = LevelManager.Instance.LastScene;
+                StartCoroutine(Wait(2f));
                 LevelManager.Instance.ChangeLevel(LastScene, true, 1);
             }
         }
@@ -599,6 +612,7 @@ public class CombatController : MonoBehaviour
             HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked);
             if(m_AliveFriendlies == 0)
             {
+                StartCoroutine(Wait(2f));
                 string LastScene = LevelManager.Instance.LastScene;
                 LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
             }
@@ -632,6 +646,7 @@ public class CombatController : MonoBehaviour
                         if(m_AliveFriendlies == 0)
                         {
                             string LastScene = LevelManager.Instance.LastScene;
+                            StartCoroutine(Wait(2f));
                             LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
                         }
                     }
@@ -666,6 +681,7 @@ public class CombatController : MonoBehaviour
                     if(m_AliveFriendlies == 0)
                     {
                         string LastScene = LevelManager.Instance.LastScene;
+                        StartCoroutine(Wait(2f));
                         LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
                     }
                 }

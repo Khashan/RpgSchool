@@ -620,7 +620,7 @@ MonoBehaviour:
   - {x: 5.6, y: -0.01999998}
   - {x: 6.93, y: -0.98}
   - {x: 8.33, y: -1.85}
-  m_TravelLerpDuration: 2
+  m_TravelLerpDuration: 1
 --- !u!4 &1944061663
 Transform:
   m_ObjectHideFlags: 0

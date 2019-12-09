@@ -58,7 +58,9 @@ public class CombatController : MonoBehaviour
 
     private void Start()
     {
-
+        //here we verify if we have to setup the final bossfight or
+        //a normal fight.
+        //we then set positions for all of the unit's attacking positions.
 
         CombatManager.Instance.CombatController = this;
         if(!CombatManager.Instance.m_isBoss)
@@ -89,6 +91,8 @@ public class CombatController : MonoBehaviour
 
     public void SetupCombat(List<CharacterData> aFriendlyData, List<CharacterData> aEnnemyData)
     {
+        //takes the randomized ennemy list and the friendly party list and
+        //instantiates each of the at the wanted position.
         m_TotalEnnemyCount = aEnnemyData.Count;
         m_AliveEnnemies = m_TotalEnnemyCount;
         m_AliveFriendlies = aFriendlyData.Count;
@@ -115,6 +119,8 @@ public class CombatController : MonoBehaviour
 
     private void Update()
     {
+        //Unefficient State machine that I procrastinated too long to change
+        //So here we are. it works fine but it is not Clean/Pretty.
 
         if(!m_IsFriendlyAttacking && !m_isEnnemyTurn && !m_IsFirstTurn)
         {
@@ -125,7 +131,7 @@ public class CombatController : MonoBehaviour
             }
         }
 
-
+#region FRIENDLYUPDATE
         if(m_IsFriendlyAttacking)
         {
             if(m_CurrentFriendlyGO.transform.position != m_CurrentDestination && !m_isDoneAttacking)
@@ -170,7 +176,8 @@ public class CombatController : MonoBehaviour
             }
             
         }
-
+#endregion
+#region ENNEMYUPDATE
         if(m_isEnnemyTurn && !m_IsBossFight)
         {
 
@@ -236,7 +243,8 @@ public class CombatController : MonoBehaviour
 
             }
         }
-
+#endregion
+#region BOSSUPDATE
         else if(m_isEnnemyTurn && m_IsBossFight)
         {
             Debug.Log("m_isennemyturnset = " + m_isEnnemyTurnSet);
@@ -341,10 +349,12 @@ public class CombatController : MonoBehaviour
                 
             }
         }
+#endregion
     }
 
     private void ClearCurrentTurn()
     {
+        //Clears all the values used and resets them for the next turn
         m_isDoneAttacking = false;
         m_CurrentFriendlyStats = null;
         m_CurrentEnnemyStats = null;
@@ -358,6 +368,7 @@ public class CombatController : MonoBehaviour
 
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
+        //Sets the values of the ennemy attacked. includes setting the posistions and getting its animator and renderer
         m_IsFirstTurn = false;
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentEnnemyAttacked = aAttackedPosition + 4;
@@ -384,6 +395,7 @@ public class CombatController : MonoBehaviour
 
     private void SetEnnemyCombat()
     {
+        //Same as the friendly version
         m_StartEnnemyCombat = true;
         m_CurrentFriendlyAttacked = RandomizeEnnemyAttack();
         m_CurrentFriendlyStats = m_FriendlyList[m_CurrentFriendlyAttacked - 1].GetComponent<NPCController>();
@@ -403,6 +415,9 @@ public class CombatController : MonoBehaviour
 
     public List<int> GetAliveEnnemies()
     {
+        //returns a list of int which contains the positions of all alive ennemies 
+        //EX ennemy 1 and 3 are alive, but 2 is dead.
+        //this will return {1,3}
         List<int> tAliveEnnemyList = new List<int>();
         for(int i = 0; i < m_EnnemyList.Count; i++)
         {
@@ -420,6 +435,8 @@ public class CombatController : MonoBehaviour
 
     private int CheckEnnemyTurn()
     {
+        //verifies if the ennemy is dead
+        //if he is, the turn will automaticly be set to the next alive ennemy
         if(m_AliveEnnemies == 3)
         {
             m_CurrentEnnemyTurn++;
@@ -465,6 +482,8 @@ public class CombatController : MonoBehaviour
 
     private int RandomizeEnnemyAttack()
     {
+        //randomizes the attack of the ennemy according to how many
+        //alive players are left
         for(int i = 0; i < 3; i++)
         {
             NPCController tempfriendly = m_FriendlyList[i].GetComponent<NPCController>();
@@ -501,6 +520,8 @@ public class CombatController : MonoBehaviour
 
     public IEnumerator WaitForAttack(float aSecs, bool aIsFriendly)
     {
+        //Waits for a set amount of time before the friendly unit runs back
+        //to its original position
         while(true)
         {
             yield return new WaitForSeconds(aSecs);
@@ -515,11 +536,12 @@ public class CombatController : MonoBehaviour
                 m_CurrentRend.flipX = false;
             }
         }
-        //m_Coroutine = null;
     }
 
     public IEnumerator MoveToNPC(GameObject aMovingNPC, Vector3 aInitial, Vector3 aDestination, float aTime)
     {
+        //moves the desired unit to the desired position over
+        //a wanted lapse of time
         float elapsed = 0f;
         while(elapsed < aTime)
         {
@@ -533,12 +555,15 @@ public class CombatController : MonoBehaviour
 
     private void Attack()
     {
+        //Friendly functions that damages the designated ennemy and updates its
+        //life in the ui
        int tDamage = m_CurrentFriendlyStats.Damage;
        m_CurrentEnnemyStats.CurrentHP -= tDamage;
        CombatManager.Instance.ChangeLifeValue(m_CurrentEnnemyStats, m_CurrentEnnemyAttacked);
        if(m_CurrentEnnemyStats.isDead == true)
         {
             m_CurrentEnnemyAnim.SetBool("isDead", true);
+            HUDManager.Instance.combatUI.EnemyDead( - 4);
             m_AliveEnnemies--;
             if(m_AliveEnnemies == 0)
             {
@@ -552,6 +577,7 @@ public class CombatController : MonoBehaviour
 
     private void EnnemyAttack()
     {
+        //same as the Attack() variant but for ennemies
         int tDamage = m_CurrentEnnemyStats.Damage;
         m_CurrentFriendlyStats.CurrentHP -= tDamage;
         CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
@@ -559,6 +585,7 @@ public class CombatController : MonoBehaviour
         {
             m_CurrentFriendlyAnim.SetBool("isDead", true);
             m_AliveFriendlies--;
+            HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked);
             if(m_AliveFriendlies == 0)
             {
                 string LastScene = LevelManager.Instance.LastScene;
@@ -571,6 +598,7 @@ public class CombatController : MonoBehaviour
 
     private void BossAttack()
     {
+        //Uses the randomized spell to attack a friendly unit.
         switch(m_ChosenBossSpell)
         {
             case "IceBurst":
@@ -587,6 +615,7 @@ public class CombatController : MonoBehaviour
                     CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked + 1);
                     if(m_CurrentFriendlyStats.isDead == true)
                     {
+                        HUDManager.Instance.combatUI.FriendlyDead(i);
                         m_CurrentFriendlyAnim.SetBool("isDead", true);
                         m_AliveFriendlies--;
                         if(m_AliveFriendlies == 0)
@@ -620,6 +649,7 @@ public class CombatController : MonoBehaviour
                 CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
                 if(m_CurrentFriendlyStats.isDead == true)
                 {
+                    HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked - 1);
                     m_CurrentFriendlyAnim.SetBool("isDead", true);
                     m_AliveFriendlies--;
                     if(m_AliveFriendlies == 0)
@@ -639,6 +669,7 @@ public class CombatController : MonoBehaviour
 
     private void SetupBossAttack(string aSpell)
     {
+        //sets up the positions and stats of the boss and spell
         Animator tBossAnim = m_EnnemyList[0].GetComponent<Animator>();
         m_CurrentEnnemyAnim = tBossAnim;
         m_CurrentEnnemyGO = m_EnnemyList[0];
@@ -680,6 +711,10 @@ public class CombatController : MonoBehaviour
 
     public void SetupBoss(List<CharacterData> aFriendlyList, CharacterData aBossData)
     {
+        //this is called at the begining of a bossfight
+        //to setup the scene.
+        //its normal variant is SetupCombat();
+        //this is only called once at the final bossfight.
         m_TotalEnnemyCount = 1;
         m_AliveEnnemies = 1;
         m_AliveFriendlies = 3;

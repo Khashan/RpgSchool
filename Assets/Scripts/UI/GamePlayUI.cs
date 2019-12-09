@@ -11,8 +11,6 @@ public class GamePlayUI : MonoBehaviour
 
     [SerializeField]
     private CustomWindow m_ShopWindow;
-    [SerializeField]
-    private CustomWindow m_ActionMenu;
 
     [Header("Navigations")]
     [SerializeField]
@@ -44,7 +42,7 @@ public class GamePlayUI : MonoBehaviour
         currOpen.Close();
         m_NavigationOpenMenus.Remove(currOpen);
 
-        if(m_NavigationOpenMenus.Count != 0)
+        if (m_NavigationOpenMenus.Count != 0)
         {
             m_NavigationOpenMenus[m_NavigationOpenMenus.Count - 1].Open();
         }
@@ -64,12 +62,12 @@ public class GamePlayUI : MonoBehaviour
 
     public void OpenSubMenu(int aId)
     {
-        switch((MenuId)aId)
+        switch ((MenuId)aId)
         {
             case MenuId.INVENTORY:
                 m_Inventory.Open();
                 m_NavigationOpenMenus.Add(m_Inventory);
-            break;
+                break;
         }
     }
 

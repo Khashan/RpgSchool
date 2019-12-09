@@ -12,7 +12,7 @@ namespace Anderson.CustomWindows
         public bool m_ShowOnAwake;
         public bool m_IsMovable;
         public bool m_BlockRaycast;
-        
+
         [Header("Logic")]
         [Tooltip("The Unity's Update callback will keep running event if the window is not focused.")]
         public bool m_AlwaysUpdating;
@@ -64,7 +64,7 @@ namespace Anderson.CustomWindows
 
         private void Update()
         {
-            if(m_WindowSettings.m_AlwaysUpdating || m_IsOpen)
+            if (m_WindowSettings.m_AlwaysUpdating || m_IsOpen)
             {
                 OnUpdate();
             }
@@ -80,26 +80,29 @@ namespace Anderson.CustomWindows
         public virtual void Close()
         {
             CancelTransition();
-            StartCoroutine(WaitForTransition(false));
+
+            m_IsOpen = false;
+            StartCoroutine(WaitForTransition());
         }
 
         public virtual void Open()
         {
             gameObject.SetActive(true);
-
             CancelTransition();
-            StartCoroutine(WaitForTransition(true));
-            Focus();
 
-            if(EventSystem.current != null)
-            {
-                EventSystem.current.SetSelectedGameObject(m_EventSystemFocusOnOpen);
-            }
+            m_IsOpen = true;
+            StartCoroutine(WaitForTransition());
+            Focus();
         }
 
         public virtual void Focus()
         {
             transform.SetAsLastSibling();
+
+            if (EventSystem.current != null)
+            {
+                EventSystem.current.SetSelectedGameObject(m_EventSystemFocusOnOpen);
+            }
         }
 
         public bool IsOpen()
@@ -111,44 +114,44 @@ namespace Anderson.CustomWindows
         {
             StopAllCoroutines();
 
-            switch(m_WindowSettings.m_WindowTransition)
+            switch (m_WindowSettings.m_WindowTransition)
             {
                 case WindowTransition.Zooming:
-                {
-                    m_WindowCanvasGroup.transform.localScale = m_IsOpen ? Vector3.one : Vector3.zero;
-                    break;
-                }
+                    {
+                        m_WindowCanvasGroup.transform.localScale = m_IsOpen ? Vector3.one : Vector3.zero;
+                        break;
+                    }
 
                 case WindowTransition.None:
                 case WindowTransition.Fading:
-                {
-                    m_WindowCanvasGroup.alpha = m_IsOpen ? 1 : 0;
-                    break;
-                }
+                    {
+                        m_WindowCanvasGroup.alpha = m_IsOpen ? 1 : 0;
+                        break;
+                    }
             }
 
             m_WindowCanvasGroup.blocksRaycasts = m_IsOpen ? m_WindowSettings.m_BlockRaycast : false;
         }
 
-        private IEnumerator WaitForTransition(bool a_IsOpening)
+        private IEnumerator WaitForTransition()
         {
             switch (m_WindowSettings.m_WindowTransition)
             {
                 case WindowTransition.None:
                     {
-                        m_WindowCanvasGroup.alpha = a_IsOpening ? 1 : 0;
+                        m_WindowCanvasGroup.alpha = m_IsOpen ? 1 : 0;
                         break;
                     }
 
                 case WindowTransition.Fading:
                     {
                         bool effectDone = false;
-                        
+
                         while (!effectDone)
                         {
-                            FadingEffect(a_IsOpening);
+                            FadingEffect(m_IsOpen);
 
-                            effectDone = (a_IsOpening && m_WindowCanvasGroup.alpha == 1) || (!a_IsOpening && m_WindowCanvasGroup.alpha == 0);
+                            effectDone = (m_IsOpen && m_WindowCanvasGroup.alpha == 1) || (!m_IsOpen && m_WindowCanvasGroup.alpha == 0);
                             yield return new WaitForEndOfFrame();
                         }
                         break;
@@ -162,22 +165,20 @@ namespace Anderson.CustomWindows
 
                         while (!effectDone)
                         {
-                            ZoomingEffect(a_IsOpening);
+                            ZoomingEffect(m_IsOpen);
 
-                            effectDone = (a_IsOpening && transform.localScale.x == 1) || (!a_IsOpening && transform.localScale.x == 0);
+                            effectDone = (m_IsOpen && transform.localScale.x == 1) || (!m_IsOpen && transform.localScale.x == 0);
                             yield return new WaitForEndOfFrame();
                         }
 
-                        m_DraggableZone.enabled = a_IsOpening ? true : false;
+                        m_DraggableZone.enabled = m_IsOpen ? true : false;
                         break;
                     }
             }
 
+            m_WindowCanvasGroup.blocksRaycasts = m_IsOpen ? m_WindowSettings.m_BlockRaycast : false;
 
-            m_IsOpen = a_IsOpening;
-            m_WindowCanvasGroup.blocksRaycasts = a_IsOpening ? m_WindowSettings.m_BlockRaycast : false;
-
-            if (!a_IsOpening)
+            if (!m_IsOpen)
             {
                 gameObject.SetActive(false);
                 m_IsDragging = false;

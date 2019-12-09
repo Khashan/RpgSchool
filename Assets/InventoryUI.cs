@@ -18,7 +18,7 @@ public class InventoryUI : CustomWindow
 
     void OnEnable()
     {
-        if(m_Contrainer.GetChild(0) != null)
+        if (m_Contrainer.GetChild(0) != null)
         {
             EventSystem.current.SetSelectedGameObject(m_Contrainer.GetChild(0).gameObject);
         }
@@ -26,7 +26,8 @@ public class InventoryUI : CustomWindow
 
     protected override void OnUpdate()
     {
-        if(CanUpdateInputs())
+        Debug.Log("Hello!");
+        if (CanUpdateInputs())
         {
             UpdateInputs();
         }
@@ -36,12 +37,12 @@ public class InventoryUI : CustomWindow
 
     private bool CanUpdateInputs()
     {
-        if(m_CurrentUpdateInputs > 0)
+        if (m_CurrentUpdateInputs > 0)
         {
             m_CurrentUpdateInputs -= Time.deltaTime;
             return false;
         }
-        
+
         return true;
     }
 
@@ -49,17 +50,17 @@ public class InventoryUI : CustomWindow
     {
         float vertical = Input.GetAxisRaw("Vertical");
 
-        if(vertical > 0 && m_CurrentChild > 0)
+        if (vertical > 0 && m_CurrentChild > 0)
         {
             m_CurrentChild--;
         }
 
-        if(vertical < 0 && m_CurrentChild < m_Contrainer.childCount - 1)
+        if (vertical < 0 && m_CurrentChild < m_Contrainer.childCount - 1)
         {
             m_CurrentChild++;
         }
-        
-        if(vertical != 0)
+
+        if (vertical != 0)
         {
             UpdateScrollView();
         }
@@ -67,15 +68,15 @@ public class InventoryUI : CustomWindow
 
     private void UpdateScrollView()
     {
-            m_CurrentUpdateInputs = m_UpdateInputs;
+        m_CurrentUpdateInputs = m_UpdateInputs;
 
-            float loc = 0;
-            if(m_CurrentChild != m_Contrainer.childCount -1)
-            {
-                loc = ((float)m_CurrentChild / (float)m_Contrainer.childCount) - 1;
-            }
+        float loc = 0;
+        if (m_CurrentChild != m_Contrainer.childCount - 1)
+        {
+            loc = ((float)m_CurrentChild / (float)m_Contrainer.childCount) - 1;
+        }
 
-            m_Scroller.verticalNormalizedPosition = Mathf.Abs(loc);
+        m_Scroller.verticalNormalizedPosition = Mathf.Abs(loc);
     }
 
 }

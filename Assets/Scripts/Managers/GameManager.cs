@@ -25,11 +25,6 @@ public class GameManager : Singleton<GameManager>
     #endregion
 
 
-    private void Start()
-    {
-        //LevelManager.Instance.m_OnLoadingFinished += OnSceneChanged;
-    }
-
     public Vector3 GetLastPlayerPosition()
     {
         if (!m_PlayerOldScenePosition.Equals(m_EmptyKeyValue) && m_PlayerOldScenePosition.Key == LevelManager.Instance.CurrentScene)

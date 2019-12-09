@@ -120,7 +120,6 @@ public class CombatController : MonoBehaviour
         {
             if(m_WaitForNextInput)
             {
-                Debug.Log("Calling next round");
                 HUDManager.Instance.combatUI.NextRound();
                 m_WaitForNextInput = false;
             }
@@ -156,7 +155,6 @@ public class CombatController : MonoBehaviour
                 {
                     m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentFriendlyGO, m_CurrentDestination, m_CurentIdle, m_TravelLerpDuration));
                 }
-                Debug.Log("not in begin pos");
 
             }
             else if(m_isDoneAttacking && m_CurrentFriendlyGO.transform.position == m_CurentIdle)
@@ -180,7 +178,6 @@ public class CombatController : MonoBehaviour
             {
                 if(!m_isEnnemyTurnSet)
                 {
-                    Debug.Log("Ennemy Turn Checked");
                     m_CurrentEnnemyTurn = CheckEnnemyTurn();
                     m_isEnnemyTurnSet = true;
                 }
@@ -188,7 +185,6 @@ public class CombatController : MonoBehaviour
                 {
                     if(m_StartEnnemyCombat)
                     {
-                        Debug.Log("EnnemyCombatStarted");
                         if(m_CurrentEnnemyGO.transform.position != m_CurrentDestination && !m_isDoneAttacking)
                         {
                             m_CurrentEnnemyAnim.SetBool("isIdle", false);
@@ -197,7 +193,6 @@ public class CombatController : MonoBehaviour
                             {
                                 m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentEnnemyGO, m_CurentIdle, m_CurrentDestination, m_TravelLerpDuration));
                             }
-                            Debug.Log("EnnemyWalkingToAttack");
                             
                         }
                         else if(m_CurrentEnnemyGO.transform.position == m_CurrentDestination && !m_isDoneAttacking)
@@ -208,7 +203,6 @@ public class CombatController : MonoBehaviour
                                 m_Coroutine = StartCoroutine(WaitForAttack(m_TravelLerpDuration, false));
                             }
                             m_isDoneAttacking = true;
-                            Debug.Log("EnnemyAttacking");
                             
                         }
                         else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position != m_CurentIdle)
@@ -218,7 +212,6 @@ public class CombatController : MonoBehaviour
                             {
                                 m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentEnnemyGO, m_CurrentDestination, m_CurentIdle, m_TravelLerpDuration));
                             }
-                            Debug.Log("EnnemyGoingBack");
 
                         }
                         else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position == m_CurentIdle)
@@ -246,12 +239,16 @@ public class CombatController : MonoBehaviour
 
         else if(m_isEnnemyTurn && m_IsBossFight)
         {
+            Debug.Log("m_isennemyturnset = " + m_isEnnemyTurnSet);
             if(!m_isEnnemyTurnSet)
             {
-                Debug.Log("Setting boss setups");
-                if((float)(m_BossData.m_CurrentHealth/m_BossData.m_MaxHealth) < 0.3f)
+                NPCController tBossController = m_EnnemyList[0].GetComponent<NPCController>();
+                int remaininghp = tBossController.CurrentHP;
+                Debug.Log(remaininghp + " boss hp");
+                if(remaininghp < 120)
                 {
                     int tHealRand = Random.Range(0,2);
+                    Debug.Log(tHealRand + " RANDOM HEAL IF 1");
                     if(tHealRand == 1)
                     {
                         SetupBossAttack("Heal");
@@ -278,9 +275,10 @@ public class CombatController : MonoBehaviour
                 }
                 else
                 {
-                if(m_AliveFriendlies == 3)
+                    if(m_AliveFriendlies == 3)
                     {
                         int tAoERand = Random.Range(0,2);
+                        Debug.Log(tAoERand + " RANDOM AOE IF 1");
                         if(tAoERand == 1)
                         {
                             SetupBossAttack("IceBurst");
@@ -316,7 +314,6 @@ public class CombatController : MonoBehaviour
                         m_Coroutine = StartCoroutine(WaitForAttack(m_TravelLerpDuration, false));
                     }
                     m_isDoneAttacking = true;
-                    Debug.Log("EnnemyAttacking");
                 }
                 else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position != m_CurentIdle)
                 {
@@ -326,12 +323,11 @@ public class CombatController : MonoBehaviour
                     {
                         m_Coroutine = StartCoroutine(MoveToNPC(m_CurrentEnnemyGO, m_CurrentDestination, m_CurentIdle, m_TravelLerpDuration));
                     }
-                    Debug.Log("EnnemyGoingBack");
 
                 }
                 else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position == m_CurentIdle)
                 {
-                    m_CurrentRend.sortingOrder = m_oldorderinlayer;
+                    Debug.Log("End of boss turn");
                     m_CurrentRend.flipX = true;
                     m_CurrentEnnemyAnim.SetBool("isIdle", true);
                     m_CurrentEnnemyAnim.StopPlayback();
@@ -363,6 +359,7 @@ public class CombatController : MonoBehaviour
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
         m_IsFirstTurn = false;
+<<<<<<< HEAD
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentEnnemyAttacked = aAttackedPosition + 4;
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition].GetComponent<NPCController>();
@@ -380,7 +377,6 @@ public class CombatController : MonoBehaviour
         }
         m_oldorderinlayer = m_CurrentRend.sortingOrder;
         m_CurrentRend.sortingOrder = 12;
-        //Debug.Log("ORIGIN = " + m_CurentIdle + "      DESTINATION: " + m_CurrentDestination);
         if(!m_IsFriendlyAttacking)
         {
             Debug.LogError("STATS WERE NOT SET CORRECTLY");
@@ -389,7 +385,6 @@ public class CombatController : MonoBehaviour
 
     private void SetEnnemyCombat()
     {
-        Debug.Log("Setting Ennemy Combat");
         m_StartEnnemyCombat = true;
         m_CurrentFriendlyAttacked = RandomizeEnnemyAttack();
         m_CurrentFriendlyStats = m_FriendlyList[m_CurrentFriendlyAttacked - 1].GetComponent<NPCController>();
@@ -438,7 +433,16 @@ public class CombatController : MonoBehaviour
         else if(m_AliveEnnemies == 2)
         {
             m_CurrentEnnemyTurn++;
-            if(m_CurrentEnnemyTurn > 2)
+            if(m_CurrentEnnemyTurn > 3)
+            {
+                m_CurrentEnnemyTurn = 1;
+            }
+            NPCController tempEnnemy = m_EnnemyList[m_CurrentEnnemyTurn - 1].GetComponent<NPCController>();
+            if(tempEnnemy.isDead)
+            {
+                m_CurrentEnnemyTurn++;
+            }
+            if(m_CurrentEnnemyTurn > 3)
             {
                 m_CurrentEnnemyTurn = 1;
             }
@@ -446,7 +450,6 @@ public class CombatController : MonoBehaviour
         }
         else if(m_AliveEnnemies == 1)
         {
-            Debug.Log("ENEMY LIST COUNT " + m_EnnemyList.Count );
             for(int i = 0; i < m_EnnemyList.Count; i++)
             {
                 NPCController tempEnnemy = m_EnnemyList[i].GetComponent<NPCController>();
@@ -457,29 +460,6 @@ public class CombatController : MonoBehaviour
                 }
             }
         }
-        /*else if(m_AliveEnnemies > 1)
-        {
-            int iter = m_CurrentEnnemyTurn - 1;
-            Debug.Log("EnteringWhile");
-            while(true)
-            {
-                Debug.Log("CreatingTempEnnemy");
-                NPCController tempEnnemy = m_EnnemyList[iter].GetComponent<NPCController>();
-                Debug.Log("TempEnnemyCreated");
-                if(!tempEnnemy.isDead && iter != m_CurrentEnnemyTurn - 1)
-                {
-                    m_CurrentEnnemyTurn = iter + 1;
-                    return m_CurrentEnnemyTurn;
-                }
-                
-                iter++;
-                if(iter >= m_AliveEnnemies)
-                {
-                    iter = 0;
-                }
-            }
-        }*/
-
         Debug.LogError("THIS SHOULD NEVER HAPPEN");
         return 0;
     }
@@ -592,7 +572,6 @@ public class CombatController : MonoBehaviour
 
     private void BossAttack()
     {
-        Debug.Log(m_ChosenBossSpell);
         switch(m_ChosenBossSpell)
         {
             case "IceBurst":
@@ -603,9 +582,10 @@ public class CombatController : MonoBehaviour
                 {
                     Instantiate(tChosenSpell.m_SpellPrefab, m_FriendlyIdlePositions[i], Quaternion.identity);
                     m_CurrentFriendlyStats = m_FriendlyList[i].GetComponent<NPCController>();
+                    m_CurrentFriendlyAnim = m_FriendlyList[i].GetComponent<Animator>();
                     m_CurrentFriendlyStats.CurrentHP -= tDamage;
                     m_CurrentFriendlyAttacked = i;
-                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
+                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked + 1);
                     if(m_CurrentFriendlyStats.isDead == true)
                     {
                         m_CurrentFriendlyAnim.SetBool("isDead", true);
@@ -649,7 +629,7 @@ public class CombatController : MonoBehaviour
                         LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
                     }
                 }
-                Vector2 tDest = m_CurrentEnnemyGO.transform.position;
+                Vector2 tDest = m_CurrentEnnemyGO.transform.position + new Vector3(0,-0.5f);
                 tDest.x -= 5;
                 Instantiate(tChosenSpell.m_SpellPrefab, tDest, Quaternion.identity);
                 m_CurrentEnnemyAnim.SetTrigger("Attack");
@@ -665,7 +645,7 @@ public class CombatController : MonoBehaviour
         m_CurrentEnnemyGO = m_EnnemyList[0];
         m_ChosenBossSpell = aSpell;
         m_StartEnnemyCombat = true;
-        m_CurentIdle = m_EnnemyIdlePositions[1];
+        m_CurentIdle = m_EnnemyIdlePositions[1] + new Vector2(0,2);
         m_CurrentEnnemyStats = m_EnnemyList[0].GetComponent<NPCController>();
         m_CurrentRend = m_EnnemyList[0].GetComponent<SpriteRenderer>();
         
@@ -675,6 +655,7 @@ public class CombatController : MonoBehaviour
             {
                 Vector2 tDest = m_FriendlyIdlePositions[1];
                 tDest.x += 4;
+                tDest.y += 1;
                 m_CurrentDestination = tDest;
                 break;
             }
@@ -682,14 +663,15 @@ public class CombatController : MonoBehaviour
             {
                 m_CurrentFriendlyAttacked = RandomizeEnnemyAttack();
                 m_CurrentFriendlyStats = m_FriendlyList[m_CurrentFriendlyAttacked - 1].GetComponent<NPCController>();
-                Vector2 tDest = m_FriendlyIdlePositions[m_CurrentFriendlyAttacked - 1];
-                tDest.x += 2;
+                m_CurrentFriendlyAnim = m_FriendlyList[m_CurrentFriendlyAttacked -1].GetComponent<Animator>();
+                Vector2 tDest = m_FriendlyIdlePositions[m_CurrentFriendlyAttacked - 1] + new Vector2(0, 2);
+                tDest.x += 4;
                 m_CurrentDestination = tDest;
                 break;
             }
             case "Heal":
             {
-                Vector2 tDest = m_EnnemyIdlePositions[1];
+                Vector2 tDest = m_EnnemyIdlePositions[1] + new Vector2(0,2);
                 tDest.x -= 3;
                 m_CurrentDestination = tDest;
                 break;
@@ -709,7 +691,7 @@ public class CombatController : MonoBehaviour
             m_FriendlyList.Add(FGO);
         }
 
-        GameObject tBoss = Instantiate(aBossData.m_CharacterPrefab, m_EnnemyIdlePositions[1], Quaternion.identity);
+        GameObject tBoss = Instantiate(aBossData.m_CharacterPrefab, m_EnnemyIdlePositions[1] + new Vector2(0,2), Quaternion.identity);
         m_EnnemyList.Add(tBoss);
         m_BossData = aBossData;
         m_CurrentEnnemyStats = tBoss.GetComponent<NPCController>();

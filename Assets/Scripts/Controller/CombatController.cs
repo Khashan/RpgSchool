@@ -359,7 +359,6 @@ public class CombatController : MonoBehaviour
     public void FriendlyAttack(int aAttackingPosition, int aAttackedPosition)
     {
         m_IsFirstTurn = false;
-<<<<<<< HEAD
         Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentEnnemyAttacked = aAttackedPosition + 4;
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition].GetComponent<NPCController>();

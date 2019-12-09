@@ -101,6 +101,7 @@ public class CombatUI_Controller : MonoBehaviour
         m_EnemiesCount = ennemy;
         InitializeFightersData();
         EnableCurrentPlayerIndicator();
+        EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
 
     private void InitializeFightersData()

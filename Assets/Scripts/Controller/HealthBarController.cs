@@ -82,6 +82,16 @@ public class HealthBarController : MonoBehaviour
         }
     }
 
+    public void ResetBarValues()
+    {
+        m_Bar1.fillAmount = 1;
+        m_Bar2.fillAmount = 1;
+        m_Bar3.fillAmount = 1;
+        m_Bar4.fillAmount = 1;
+        m_Bar5.fillAmount = 1;
+        m_Bar6.fillAmount = 1;
+    }
+
     public void ChangeLifeValues(NPCController aCurrentNPC, int aPos)
     {
         switch(aPos)

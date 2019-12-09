@@ -113,9 +113,8 @@ public class CombatUI_Controller : MonoBehaviour
     {
         m_Allie = allie;
         m_Enemy = ennemy;
-        //Debug.Log("alli: " + m_Allie + " / Enemy:" + m_Enemy);
         m_AllieCount = 0;
-        Debug.Log(m_AllieCount);
+       // Debug.Log(m_AllieCount);
         ActiveAllie(false);
     }
 

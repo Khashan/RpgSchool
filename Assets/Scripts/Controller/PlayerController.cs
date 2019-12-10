@@ -62,10 +62,16 @@ public class PlayerController : MonoBehaviour
             m_Animator.SetTrigger("Walk");
             m_Animator.SetBool("isIdle", false);
         }
-        
-        if(Input.GetKeyDown(KeyCode.K))
+
+        if(Input.GetMouseButtonDown(0))
         {
-            GameManager.Instance.StartBoss();
+            m_Animator.SetTrigger("Walk");
+            m_Animator.SetTrigger("Attack");
+        }
+        if(Input.GetMouseButtonUp(0))
+        {
+            m_Animator.ResetTrigger("Walk");
+            m_Animator.ResetTrigger("Attack");
         }
 
         if(!m_IsInCombat)

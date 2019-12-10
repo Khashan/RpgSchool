@@ -316,5 +316,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73831650dbc7ea34eab258a9eca9436d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Name: {fileID: 7562278167032062498}
+  m_TextName: {fileID: 7562278167032062498}
   m_Btn: {fileID: 7906202787331111381}

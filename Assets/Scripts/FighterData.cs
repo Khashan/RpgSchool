@@ -2,7 +2,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public struct FigherData
+public struct FighterData
 {
     public void UpdateData(int aHealth)
     {

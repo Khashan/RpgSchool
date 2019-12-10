@@ -11,5 +11,5 @@ public abstract class SimonItemData : ScriptableObject
     [SerializeField]
     private int m_Cost;
 
-    public abstract void Use(FigherData aFighter);
+    public abstract void Use(FighterData aFighter);
 }

@@ -4,8 +4,8 @@ using UnityEngine;
 public class GameManager : Singleton<GameManager>
 {
     [SerializeField]
-    private List<FigherData> m_Fighters = new List<FigherData>();
-    public List<FigherData> Fighters
+    private List<FighterData> m_Fighters = new List<FighterData>();
+    public List<FighterData> Fighters
     {
         get { return m_Fighters; }
     }
@@ -30,8 +30,19 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
+    public void UpdateFighterData(string aName, int aHealth)
+    {
+        for(int i = 0; i < m_Fighters.Count; i++)
+        {
+            if(m_Fighters[i].Name.ToLower().Equals(aName.ToLower()))
+            {
+                m_Fighters[i].UpdateData(aHealth);
+                return;
+            }
+        }
+    }
 
-    public FigherData GetFighterByName(string aName)
+    public FighterData GetFighterByName(string aName)
     {
         for(int i = 0; i < m_Fighters.Count; i++)
         {
@@ -45,7 +56,7 @@ public class GameManager : Singleton<GameManager>
         Debug.LogWarning("Fighter name is not matching!");
         #endif
 
-        return new FigherData();
+        return new FighterData();
     }
 
     public Vector3 GetLastPlayerPosition()

@@ -16,7 +16,7 @@ public class ConsumableItemData : SimonItemData
     [SerializeField]
     private int m_EffectAmount;
 
-    public override void Use(FigherData aFigher)
+    public override void Use(FighterData aFigher)
     {
         if(m_Type == ConsumableType.HEALTH)
         {

@@ -17,3 +17,5 @@ MonoBehaviour:
   m_AttackDamage: 40
   m_CharacterPrefab: {fileID: 4561604957462554908, guid: 4c864207191e25642a0107fd00ba0e1e,
     type: 3}
+  m_IsDead: 0
+  m_EntityName: Cyclop

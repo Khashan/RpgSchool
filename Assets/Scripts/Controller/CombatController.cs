@@ -82,7 +82,7 @@ public class CombatController : MonoBehaviour
         m_FriendlyAttackingPositions.Add(new Vector2(m_EnnemyIdlePositions[1].x - 2, m_EnnemyIdlePositions[1].y));
         m_FriendlyAttackingPositions.Add(new Vector2(m_EnnemyIdlePositions[2].x - 2, m_EnnemyIdlePositions[2].y));
 
-        SetRemainingHealth();
+        Invoke("SetRemainingHealth", 0.3f);
     }
 
     private void CombatOver()
@@ -249,16 +249,13 @@ public class CombatController : MonoBehaviour
 #region BOSSUPDATE
         else if(m_isEnnemyTurn && m_IsBossFight)
         {
-            Debug.Log("m_isennemyturnset = " + m_isEnnemyTurnSet);
             if(!m_isEnnemyTurnSet)
             {
                 NPCController tBossController = m_EnnemyList[0].GetComponent<NPCController>();
                 int remaininghp = tBossController.CurrentHP;
-                Debug.Log(remaininghp + " boss hp");
                 if(remaininghp < 120)
                 {
                     int tHealRand = Random.Range(0,2);
-                    Debug.Log(tHealRand + " RANDOM HEAL IF 1");
                     if(tHealRand == 1)
                     {
                         SetupBossAttack("Heal");
@@ -288,7 +285,6 @@ public class CombatController : MonoBehaviour
                     if(m_AliveFriendlies == 3)
                     {
                         int tAoERand = Random.Range(0,2);
-                        Debug.Log(tAoERand + " RANDOM AOE IF 1");
                         if(tAoERand == 1)
                         {
                             SetupBossAttack("IceBurst");
@@ -337,7 +333,6 @@ public class CombatController : MonoBehaviour
                 }
                 else if(m_isDoneAttacking && m_CurrentEnnemyGO.transform.position == m_CurentIdle)
                 {
-                    Debug.Log("End of boss turn");
                     m_CurrentRend.flipX = true;
                     m_CurrentEnnemyAnim.SetBool("isIdle", true);
                     m_CurrentEnnemyAnim.StopPlayback();
@@ -372,7 +367,6 @@ public class CombatController : MonoBehaviour
     {
         //Sets the values of the ennemy attacked. includes setting the posistions and getting its animator and renderer
         m_IsFirstTurn = false;
-        Debug.Log("Setup attack : " + aAttackingPosition + "  Attacks   " + aAttackedPosition);
         m_CurrentEnnemyAttacked = aAttackedPosition + 4;
         m_CurrentFriendlyStats = m_FriendlyList[aAttackingPosition].GetComponent<NPCController>();
         m_CurrentEnnemyStats = m_EnnemyList[aAttackedPosition].GetComponent<NPCController>();
@@ -467,7 +461,6 @@ public class CombatController : MonoBehaviour
         GameManager.Instance.UpdateFighterData("Minotaur", tMinotaur.CurrentHP);
         NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
         GameManager.Instance.UpdateFighterData("Cyclop", tCyclop.CurrentHP);
-        Debug.Log("Updating Fighter Lives");
     }
 
     private void SetRemainingHealth()
@@ -476,18 +469,14 @@ public class CombatController : MonoBehaviour
         List<FighterData> tList = GameManager.Instance.Fighters;
         NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
         tSkeleton.CurrentHP = tList[0].Health;
-        Debug.Log(tSkeleton.CurrentHP);
         NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
         tMinotaur.CurrentHP = tList[1].Health;
         
-        Debug.Log(tMinotaur.CurrentHP);
         NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
         tCyclop.CurrentHP = tList[2].Health;
-        Debug.Log(tCyclop.CurrentHP);
         CombatManager.Instance.ChangeLifeValue(tSkeleton, 0);
         CombatManager.Instance.ChangeLifeValue(tMinotaur, 1);
         CombatManager.Instance.ChangeLifeValue(tCyclop, 2);
-        Debug.Log("Setting remaining life");
     }
 
     private void ResetFighterValues()

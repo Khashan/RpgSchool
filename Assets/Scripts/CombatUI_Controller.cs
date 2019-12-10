@@ -124,7 +124,7 @@ public class CombatUI_Controller : MonoBehaviour
 
         if(m_Ability != null)
         {
-            CastAbility();
+            CastAbility(enemy);
             m_Ability = null;
         }
         else
@@ -133,16 +133,18 @@ public class CombatUI_Controller : MonoBehaviour
         }
     }
 
-    private void CastAbility()
+    private void CastAbility(int enemy)
     {
         if(m_Ability is AttackAbility)
         {
             AttackAbility aa = (AttackAbility)m_Ability;
-            
+            aa.SendAudio();
+            CombatManager.Instance.DamagingSpell(enemy, aa.AbilityDamage, aa.AbilityPrefab);
         }
         else if(m_Ability is OffenseAbility)
         {
             OffenseAbility oa = (OffenseAbility)m_Ability;
+            CombatManager.Instance.HealingSpell(enemy, oa.AbilityEffect, oa.AbilityPrefab);
         }
     }
 

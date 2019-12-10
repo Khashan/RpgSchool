@@ -32,6 +32,10 @@ public class AttackAbility : BaseAbility
 
     [SerializeField]
     private int m_AbilityFirstDamage = 0;
+    public int AbilityDamage
+    {
+        get { return m_AbilityFirstDamage;}
+    }
 
     public override void CastAbilityTo(IFighter[] aTargets)
     {

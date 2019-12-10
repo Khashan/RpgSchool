@@ -33,6 +33,10 @@ public class OffenseAbility : BaseAbility
 
     [SerializeField]
     private int m_AbilityFirstEffect = 0;
+    public int AbilityEffect
+    {
+        get { return m_AbilityFirstEffect; }
+    }
 
 
     public override void CastAbilityTo(IFighter[] aTargets)

@@ -21,6 +21,11 @@ public abstract class BaseAbility : ScriptableObject
     private int m_TurnCoolDown;
     [SerializeField]
     private GameObject m_AbilityPrefab;
+    public GameObject AbilityPrefab
+    {
+        get { return m_AbilityPrefab; }
+    }
+
     [SerializeField]
     private AudioClip m_SFX;
 
@@ -34,6 +39,12 @@ public abstract class BaseAbility : ScriptableObject
     [SerializeField]
     [Tooltip("Example: If its a healing spell and the power is 5 = +5 to health")]
     private int m_EffectPower;
+
+    public virtual void SendAudio()
+    {
+        if(m_SFX != null)
+        AudioManager.Instance.PlaySFX(m_SFX, Vector3.zero);
+    }
 
     public virtual void CastAbilityTo(IFighter[] aTargets)
     {

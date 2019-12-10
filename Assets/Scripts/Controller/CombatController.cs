@@ -710,7 +710,6 @@ public class CombatController : MonoBehaviour
         {
             m_CurrentFriendlyAnim.SetBool("isDead", true);
             m_AliveFriendlies--;
-            HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked);
             if(m_AliveFriendlies == 0)
             {
                 ResetFighterValues();
@@ -742,7 +741,6 @@ public class CombatController : MonoBehaviour
                     CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
                     if(m_CurrentFriendlyStats.isDead == true)
                     {
-                        HUDManager.Instance.combatUI.FriendlyDead(i);
                         m_CurrentFriendlyAnim.SetBool("isDead", true);
                         m_AliveFriendlies--;
                         if(m_AliveFriendlies == 0)
@@ -778,7 +776,6 @@ public class CombatController : MonoBehaviour
                 CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
                 if(m_CurrentFriendlyStats.isDead == true)
                 {
-                    HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked - 1);
                     m_CurrentFriendlyAnim.SetBool("isDead", true);
                     m_AliveFriendlies--;
                     if(m_AliveFriendlies == 0)

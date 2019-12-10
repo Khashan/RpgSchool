@@ -15,11 +15,12 @@ MonoBehaviour:
   m_SpellName: Firebolt
   m_ManaCost: 0
   m_TurnCoolDown: 0
-  m_AbilityPrefab: {fileID: 0}
+  m_AbilityPrefab: {fileID: 3081752413319247127, guid: 629d5fc2c1e59084bb1354f57563c091,
+    type: 3}
   m_SFX: {fileID: 0}
   m_EffectScript: IgniteEffect
   m_EffectLifeSpan: 3
   m_EffectPower: 2
   m_AttackType: 1
   m_AttackTarget: 1
-  m_AbilityFirstDamage: 5
+  m_AbilityFirstDamage: 80

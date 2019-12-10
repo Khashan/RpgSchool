@@ -414,19 +414,22 @@ MonoBehaviour:
     m_CurrentHealth: 100
     m_MaxHealth: 100
     m_DamagePower: 0
-    m_Abilities: []
+    m_Abilities:
+    - {fileID: 11400000, guid: a6a947170d056d54f8b3ac6fbe0aac0a, type: 2}
     m_Equipments: []
   - m_FighterName: Minotaur
     m_CurrentHealth: 100
     m_MaxHealth: 100
     m_DamagePower: 0
-    m_Abilities: []
+    m_Abilities:
+    - {fileID: 11400000, guid: ea66286e298a95044b5e27fe5b4537ca, type: 2}
     m_Equipments: []
   - m_FighterName: Cyclop
     m_CurrentHealth: 100
     m_MaxHealth: 100
     m_DamagePower: 0
-    m_Abilities: []
+    m_Abilities:
+    - {fileID: 11400000, guid: cb52f28020dc5af4d8a76d7572983aed, type: 2}
     m_Equipments: []
   m_Odds: 750
 --- !u!4 &932570313

@@ -12,7 +12,7 @@ public abstract class BaseAbility : ScriptableObject
     private string m_SpellName;
     public string SpellName
     {
-        get { return SpellName;}
+        get { return m_SpellName;}
     }
 
     [SerializeField]

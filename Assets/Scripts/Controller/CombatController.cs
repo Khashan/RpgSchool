@@ -451,15 +451,38 @@ public class CombatController : MonoBehaviour
         return tAliveEnnemyList;
     }
 
+    public bool IsFriendlyDead(int aFriendly)
+    {
+        NPCController tAlly = m_FriendlyList[aFriendly].GetComponent<NPCController>();
+        return tAlly.isDead;
+    }
+
     private void SetFighterValues()
     {
-        //Sets the remaining health/stats of all friendly fighters
-        //so it persists until the next combat
+        NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Skeleton", tSkeleton.CurrentHP);
+        NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Skeleton", tMinotaur.CurrentHP);
+        NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Skeleton", tCyclop.CurrentHP);
+    }
 
-        for(int i = 0 ; i < m_FriendlyList.Count; i++)
-        {
+    private void SetCombatValues()
+    {
+        //sets the values of all the fighters before the combat
+        List<FighterData> tList = GameManager.Instance.Fighters;
+        NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
+        tSkeleton.CurrentHP = tList[0].Health;
+        NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
+        tMinotaur.CurrentHP = tList[1].Health;
+        NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
+        tCyclop.CurrentHP = tList[2].Health;
+        CombatManager.Instance.ChangeLifeValue(tSkeleton, 0);
+        CombatManager.Instance.ChangeLifeValue(tMinotaur, 1);
+        CombatManager.Instance.ChangeLifeValue(tCyclop, 2);
 
-        }
+        
+
     }
 
     private int CheckEnnemyTurn()
@@ -666,7 +689,7 @@ public class CombatController : MonoBehaviour
                     m_CurrentFriendlyAnim = m_FriendlyList[i].GetComponent<Animator>();
                     m_CurrentFriendlyStats.CurrentHP -= tDamage;
                     m_CurrentFriendlyAttacked = i;
-                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked + 1);
+                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
                     if(m_CurrentFriendlyStats.isDead == true)
                     {
                         HUDManager.Instance.combatUI.FriendlyDead(i);

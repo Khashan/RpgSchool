@@ -130,7 +130,7 @@ public class CombatUI_Controller : MonoBehaviour
             m_CurrentAlly = 0;
         }
 
-        if (m_AllyFighters[m_CurrentAlly].m_IsDead)
+        if (CombatManager.Instance.IsFriendlyDead(m_CurrentAlly))
         {
             NextRound();
             return;

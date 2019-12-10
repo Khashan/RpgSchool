@@ -103,5 +103,10 @@ public class CombatManager : Singleton<CombatManager>
     {
         m_CombatController.EndFriendlyTurn();
     }
+
+    public bool IsFriendlyDead(int aFriendlyPos)
+    {
+        return m_CombatController.IsFriendlyDead(aFriendlyPos);
+    }
     
 }

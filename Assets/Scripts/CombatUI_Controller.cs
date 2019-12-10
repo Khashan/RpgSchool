@@ -2,14 +2,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Anderson.CustomWindows;
 
 public class CombatUI_Controller : MonoBehaviour
 {
-    public struct Spell
-    {
-        public string m_Name;
-    }
-
     [System.Serializable]
     private struct FigtherData
     {
@@ -38,18 +34,9 @@ public class CombatUI_Controller : MonoBehaviour
     }
 
     [SerializeField]
-    private List<GameObject> m_SpellButton = new List<GameObject>();
-    public List<GameObject> ListSpellButton
-    {
-        get { return m_SpellButton; }
-    }
-
+    private CustomWindow m_InventoryPanel;
     [SerializeField]
-    private List<GameObject> m_ItemButton = new List<GameObject>();
-    public List<GameObject> ListItemButton
-    {
-        get { return m_ItemButton; }
-    }
+    private CustomWindow m_SpellPanel;
 
     private int m_CurrentAlly = 0;
     private int m_CurrentEnemy = 0;
@@ -62,19 +49,23 @@ public class CombatUI_Controller : MonoBehaviour
     {
         HUDManager.Instance.combatUI = this;
         ActivatedEnemyButton(false);
-        ShowItem(false);
-        ShowSpell(false);
         EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
+        ClosePanels();
     }
 
     private void Update()
     {
-        if (m_PlayerTurns && (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)))
+        if (m_PlayerTurns && (Input.GetKeyDown(KeyCode.Escape)))
         {
             EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
-            ShowItem(false);
-            ShowSpell(false);
+            ClosePanels();
         }
+    }
+
+    private void ClosePanels()
+    {
+        m_InventoryPanel.Close();
+        m_SpellPanel.Close();
     }
 
     private void EnableCurrentPlayerIndicator()
@@ -139,12 +130,13 @@ public class CombatUI_Controller : MonoBehaviour
             m_CurrentAlly = 0;
         }
 
-        if(m_AllyFighters[m_CurrentAlly].m_IsDead)
+        if (m_AllyFighters[m_CurrentAlly].m_IsDead)
         {
             NextRound();
             return;
         }
 
+        ClosePanels();
         EnableCurrentPlayerIndicator();
         EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
@@ -182,13 +174,12 @@ public class CombatUI_Controller : MonoBehaviour
 
     public void ItemButton()
     {
-        ShowItem(true);
-        EventSystem.current.SetSelectedGameObject(m_FirstItemButton.gameObject);
+        m_InventoryPanel.Open();
     }
+
     public void SpellButton()
     {
-        ShowSpell(true);
-        EventSystem.current.SetSelectedGameObject(m_FirstSpellButton.gameObject);
+        m_SpellPanel.Open();
     }
     public void FleeButton()
     {
@@ -203,21 +194,5 @@ public class CombatUI_Controller : MonoBehaviour
         m_CurrentAlly = 0;
         m_AlliesCount = 0;
         m_EnemiesCount = 0;
-    }
-
-    private void ShowSpell(bool active)
-    {
-        for (int i = 0; i < m_SpellButton.Count; i++)
-        {
-            m_SpellButton[i].SetActive(active);
-        }
-    }
-
-    private void ShowItem(bool active)
-    {
-        for (int i = 0; i < m_ItemButton.Count; i++)
-        {
-            m_ItemButton[i].SetActive(active);
-        }
     }
 }

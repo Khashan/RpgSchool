@@ -7,6 +7,8 @@ public class InventoryUI : CustomWindow
 {
     [Header("Inventory")]
     [SerializeField]
+    private ItemUI m_ItemUIPrefab;
+    [SerializeField]
     private ScrollRect m_Scroller;
     [SerializeField]
     private RectTransform m_Contrainer;
@@ -16,7 +18,11 @@ public class InventoryUI : CustomWindow
 
     private int m_CurrentChild = 0;
 
-    void OnEnable()
+    public virtual void LoadInventory()
+    {
+    }
+
+    private void OnEnable()
     {
         if (m_Contrainer.GetChild(0) != null)
         {

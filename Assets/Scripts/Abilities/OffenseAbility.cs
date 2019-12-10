@@ -38,7 +38,6 @@ public class OffenseAbility : BaseAbility
     public override void CastAbilityTo(IFighter[] aTargets)
     {
         base.CastAbilityTo(aTargets);
-
         ApplyEffect(aTargets);
     }
 

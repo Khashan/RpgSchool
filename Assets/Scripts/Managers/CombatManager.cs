@@ -16,10 +16,6 @@ public class CombatManager : Singleton<CombatManager>
     private HealthBarController m_HealthBarController;
     public bool m_isBoss = false;
 
-    //[SerializeField]
-    //private List<>
-
-
 
     [SerializeField]
     private List<CharacterData> m_PlayerTeam = new List<CharacterData>();
@@ -96,6 +92,16 @@ public class CombatManager : Singleton<CombatManager>
     public void Attack(int aAttackingPosition, int aAttackedPosition)
     {
         m_CombatController.FriendlyAttack(aAttackingPosition, aAttackedPosition);
+    }
+
+    public void UsePotion(int aTarget, int aHealAmmount)
+    {
+        m_CombatController.UsePotion(aTarget, aHealAmmount);
+    }
+
+    public void EndFriendlyTurn()
+    {
+        m_CombatController.EndFriendlyTurn();
     }
     
 }

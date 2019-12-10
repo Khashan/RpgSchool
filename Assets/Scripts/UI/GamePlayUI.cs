@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Anderson.CustomWindows;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GamePlayUI : MonoBehaviour
 {
@@ -17,12 +18,17 @@ public class GamePlayUI : MonoBehaviour
     private CustomWindow m_NavigationMenu;
     [SerializeField]
     private CustomWindow m_Inventory;
+    [SerializeField]
+    private Image m_Bar;
 
     List<CustomWindow> m_NavigationOpenMenus = new List<CustomWindow>();
 
 
     private void Update()
     {
+        m_Bar.fillAmount = (float)GameManager.Instance.GetFighterByName("Minotaur").Health / 
+                           (float)GameManager.Instance.GetFighterByName("Minotaur").MaxHealth;
+
         if (Input.GetButtonDown("Cancel"))
         {
             if (m_NavigationOpenMenus.Count != 0)

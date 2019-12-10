@@ -104,6 +104,7 @@ public class HealthBarController : MonoBehaviour
             case 2:
             {
                 m_Bar2.fillAmount = (float)aCurrentNPC.CurrentHP / (float)aCurrentNPC.MaxHP;
+                GameManager.Instance.GetFighterByName("Minotaur").UpdateData(aCurrentNPC.CurrentHP);
                 break;
             }
             case 3:

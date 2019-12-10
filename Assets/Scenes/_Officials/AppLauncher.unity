@@ -418,7 +418,7 @@ MonoBehaviour:
     m_CurrentHealth: 100
     m_MaxHealth: 100
     m_Abilities: []
-  - m_FighterName: Cyclops
+  - m_FighterName: Cyclop
     m_CurrentHealth: 100
     m_MaxHealth: 100
     m_Abilities: []

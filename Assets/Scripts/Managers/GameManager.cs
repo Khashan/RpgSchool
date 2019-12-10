@@ -36,7 +36,9 @@ public class GameManager : Singleton<GameManager>
         {
             if(m_Fighters[i].Name.ToLower().Equals(aName.ToLower()))
             {
-                m_Fighters[i].UpdateData(aHealth);
+                FighterData aFighter = m_Fighters[i];
+                aFighter.UpdateData(aHealth);
+                m_Fighters[i] = aFighter;
                 return;
             }
         }

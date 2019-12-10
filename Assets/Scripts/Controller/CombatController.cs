@@ -81,6 +81,8 @@ public class CombatController : MonoBehaviour
         m_FriendlyAttackingPositions.Add(new Vector2(m_EnnemyIdlePositions[0].x - 2, m_EnnemyIdlePositions[0].y));
         m_FriendlyAttackingPositions.Add(new Vector2(m_EnnemyIdlePositions[1].x - 2, m_EnnemyIdlePositions[1].y));
         m_FriendlyAttackingPositions.Add(new Vector2(m_EnnemyIdlePositions[2].x - 2, m_EnnemyIdlePositions[2].y));
+
+        SetRemainingHealth();
     }
 
     private void CombatOver()
@@ -462,26 +464,41 @@ public class CombatController : MonoBehaviour
         NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
         GameManager.Instance.UpdateFighterData("Skeleton", tSkeleton.CurrentHP);
         NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
-        GameManager.Instance.UpdateFighterData("Skeleton", tMinotaur.CurrentHP);
+        GameManager.Instance.UpdateFighterData("Minotaur", tMinotaur.CurrentHP);
         NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
-        GameManager.Instance.UpdateFighterData("Skeleton", tCyclop.CurrentHP);
+        GameManager.Instance.UpdateFighterData("Cyclop", tCyclop.CurrentHP);
+        Debug.Log("Updating Fighter Lives");
     }
 
-    private void SetCombatValues()
+    private void SetRemainingHealth()
     {
         //sets the values of all the fighters before the combat
         List<FighterData> tList = GameManager.Instance.Fighters;
         NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
         tSkeleton.CurrentHP = tList[0].Health;
+        Debug.Log(tSkeleton.CurrentHP);
         NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
         tMinotaur.CurrentHP = tList[1].Health;
+        
+        Debug.Log(tMinotaur.CurrentHP);
         NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
         tCyclop.CurrentHP = tList[2].Health;
+        Debug.Log(tCyclop.CurrentHP);
         CombatManager.Instance.ChangeLifeValue(tSkeleton, 0);
         CombatManager.Instance.ChangeLifeValue(tMinotaur, 1);
         CombatManager.Instance.ChangeLifeValue(tCyclop, 2);
+        Debug.Log("Setting remaining life");
+    }
 
-        
+    private void ResetFighterValues()
+    {
+        //if we lose, we reset the values of the fighters to their maximum
+        NPCController tSkeleton = m_FriendlyList[0].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Skeleton", tSkeleton.MaxHP);
+        NPCController tMinotaur = m_FriendlyList[1].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Minotaur", tMinotaur.MaxHP);
+        NPCController tCyclop = m_FriendlyList[2].GetComponent<NPCController>();
+        GameManager.Instance.UpdateFighterData("Cyclop", tCyclop.MaxHP);
 
     }
 
@@ -541,6 +558,37 @@ public class CombatController : MonoBehaviour
         }
         Debug.LogError("THIS SHOULD NEVER HAPPEN");
         return 0;
+    }
+
+    public void DamagingSpell(int aPos, int aDMG)
+    {
+        NPCController tEnnemy = m_EnnemyList[aPos].GetComponent<NPCController>();
+        m_CurrentEnnemyAnim = m_EnnemyList[aPos].GetComponent<Animator>();
+        tEnnemy.CurrentHP -= aDMG;
+        CombatManager.Instance.ChangeLifeValue(tEnnemy, aPos);
+        if(tEnnemy.isDead)
+        {
+            m_CurrentEnnemyAnim.SetBool("isDead", true);
+            HUDManager.Instance.combatUI.EnemyDead(m_CurrentEnnemyAttacked - 4);
+            m_AliveEnnemies--;
+            if(m_AliveEnnemies == 0)
+            {
+                SetFighterValues();
+                string LastScene = LevelManager.Instance.LastScene;
+                StartCoroutine(Wait(2f));
+                LevelManager.Instance.ChangeLevel(LastScene, true, 1);
+            }
+        }
+        m_isEnnemyTurn = true;
+        ClearCurrentTurn();
+    }
+
+    public void HealingSpell(int aPos, int aHeal)
+    {
+        NPCController tAlly = m_FriendlyList[aPos].GetComponent<NPCController>();
+        tAlly.CurrentHP += aHeal;
+        m_isEnnemyTurn = true;
+        ClearCurrentTurn();
     }
 
     private int RandomizeEnnemyAttack()
@@ -642,6 +690,7 @@ public class CombatController : MonoBehaviour
             m_AliveEnnemies--;
             if(m_AliveEnnemies == 0)
             {
+                SetFighterValues();
                 string LastScene = LevelManager.Instance.LastScene;
                 StartCoroutine(Wait(2f));
                 LevelManager.Instance.ChangeLevel(LastScene, true, 1);
@@ -664,6 +713,7 @@ public class CombatController : MonoBehaviour
             HUDManager.Instance.combatUI.FriendlyDead(m_CurrentFriendlyAttacked);
             if(m_AliveFriendlies == 0)
             {
+                ResetFighterValues();
                 StartCoroutine(Wait(2f));
                 string LastScene = LevelManager.Instance.LastScene;
                 LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
@@ -697,6 +747,7 @@ public class CombatController : MonoBehaviour
                         m_AliveFriendlies--;
                         if(m_AliveFriendlies == 0)
                         {
+                            ResetFighterValues();
                             string LastScene = LevelManager.Instance.LastScene;
                             StartCoroutine(Wait(2f));
                             LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
@@ -732,6 +783,7 @@ public class CombatController : MonoBehaviour
                     m_AliveFriendlies--;
                     if(m_AliveFriendlies == 0)
                     {
+                        ResetFighterValues();
                         string LastScene = LevelManager.Instance.LastScene;
                         StartCoroutine(Wait(2f));
                         LevelManager.Instance.ChangeLevel("MainMenu", true, 3);

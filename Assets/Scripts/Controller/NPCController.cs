@@ -23,7 +23,7 @@ public class NPCController : MonoBehaviour, IFighter
     {
         m_Damage = m_NPCData.m_AttackDamage;
         m_MaxHP = m_NPCData.m_MaxHealth;
-        m_CurrentHP = m_NPCData.m_CurrentHealth;
+       // m_CurrentHP = m_NPCData.m_CurrentHealth;
         m_IsDead = m_NPCData.m_IsDead;
     }
 

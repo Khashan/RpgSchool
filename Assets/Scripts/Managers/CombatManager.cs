@@ -94,6 +94,16 @@ public class CombatManager : Singleton<CombatManager>
         m_CombatController.FriendlyAttack(aAttackingPosition, aAttackedPosition);
     }
 
+    public void DamagingSpell(int aTargetedEnnemy, int aDamage)
+    {
+        m_CombatController.DamagingSpell(aTargetedEnnemy, aDamage);
+    }
+
+    public void HealingSpell(int aTargetedFriendly, int aHealAmmount)
+    {
+        m_CombatController.HealingSpell(aTargetedFriendly, aHealAmmount);
+    }
+
     public void UsePotion(int aTarget, int aHealAmmount)
     {
         m_CombatController.UsePotion(aTarget, aHealAmmount);

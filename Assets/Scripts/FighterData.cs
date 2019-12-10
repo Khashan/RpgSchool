@@ -31,6 +31,13 @@ public struct FighterData
     }
 
     [SerializeField]
+    private int m_DamagePower;
+    public int DamagePower
+    {
+        get { return m_DamagePower; }
+    }
+
+    [SerializeField]
     private List<BaseAbility> m_Abilities;
     public List<BaseAbility> Abilities
     {
@@ -38,11 +45,7 @@ public struct FighterData
     }
     
     [SerializeField]
-    private List<object> m_Equipments;
-    public List<object> Equipments
-    {
-        get { return m_Equipments;}
-    }
+    private List<EquippableItemData> m_Equipments;
 
     public void Heal(int aAmount)
     {
@@ -52,5 +55,27 @@ public struct FighterData
         {
             m_CurrentHealth = m_MaxHealth;
         }
+    }
+
+    public void Equipe(EquippableItemData aEquip)
+    {
+        m_Equipments.Add(aEquip);
+        m_MaxHealth += aEquip.BonusHealth;
+        m_DamagePower += aEquip.BonusDamage;
+    }
+
+    public void UnEquipe(EquippableItemData aEquip)
+    {
+        if(m_Equipments.Contains(aEquip))
+        {
+            m_Equipments.Remove(aEquip);
+            m_MaxHealth -= aEquip.BonusHealth;
+            m_DamagePower -= aEquip.BonusDamage;
+        }
+    }
+
+    public bool HasEquipment(EquippableItemData aEquip)
+    {
+        return m_Equipments.Contains(aEquip);
     }
 }

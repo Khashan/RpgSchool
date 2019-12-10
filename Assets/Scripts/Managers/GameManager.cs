@@ -44,6 +44,19 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    
+    public void OverriderFigther(FighterData aNewFighter)
+    {
+        for(int i = 0; i < m_Fighters.Count; i++)
+        {
+            if(m_Fighters[i].Name.ToLower().Equals(aNewFighter.Name.ToLower()))
+            {
+                m_Fighters[i] = aNewFighter;
+                return;
+            }
+        }
+    }
+
     public FighterData GetFighterByName(string aName)
     {
         for(int i = 0; i < m_Fighters.Count; i++)

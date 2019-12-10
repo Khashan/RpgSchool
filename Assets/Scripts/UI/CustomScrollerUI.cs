@@ -9,20 +9,12 @@ public class CustomScrollerUI : CustomWindow
     [SerializeField]
     private ScrollRect m_Scroller;
     [SerializeField]
-    protected RectTransform m_Contrainer;
+    protected RectTransform m_Container;
 
     private float m_UpdateInputs = 0.2f;
     private float m_CurrentUpdateInputs = 0.2f;
 
     protected int m_CurrentChild = 0;
-
-    private void OnEnable()
-    {
-        if (m_Contrainer.GetChild(0) != null)
-        {
-            EventSystem.current.SetSelectedGameObject(m_Contrainer.GetChild(0).gameObject);
-        }
-    }
 
     protected override void OnUpdate()
     {
@@ -31,7 +23,10 @@ public class CustomScrollerUI : CustomWindow
             UpdateInputs();
         }
 
-        EventSystem.current.SetSelectedGameObject(m_Contrainer.GetChild(m_CurrentChild).gameObject);
+        if(m_Container.childCount != 0)
+        {
+            EventSystem.current.SetSelectedGameObject(m_Container.GetChild(m_CurrentChild).gameObject);
+        }
     }
 
     private bool CanUpdateInputs()
@@ -54,7 +49,7 @@ public class CustomScrollerUI : CustomWindow
             m_CurrentChild--;
         }
 
-        if (vertical < 0 && m_CurrentChild < m_Contrainer.childCount - 1)
+        if (vertical < 0 && m_CurrentChild < m_Container.childCount - 1)
         {
             m_CurrentChild++;
         }
@@ -70,9 +65,9 @@ public class CustomScrollerUI : CustomWindow
         m_CurrentUpdateInputs = m_UpdateInputs;
 
         float loc = 0;
-        if (m_CurrentChild != m_Contrainer.childCount - 1)
+        if (m_CurrentChild != m_Container.childCount - 1)
         {
-            loc = ((float)m_CurrentChild / (float)m_Contrainer.childCount) - 1;
+            loc = ((float)m_CurrentChild / (float)m_Container.childCount) - 1;
         }
 
         m_Scroller.verticalNormalizedPosition = Mathf.Abs(loc);

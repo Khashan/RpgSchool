@@ -9,6 +9,13 @@ public abstract class BaseAbility : ScriptableObject
 
     [Header("Base Setting")]
     [SerializeField]
+    private string m_SpellName;
+    public string SpellName
+    {
+        get { return SpellName;}
+    }
+
+    [SerializeField]
     private int m_ManaCost;
     [SerializeField]
     private int m_TurnCoolDown;

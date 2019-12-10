@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class CombatSpellUI : MonoBehaviour
 {
     [SerializeField]
-    private TextMeshProUGUI m_Name;
+    private TextMeshProUGUI m_TextName;
     [SerializeField]
     private Button m_Btn;
 
@@ -24,7 +24,7 @@ public class CombatSpellUI : MonoBehaviour
 
     public void InitSpellUI(int aId, BaseAbility aAbility, FighterData aFighter)
     {
-        m_Name.name = aAbility.name;
+        m_TextName.name = aAbility.SpellName;
         m_Ability = aAbility;
         m_Caster = aFighter;
     }

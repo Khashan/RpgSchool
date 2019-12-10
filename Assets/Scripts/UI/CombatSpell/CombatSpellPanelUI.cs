@@ -13,16 +13,16 @@ public class CombatSpellPanelUI: CustomScrollerUI
 
         for(int i = 0; i < aFighter.Abilities.Count; i++)
         {
-            CombatSpellUI spell = Instantiate(m_SpellUIPrefab, m_Contrainer);
+            CombatSpellUI spell = Instantiate(m_SpellUIPrefab, m_Container);
             spell.InitSpellUI(i, aFighter.Abilities[i], aFighter);
         }
     }
 
     private void ClearContainer()
     {
-        for(int i = 0; i < m_Contrainer.childCount; i++)
+        for(int i = 0; i < m_Container.childCount; i++)
         {
-            Destroy(m_Contrainer.GetChild(i).gameObject);
+            Destroy(m_Container.GetChild(i).gameObject);
         }
     }
 }

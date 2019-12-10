@@ -31,7 +31,7 @@ public class LoadingSceneController : MonoBehaviour
 
             if(m_LoadingBar.value >= 100)
             {
-                LevelManager.Instance.ChangeLevel(m_SceneToGo, true);
+                LevelManager.Instance.ChangeLevel(m_SceneToGo, true, 0.5f);
             }
         }
 

@@ -24,7 +24,7 @@ public class CombatSpellUI : MonoBehaviour
 
     public void InitSpellUI(int aId, BaseAbility aAbility, FighterData aFighter)
     {
-        m_TextName.name = aAbility.SpellName;
+        m_TextName.text = aAbility.SpellName;
         m_Ability = aAbility;
         m_Caster = aFighter;
     }

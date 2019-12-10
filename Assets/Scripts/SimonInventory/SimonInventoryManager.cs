@@ -8,17 +8,21 @@ David's Inventory is nice, but over complicated for this type of project
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SimonInventoryManager : MonoBehaviour
+public class SimonInventoryManager : Singleton<SimonInventoryManager>
 {
     public struct Item
     {
         public SimonItemData m_ItemData;
         public int m_Quantity;
 
+        public bool IsSizeMaxed()
+        {
+            return m_Quantity >= m_ItemData.StackSize;
+        }
+
         public void AddQuantity(int aAmount)
         {
             m_Quantity += aAmount;
-
             if(m_Quantity > m_ItemData.StackSize)
             {
                 m_Quantity = m_ItemData.StackSize;
@@ -28,6 +32,32 @@ public class SimonInventoryManager : MonoBehaviour
 
     private List<Item> m_Items = new List<Item>();
 
+    [SerializeField]
+    private int m_Token = 3000;
+
+    public void Buy(SimonItemData aBuyItem)
+    {
+        if(CanBuy(aBuyItem.Cost))
+        {
+            Item aItem = GetItem(aBuyItem);
+
+            if(IsValidItem(aItem) && !aItem.IsSizeMaxed())
+            {
+                aItem.AddQuantity(1);
+            }
+            else
+            {
+                aItem = new Item(){m_ItemData = aBuyItem, m_Quantity = 1};
+            }
+
+            m_Token -= aBuyItem.Cost;
+        }
+    }
+
+    private bool CanBuy(int aPrice)
+    {
+        return m_Token - aPrice >= 0;
+    }
     public void UseItem(FighterData aUser, ScriptableObject aItemObject)
     {
         Item selectedItem = GetItem(aItemObject);

@@ -150,7 +150,18 @@ public class CombatUI_Controller : MonoBehaviour
 
     public void UseAbility(BaseAbility aAbility)
     {
+        m_SpellPanel.Close();
         ActivatedEnemyButton(true);
+
+        for (int i = 0; i < m_EnemyFighters.Count; i++)
+        {
+            if (!m_EnemyFighters[i].m_IsDead)
+            {
+                EventSystem.current.SetSelectedGameObject(m_EnemyFighters[i].m_Position);
+                break;
+            }
+        }
+
         m_Ability = aAbility;
     }
 

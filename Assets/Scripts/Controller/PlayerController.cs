@@ -123,7 +123,6 @@ public class PlayerController : MonoBehaviour
 
         if(Input.GetMouseButtonDown(0))
         {
-            Debug.Log("Enter click Attack");
             ChangeState(State.Attack);
             return;
         }
@@ -144,7 +143,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnIdleFixedUpdate()
     {
-        Debug.Log("On Idle FixedUpdate");
         m_Rb.velocity = m_Velocity;
     }
 
@@ -159,7 +157,6 @@ public class PlayerController : MonoBehaviour
 
     private void OnAttackEnter()
     {
-        Debug.Log("AttackEnters");
         m_AttackTimer = ATTACK_TIME;
         m_Animator.SetTrigger("Walk");
         m_Animator.SetTrigger("Attack");

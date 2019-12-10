@@ -46,6 +46,8 @@ public class CombatUI_Controller : MonoBehaviour
     private bool m_PlayerTurns = true;
     private BaseAbility m_Ability;
 
+    private int m_SafetyLoop = 0;
+
     private void Start()
     {
         HUDManager.Instance.combatUI = this;
@@ -116,6 +118,7 @@ public class CombatUI_Controller : MonoBehaviour
     public void Fight(int enemy)
     {
         m_PlayerTurns = false;
+        m_SafetyLoop = 0;
         ActivatedEnemyButton(false);
         m_AllyFighters[m_CurrentAlly].m_Position.SetActive(false);
 
@@ -161,7 +164,12 @@ public class CombatUI_Controller : MonoBehaviour
 
         if (CombatManager.Instance.IsFriendlyDead(m_CurrentAlly))
         {
-            NextRound();
+            m_SafetyLoop++;
+
+            if(m_SafetyLoop <= m_AlliesCount)
+            {
+                NextRound();
+            }
             return;
         }
 

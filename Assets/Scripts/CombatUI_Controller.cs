@@ -55,7 +55,7 @@ public class CombatUI_Controller : MonoBehaviour
 
     private void Update()
     {
-        if (m_PlayerTurns && (Input.GetKeyDown(KeyCode.Escape)))
+        if (m_PlayerTurns && (Input.GetKeyDown(KeyCode.Escape) || Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) )
         {
             EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
             ClosePanels();

@@ -9,7 +9,7 @@ public class EntersFinalBoss : MonoBehaviour
         PlayerController player = aTrig.GetComponent<PlayerController>();
         if(player != null)
         {
-            //CombatManager.CallBossFigth();
+            GameManager.Instance.StartBoss();
         }
     }
 

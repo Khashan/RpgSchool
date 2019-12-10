@@ -8,15 +8,13 @@ public class PlayerController : MonoBehaviour
     private PlayerData m_Data;
     [SerializeField]
     private Rigidbody2D m_Rb;
+    [SerializeField]
+    private Animator m_Animator;
+
     private float m_Speed;
     private float m_Hp;
 
-    private float m_PercentageCompletion;
 
-    private bool m_IsMoving = false;
-
-    private Vector2 m_InitialPos;
-    private Vector2 m_WantedPos;
     private bool m_IsInCombat = false;
     private Vector2 m_Velocity;
 
@@ -47,12 +45,24 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_Rb = gameObject.GetComponent<Rigidbody2D>();
         m_Speed = m_Data.m_Speed;
         m_Hp = m_Data.m_Hp;
     }
 
     private void Update()
     {
+        if(m_Velocity.x == 0 && m_Velocity.y == 0)
+        {
+            m_Animator.ResetTrigger("Walk");
+            m_Animator.SetBool("isIdle", true);
+        }
+        else
+        {
+            m_Animator.SetTrigger("Walk");
+            m_Animator.SetBool("isIdle", false);
+        }
+        
         if(Input.GetKeyDown(KeyCode.K))
         {
             GameManager.Instance.StartBoss();
@@ -84,13 +94,6 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.E))
         {
             //Collect Potion put it on inventory
-        }
-    }
-    private void OnCollisionEnter2D(Collision2D aCol)
-    {
-        if(aCol.gameObject.layer == 10)
-        {
-            m_WantedPos = m_InitialPos;
         }
     }
 }

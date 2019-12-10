@@ -451,6 +451,17 @@ public class CombatController : MonoBehaviour
         return tAliveEnnemyList;
     }
 
+    private void SetFighterValues()
+    {
+        //Sets the remaining health/stats of all friendly fighters
+        //so it persists until the next combat
+
+        for(int i = 0 ; i < m_FriendlyList.Count; i++)
+        {
+
+        }
+    }
+
     private int CheckEnnemyTurn()
     {
         //verifies if the ennemy is dead

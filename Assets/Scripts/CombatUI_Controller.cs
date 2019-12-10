@@ -34,9 +34,9 @@ public class CombatUI_Controller : MonoBehaviour
     }
 
     [SerializeField]
-    private CustomWindow m_InventoryPanel;
+    private CombatInventoryPanelUI m_InventoryPanel;
     [SerializeField]
-    private CustomWindow m_SpellPanel;
+    private CombatSpellPanelUI m_SpellPanel;
 
     private int m_CurrentAlly = 0;
     private int m_CurrentEnemy = 0;
@@ -44,6 +44,7 @@ public class CombatUI_Controller : MonoBehaviour
     private int m_AlliesCount = 0;
 
     private bool m_PlayerTurns = true;
+    private BaseAbility m_Ability;
 
     private void Start()
     {
@@ -117,7 +118,35 @@ public class CombatUI_Controller : MonoBehaviour
         m_PlayerTurns = false;
         ActivatedEnemyButton(false);
         m_AllyFighters[m_CurrentAlly].m_Position.SetActive(false);
-        CombatManager.Instance.Attack(m_CurrentAlly, enemy);
+
+        if(m_Ability != null)
+        {
+            CastAbility();
+            m_Ability = null;
+        }
+        else
+        {
+            CombatManager.Instance.Attack(m_CurrentAlly, enemy);
+        }
+    }
+
+    private void CastAbility()
+    {
+        if(m_Ability is AttackAbility)
+        {
+            AttackAbility aa = (AttackAbility)m_Ability;
+            
+        }
+        else if(m_Ability is OffenseAbility)
+        {
+            OffenseAbility oa = (OffenseAbility)m_Ability;
+        }
+    }
+
+    public void UseAbility(BaseAbility aAbility)
+    {
+        ActivatedEnemyButton(true);
+        m_Ability = aAbility;
     }
 
     public void NextRound()
@@ -140,15 +169,6 @@ public class CombatUI_Controller : MonoBehaviour
         EnableCurrentPlayerIndicator();
         EventSystem.current.SetSelectedGameObject(m_FirstPos.gameObject);
     }
-
-    public void FriendlyDead(int aAllyIndex)
-    {
-        if (aAllyIndex < m_AlliesCount)
-        {
-            m_AllyFighters[aAllyIndex] = new FigtherData { m_Position = m_AllyFighters[aAllyIndex].m_Position, m_IsDead = true };
-        }
-    }
-
 
     public void EnemyDead(int aIndexEnemy)
     {
@@ -179,6 +199,7 @@ public class CombatUI_Controller : MonoBehaviour
 
     public void SpellButton()
     {
+        m_SpellPanel.LoadSpell(GameManager.Instance.Fighters[m_CurrentAlly]);
         m_SpellPanel.Open();
     }
     public void FleeButton()

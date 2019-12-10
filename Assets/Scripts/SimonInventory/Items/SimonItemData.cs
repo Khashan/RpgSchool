@@ -12,6 +12,13 @@ public abstract class SimonItemData : ScriptableObject
     }
 
     [SerializeField]
+    private Sprite m_Icon;
+    public Sprite Icon
+    {
+        get {return m_Icon;}
+    }
+
+    [SerializeField]
     private int m_MaxStackSize;
     public int StackSize
     {

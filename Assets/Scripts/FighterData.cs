@@ -1,8 +1,14 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+[System.Serializable]
 public struct FigherData
 {
+    public void UpdateData(int aHealth)
+    {
+        m_CurrentHealth = aHealth;
+    }
+
     [SerializeField]
     private string m_FighterName;
     public string Name

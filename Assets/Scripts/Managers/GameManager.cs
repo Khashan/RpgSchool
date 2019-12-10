@@ -3,10 +3,17 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
+    [SerializeField]
+    private List<FigherData> m_Fighters = new List<FigherData>();
+    public List<FigherData> Fighters
+    {
+        get { return m_Fighters; }
+    }
+
     private PlayerController m_Player;
     private float m_PlayerDistance = 0;
     [SerializeField]
-    private int m_Odds = 125;
+    private int m_Odds = 900;
 
     private KeyValuePair<string, Vector3> m_PlayerOldScenePosition;
     private KeyValuePair<string, Vector3> m_EmptyKeyValue = new KeyValuePair<string, Vector3>();
@@ -23,6 +30,23 @@ public class GameManager : Singleton<GameManager>
     }
     #endregion
 
+
+    public FigherData GetFighterByName(string aName)
+    {
+        for(int i = 0; i < m_Fighters.Count; i++)
+        {
+            if(m_Fighters[i].Name.ToLower().Equals(aName.ToLower()))
+            {
+                return m_Fighters[i];
+            }
+        }
+        
+        #if UNITY_EDITOR
+        Debug.LogWarning("Fighter name is not matching!");
+        #endif
+
+        return new FigherData();
+    }
 
     public Vector3 GetLastPlayerPosition()
     {

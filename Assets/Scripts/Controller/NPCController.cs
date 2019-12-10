@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NPCController : MonoBehaviour, IFighter
 {
-
     [SerializeField]
     private GameObject m_SelfPrefab;
 

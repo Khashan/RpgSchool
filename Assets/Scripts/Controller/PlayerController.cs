@@ -1,16 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using StateMachineT;
 
 public class PlayerController : MonoBehaviour
 {
+    protected enum State
+    {
+        Idle,
+        Run,
+        Attack,
+        COUNT
+    }
+
     [SerializeField]
     private PlayerData m_Data;
     [SerializeField]
     private Rigidbody2D m_Rb;
     [SerializeField]
     private Animator m_Animator;
+    [SerializeField]
+    private float m_DistanceTravelled = 0;
 
+    private const float ATTACK_TIME = 1f;
+    private float m_AttackTimer;
     private float m_Speed;
     private float m_Hp;
 
@@ -27,8 +40,8 @@ public class PlayerController : MonoBehaviour
         return m_IsInCombat;
     }
     
-    [SerializeField]
-    private float m_DistanceTravelled = 0;
+
+    protected StateMachine m_SM = new StateMachine();
 
     public void SetDistanceTravelled(int aDistance)
     {
@@ -37,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
     private void Awake()
     {
+        InitSM();
         GameManager.Instance.PlayerController(this);
 
         Vector3 lastPos = GameManager.Instance.GetLastPlayerPosition();
@@ -52,32 +66,70 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(m_Velocity.x == 0 && m_Velocity.y == 0)
-        {
-            m_Animator.ResetTrigger("Walk");
-            m_Animator.SetBool("isIdle", true);
-        }
-        else
+        m_SM.UpdateSM();
+    }
+
+    private void FixedUpdate()
+    {
+        m_SM.FixedUpdateSM();
+    }
+
+
+    #region StateMachine
+    protected virtual void InitSM()
+    {
+        m_SM.AddState((int)State.Idle);
+        m_SM.OnEnter((int)State.Idle, OnIdleEnter);
+        m_SM.OnUpdate((int)State.Idle, OnIdleUpdate);
+        m_SM.OnFixedUpdate((int)State.Idle, OnIdleFixedUpdate);
+        m_SM.OnExit((int)State.Idle, OnIdleExit);
+
+        m_SM.AddState((int)State.Attack);
+        m_SM.OnEnter((int)State.Attack, OnAttackEnter);
+        m_SM.OnUpdate((int)State.Attack, OnAttackUpdate);
+        
+        m_SM.AddState((int)State.Run);
+        m_SM.OnEnter((int)State.Run, OnRunEnter);
+        m_SM.OnUpdate((int)State.Run, OnRunUpdate);
+        m_SM.OnExit((int)State.Run, OnRunExit);
+
+        m_SM.Init((int)State.Idle);
+    }
+
+    private void ChangeState(State aState)
+    {
+        m_SM.ChangeState((int)aState);
+    }
+
+    #endregion
+
+    #region Idle State
+
+    private void OnIdleEnter()
+    {
+        m_Animator.ResetTrigger("Walk");
+        m_Animator.SetBool("isIdle", true);
+    }
+
+    protected virtual void OnIdleUpdate()
+    {
+        if(m_Velocity.x != 0 || m_Velocity.y != 0)
         {
             m_Animator.SetTrigger("Walk");
             m_Animator.SetBool("isIdle", false);
+            ChangeState(State.Run);
+            return;
         }
 
         if(Input.GetMouseButtonDown(0))
         {
-            m_Animator.SetTrigger("Walk");
-            m_Animator.SetTrigger("Attack");
+            Debug.Log("Enter click Attack");
+            ChangeState(State.Attack);
+            return;
         }
-        if(Input.GetMouseButtonUp(0))
-        {
-            m_Animator.ResetTrigger("Walk");
-            m_Animator.ResetTrigger("Attack");
-        }
-
+                
         if(!m_IsInCombat)
         {
-            CollectPotion();
-
             m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
             m_Velocity += (Vector2)transform.up * Input.GetAxisRaw("Vertical");
             m_Velocity *= m_Speed;
@@ -90,16 +142,89 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate()
+    private void OnIdleFixedUpdate()
+    {
+        Debug.Log("On Idle FixedUpdate");
+        m_Rb.velocity = m_Velocity;
+    }
+
+    private void OnIdleExit()
+    {
+        m_Animator.SetBool("isIdle", false);
+    }
+
+    #endregion
+
+    #region Attack State
+
+    private void OnAttackEnter()
+    {
+        Debug.Log("AttackEnters");
+        m_AttackTimer = ATTACK_TIME;
+        m_Animator.SetTrigger("Walk");
+        m_Animator.SetTrigger("Attack");
+    }
+
+    private void OnAttackUpdate()
+    {
+        m_AttackTimer -= Time.deltaTime;
+        if(m_AttackTimer <= 0f)
+        {
+            m_Animator.ResetTrigger("Attack");
+            m_Animator.ResetTrigger("Attack");
+            ChangeState(State.Idle);
+        }
+    }
+
+    #endregion
+  
+    #region Run State
+    private void OnRunEnter()
+    {
+        m_Animator.SetTrigger("Walk");
+        m_Animator.SetBool("isIdle", false);
+    }
+
+    protected virtual void OnRunUpdate()
+    {
+        if(m_Velocity.x == 0 && m_Velocity.y == 0)
+        {
+            m_Animator.ResetTrigger("Walk");
+            ChangeState(State.Idle);
+            return;
+        }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            ChangeState(State.Attack);
+            return;
+        }
+                
+        if(!m_IsInCombat)
+        {
+            m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
+            m_Velocity += (Vector2)transform.up * Input.GetAxisRaw("Vertical");
+            m_Velocity *= m_Speed;
+
+            if(m_Velocity != Vector2.zero)
+            {
+                m_DistanceTravelled += Time.deltaTime;
+                GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
+            }
+        }
+    }
+
+    private void OnRunFixedUpdate()
     {
         m_Rb.velocity = m_Velocity;
     }
 
-    private void CollectPotion()
+    private void OnRunExit()
     {
-        if(Input.GetKeyDown(KeyCode.E))
-        {
-            //Collect Potion put it on inventory
-        }
+        m_Animator.ResetTrigger("Walk");
     }
+
+    #endregion
 }
+
+

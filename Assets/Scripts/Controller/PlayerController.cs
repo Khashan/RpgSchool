@@ -29,10 +29,12 @@ public class PlayerController : MonoBehaviour
     private float m_Timer = 2f;
 
     private float m_InitialHp = 0;
-
+    private bool m_IsInInventory = false;
+    
     private const float TIMER_TO_RETURN_TO_GAMPLAY = 1;
     private bool m_IsInCombat = false;
     private Vector2 m_Velocity;
+    protected StateMachine m_SM = new StateMachine();
 
     public void SetBool(bool aBool)
     {
@@ -44,7 +46,6 @@ public class PlayerController : MonoBehaviour
     }
     
 
-    protected StateMachine m_SM = new StateMachine();
 
     public void SetDistanceTravelled(int aDistance)
     {
@@ -62,6 +63,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_Hp = (float)GameManager.Instance.GetFighterByName("Minotaur").Health;
         m_Rb = gameObject.GetComponent<Rigidbody2D>();
         m_Speed = m_Data.m_Speed;
         m_Hp = m_Data.m_Hp;
@@ -69,6 +71,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        
         m_SM.UpdateSM();
         if(m_Hp <=0)
         {
@@ -86,7 +89,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        m_SM.FixedUpdateSM();
+        m_Rb.velocity = m_Velocity;
     }
 
 
@@ -96,7 +99,6 @@ public class PlayerController : MonoBehaviour
         m_SM.AddState((int)State.Idle);
         m_SM.OnEnter((int)State.Idle, OnIdleEnter);
         m_SM.OnUpdate((int)State.Idle, OnIdleUpdate);
-        m_SM.OnFixedUpdate((int)State.Idle, OnIdleFixedUpdate);
         m_SM.OnExit((int)State.Idle, OnIdleExit);
 
         m_SM.AddState((int)State.Attack);
@@ -128,37 +130,19 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnIdleUpdate()
     {
-        if(m_Velocity.x != 0 || m_Velocity.y != 0)
+        if(m_IsInInventory == false)
         {
-            m_Animator.SetTrigger("Walk");
-            m_Animator.SetBool("isIdle", false);
-            ChangeState(State.Run);
-            return;
-        }
-
-        if(Input.GetMouseButtonDown(0))
-        {
-            ChangeState(State.Attack);
-            return;
-        }
-                
-        if(!m_IsInCombat)
-        {
-            m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
-            m_Velocity += (Vector2)transform.up * Input.GetAxisRaw("Vertical");
-            m_Velocity *= m_Speed;
-
-            if(m_Velocity != Vector2.zero)
+            if(m_Velocity.x != 0 || m_Velocity.y != 0)
             {
-                m_DistanceTravelled += Time.deltaTime;
-                GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
+                m_Animator.SetTrigger("Walk");
+                m_Animator.SetBool("isIdle", false);
+                ChangeState(State.Run);
+                return;
             }
+            UpdateVelocity();
         }
-    }
 
-    private void OnIdleFixedUpdate()
-    {
-        m_Rb.velocity = m_Velocity;
+        UpdateInputs();
     }
 
     private void OnIdleExit()
@@ -199,19 +183,29 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnRunUpdate()
     {
-        if(m_Velocity.x == 0 && m_Velocity.y == 0)
+        if(m_IsInInventory == false)
         {
-            m_Animator.ResetTrigger("Walk");
-            ChangeState(State.Idle);
-            return;
+            if(m_Velocity.x == 0 && m_Velocity.y == 0)
+            {
+                m_Animator.ResetTrigger("Walk");
+                ChangeState(State.Idle);
+                return;
+            }
+            UpdateVelocity();
         }
 
-        if(Input.GetMouseButtonDown(0))
-        {
-            ChangeState(State.Attack);
-            return;
-        }
-                
+        UpdateInputs();
+    }
+
+    private void OnRunExit()
+    {
+        m_Animator.ResetTrigger("Walk");
+    }
+
+    #endregion
+
+    private void UpdateVelocity()
+    {
         if(!m_IsInCombat)
         {
             m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
@@ -226,17 +220,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnRunFixedUpdate()
+    private void UpdateInputs()
     {
-        m_Rb.velocity = m_Velocity;
-    }
+        if(Input.GetMouseButtonDown(0))
+        {
+            ChangeState(State.Attack);
+            return;
+        }
 
-    private void OnRunExit()
-    {
-        m_Animator.ResetTrigger("Walk");
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            m_IsInInventory = !m_IsInInventory;
+        }
     }
-
-    #endregion
 }
 
 

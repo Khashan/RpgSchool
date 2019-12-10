@@ -549,10 +549,11 @@ public class CombatController : MonoBehaviour
         return 0;
     }
 
-    public void DamagingSpell(int aPos, int aDMG)
+    public void DamagingSpell(int aPos, int aDMG, GameObject aGO)
     {
         NPCController tEnnemy = m_EnnemyList[aPos].GetComponent<NPCController>();
         m_CurrentEnnemyAnim = m_EnnemyList[aPos].GetComponent<Animator>();
+        Instantiate(aGO, m_EnnemyIdlePositions[aPos], Quaternion.identity);
         tEnnemy.CurrentHP -= aDMG;
         CombatManager.Instance.ChangeLifeValue(tEnnemy, aPos);
         if(tEnnemy.isDead)
@@ -572,9 +573,10 @@ public class CombatController : MonoBehaviour
         ClearCurrentTurn();
     }
 
-    public void HealingSpell(int aPos, int aHeal)
+    public void HealingSpell(int aPos, int aHeal, GameObject aGO)
     {
         NPCController tAlly = m_FriendlyList[aPos].GetComponent<NPCController>();
+        Instantiate(aGO, m_FriendlyIdlePositions[aPos], Quaternion.identity);
         tAlly.CurrentHP += aHeal;
         m_isEnnemyTurn = true;
         ClearCurrentTurn();

@@ -14,6 +14,8 @@ public abstract class BaseAbility : ScriptableObject
     private int m_TurnCoolDown;
     [SerializeField]
     private GameObject m_AbilityPrefab;
+    [SerializeField]
+    private AudioClip m_SFX;
 
     [Header("Effects")]
     [MonoScript]

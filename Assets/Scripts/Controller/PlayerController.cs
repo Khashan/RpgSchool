@@ -26,8 +26,11 @@ public class PlayerController : MonoBehaviour
     private float m_AttackTimer;
     private float m_Speed;
     private float m_Hp;
+    private float m_Timer = 2f;
 
+    private float m_InitialHp = 0;
 
+    private const float TIMER_TO_RETURN_TO_GAMPLAY = 1;
     private bool m_IsInCombat = false;
     private Vector2 m_Velocity;
 
@@ -52,9 +55,9 @@ public class PlayerController : MonoBehaviour
     {
         InitSM();
         GameManager.Instance.PlayerController(this);
-
         Vector3 lastPos = GameManager.Instance.GetLastPlayerPosition();
         transform.position = lastPos != Vector3.zero ? lastPos : transform.position; 
+        m_InitialHp = m_Hp;
     }
 
     private void Start()
@@ -67,6 +70,18 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         m_SM.UpdateSM();
+        if(m_Hp <=0)
+        {
+            HUDManager.Instance.ActivateGameOverHUD(true);
+            m_Timer -= Time.deltaTime;
+            if(m_Timer <= 0)
+            {
+                LevelManager.Instance.ChangeLevel(LevelManager.Instance.LastScene,true,1);
+                HUDManager.Instance.ActivateGameOverHUD(false);
+                m_Hp = m_InitialHp;
+                m_Timer = TIMER_TO_RETURN_TO_GAMPLAY;
+            }
+        }
     }
 
     private void FixedUpdate()

@@ -6,10 +6,24 @@ public abstract class SimonItemData : ScriptableObject
 
     [SerializeField]
     private string m_ItemName;
+    public string ItemName
+    {
+        get { return m_ItemName; }
+    }
+
     [SerializeField]
     private int m_MaxStackSize;
+    public int StackSize
+    {
+        get {return m_MaxStackSize;}
+    }
+
     [SerializeField]
     private int m_Cost;
+    public int Cost
+    {
+        get { return m_Cost;}
+    }
 
     public abstract void Use(FighterData aFighter);
 }

@@ -79,6 +79,11 @@ namespace Anderson.CustomWindows
 
         public virtual void Close()
         {
+            if(!gameObject.activeSelf)
+            {
+                gameObject.SetActive(true);
+            }
+
             CancelTransition();
 
             m_IsOpen = false;
@@ -87,7 +92,11 @@ namespace Anderson.CustomWindows
 
         public virtual void Open()
         {
-            gameObject.SetActive(true);
+            if(!gameObject.activeSelf)
+            {
+                gameObject.SetActive(true);
+            }
+
             CancelTransition();
 
             m_IsOpen = true;

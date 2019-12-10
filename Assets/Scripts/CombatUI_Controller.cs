@@ -5,6 +5,11 @@ using UnityEngine.EventSystems;
 
 public class CombatUI_Controller : MonoBehaviour
 {
+    public struct Spell
+    {
+        public string m_Name;
+    }
+
     [System.Serializable]
     private struct FigtherData
     {

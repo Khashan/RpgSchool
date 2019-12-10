@@ -9,16 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1451dcbf3cee842a4c1820e52de4dc, type: 3}
-  m_Name: SlowHealing
+  m_Script: {fileID: 11500000, guid: 908cbb805fda8f347831058c9ba1a200, type: 3}
+  m_Name: Ignite
   m_EditorClassIdentifier: 
-  m_ManaCost: 10
-  m_TurnCoolDown: 3
+  m_SpellName: Ignite
+  m_ManaCost: 0
+  m_TurnCoolDown: 0
   m_AbilityPrefab: {fileID: 0}
-  m_EffectScript: HealingEffect
+  m_SFX: {fileID: 0}
+  m_EffectScript: IgniteEffect
   m_EffectLifeSpan: 3
-  m_EffectPower: 5
-  m_Selection: 0
-  m_AvailableTargets: 2
-  m_OffenseType: 0
-  m_AbilityHealFirstEffect: 0
+  m_EffectPower: 2
+  m_AttackType: 1
+  m_AttackTarget: 0
+  m_AbilityFirstDamage: 5

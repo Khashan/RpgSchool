@@ -9,16 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c1451dcbf3cee842a4c1820e52de4dc, type: 3}
-  m_Name: TurtleShield
+  m_Script: {fileID: 11500000, guid: 908cbb805fda8f347831058c9ba1a200, type: 3}
+  m_Name: Poison
   m_EditorClassIdentifier: 
-  m_ManaCost: 2
-  m_TurnCoolDown: 3
+  m_SpellName: Poison
+  m_ManaCost: 0
+  m_TurnCoolDown: 0
   m_AbilityPrefab: {fileID: 0}
-  m_EffectScript: 
-  m_EffectLifeSpan: 0
-  m_EffectPower: 0
-  m_Selection: 0
-  m_AvailableTargets: 2
-  m_OffenseType: 1
-  m_AbilityFirstEffect: 25
+  m_SFX: {fileID: 0}
+  m_EffectScript: PoisonEffect
+  m_EffectLifeSpan: 5
+  m_EffectPower: 4
+  m_AttackType: 0
+  m_AttackTarget: 0
+  m_AbilityFirstDamage: 10

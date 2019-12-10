@@ -6440,7 +6440,7 @@ MonoBehaviour:
     m_ShowOnAwake: 0
     m_IsMovable: 0
     m_BlockRaycast: 1
-    m_AlwaysUpdating: 1
+    m_AlwaysUpdating: 0
     m_WindowTransition: 1
   m_WindowCanvasGroup: {fileID: 1402828013}
   m_CloseWindow: {fileID: 0}
@@ -11238,7 +11238,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 8.0998535, y: -465.8999}
+  m_AnchoredPosition: {x: 8.0998535, y: -465.89978}
   m_SizeDelta: {x: -1095.2, y: -895.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7692418961051996198
@@ -13292,8 +13292,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a08f7029064a6f24f8ebce5a9c62cd9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ShopWindow: {fileID: 0}
-  m_ActionMenu: {fileID: 0}
+  m_ShopWindow: {fileID: 6472361363300226792}
   m_NavigationMenu: {fileID: 1266064641}
   m_Inventory: {fileID: 1402828012}
 --- !u!1 &6472361363787304413

@@ -26,7 +26,6 @@ public class InventoryUI : CustomWindow
 
     protected override void OnUpdate()
     {
-        Debug.Log("Hello!");
         if (CanUpdateInputs())
         {
             UpdateInputs();

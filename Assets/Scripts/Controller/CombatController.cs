@@ -393,6 +393,24 @@ public class CombatController : MonoBehaviour
         }
     }
 
+    public void UsePotion(int aTargetPos, int aHealAmmount)
+    {
+        m_CurrentFriendlyStats = m_FriendlyList[aTargetPos].GetComponent<NPCController>();
+        m_CurrentFriendlyStats.CurrentHP += aHealAmmount;
+        if(m_CurrentFriendlyStats.MaxHP < m_CurrentFriendlyStats.CurrentHP)
+        {
+            m_CurrentFriendlyStats.CurrentHP = m_CurrentFriendlyStats.MaxHP;
+        }
+        m_isEnnemyTurn = true;
+        ClearCurrentTurn();
+    }
+
+    public void EndFriendlyTurn()
+    {
+        m_isEnnemyTurn = true;
+        ClearCurrentTurn();
+    }
+
     private void SetEnnemyCombat()
     {
         //Same as the friendly version

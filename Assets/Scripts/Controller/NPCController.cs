@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NPCController : MonoBehaviour
+public class NPCController : MonoBehaviour, IFighter
 {
 
     [SerializeField]
@@ -75,5 +75,40 @@ public class NPCController : MonoBehaviour
     {
         get {return m_IsDead;}
     }
+
+
+    public void ReceiveDamage(int aDamage)
+    {
+        m_CurrentHP -= aDamage;
+        if(m_CurrentHP <= 0)
+        {
+            m_IsDead = true;
+        }
+    }
+
+    public void ReceiveHeal(int aHeal)
+    {
+        m_CurrentHP += aHeal;
+        if(m_CurrentHP >= m_MaxHP)
+        {
+            m_CurrentHP = m_MaxHP;
+        }
+    }
+
+    public void AddArmor(int aArmor)
+    {
+
+    }
+
+    public void Cleanse()
+    {
+
+    }
+
+    public GameObject GetFighterGameObject()
+    {
+        return this.gameObject;
+    }
+
 
 }

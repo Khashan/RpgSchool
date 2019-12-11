@@ -397,8 +397,8 @@ public class CombatController : MonoBehaviour
         {
             m_CurrentFriendlyStats.CurrentHP = m_CurrentFriendlyStats.MaxHP;
         }
-        m_isEnnemyTurn = true;
-        ClearCurrentTurn();
+        CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, aTargetPos + 1);
+        StartCoroutine(SpellCastWait(1f));
     }
 
     public void EndFriendlyTurn()

@@ -553,33 +553,31 @@ public class CombatController : MonoBehaviour
     {
         NPCController tEnnemy = m_EnnemyList[aPos].GetComponent<NPCController>();
         m_CurrentEnnemyAnim = m_EnnemyList[aPos].GetComponent<Animator>();
-        Instantiate(aGO, m_EnnemyIdlePositions[aPos], Quaternion.identity);
+        Instantiate(aGO, m_EnnemyIdlePositions[aPos] + new Vector2(0.2f, 0.5f), aGO.transform.rotation);
         tEnnemy.CurrentHP -= aDMG;
-        CombatManager.Instance.ChangeLifeValue(tEnnemy, aPos);
+        CombatManager.Instance.ChangeLifeValue(tEnnemy, aPos + 4);
         if(tEnnemy.isDead)
         {
             m_CurrentEnnemyAnim.SetBool("isDead", true);
-            HUDManager.Instance.combatUI.EnemyDead(m_CurrentEnnemyAttacked - 4);
+            HUDManager.Instance.combatUI.EnemyDead(aPos);
             m_AliveEnnemies--;
             if(m_AliveEnnemies == 0)
             {
                 SetFighterValues();
-                string LastScene = LevelManager.Instance.LastScene;
-                StartCoroutine(Wait(2f));
-                LevelManager.Instance.ChangeLevel(LastScene, true, 1);
+                StartCoroutine(WaitForGameplay(1f));
             }
         }
-        m_isEnnemyTurn = true;
-        ClearCurrentTurn();
+        StartCoroutine(SpellCastWait(1f));
+        
     }
 
     public void HealingSpell(int aPos, int aHeal, GameObject aGO)
     {
         NPCController tAlly = m_FriendlyList[aPos].GetComponent<NPCController>();
-        Instantiate(aGO, m_FriendlyIdlePositions[aPos], Quaternion.identity);
+        Instantiate(aGO, m_FriendlyIdlePositions[aPos] + new Vector2(-0.2f, 0.5f), Quaternion.identity);
         tAlly.CurrentHP += aHeal;
-        m_isEnnemyTurn = true;
-        ClearCurrentTurn();
+        CombatManager.Instance.ChangeLifeValue(tAlly, aPos + 1);
+        StartCoroutine(SpellCastWait(1f));
     }
 
     private int RandomizeEnnemyAttack()
@@ -640,7 +638,7 @@ public class CombatController : MonoBehaviour
         }
     }
 
-    public IEnumerator Wait(float aSecs)
+    public IEnumerator SpellCastWait(float aSecs)
     {
         //Waits for a set amount of time before the friendly unit runs back
         //to its original position
@@ -648,7 +646,35 @@ public class CombatController : MonoBehaviour
         {
             yield return new WaitForSeconds(aSecs);
             StopAllCoroutines();
-            m_Coroutine = null;
+            ClearCurrentTurn();
+            m_isEnnemyTurn = true;
+            m_IsFirstTurn = false;
+        }
+        
+    }
+
+    public IEnumerator WaitForMainMenu(float aSecs)
+    {
+        //Waits for a set amount of time before the friendly unit runs back
+        //to its original position
+        while(true)
+        {
+            yield return new WaitForSeconds(aSecs);
+            LevelManager.Instance.ChangeLevel("MainMenu", true, 1f);
+            StopAllCoroutines();
+        }
+    }
+
+    public IEnumerator WaitForGameplay(float aSecs)
+    {
+        //Waits for a set amount of time before the friendly unit runs back
+        //to its original position
+        while(true)
+        {
+            yield return new WaitForSeconds(aSecs);
+            Debug.Log("SupposedToChangeLevel");
+            LevelManager.Instance.ChangeLevel(LevelManager.Instance.LastScene, true, 1f);
+            StopAllCoroutines();
         }
     }
 
@@ -681,10 +707,13 @@ public class CombatController : MonoBehaviour
             m_AliveEnnemies--;
             if(m_AliveEnnemies == 0)
             {
+                if(m_IsBossFight)
+                {
+                    ResetFighterValues();
+                    StartCoroutine(WaitForMainMenu(2f));
+                }
                 SetFighterValues();
-                string LastScene = LevelManager.Instance.LastScene;
-                StartCoroutine(Wait(2f));
-                LevelManager.Instance.ChangeLevel(LastScene, true, 1);
+                StartCoroutine(WaitForGameplay(2f));
             }
         }
        //Animator EAnim = m_CurrentEnnemyGO.GetComponent<Animator>();
@@ -704,9 +733,7 @@ public class CombatController : MonoBehaviour
             if(m_AliveFriendlies == 0)
             {
                 ResetFighterValues();
-                StartCoroutine(Wait(2f));
-                string LastScene = LevelManager.Instance.LastScene;
-                LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+                StartCoroutine(WaitForMainMenu(2f));
             }
         }
         //m_CurrentFriendlyAnim.SetTrigger("TakeDamage");
@@ -729,7 +756,7 @@ public class CombatController : MonoBehaviour
                     m_CurrentFriendlyAnim = m_FriendlyList[i].GetComponent<Animator>();
                     m_CurrentFriendlyStats.CurrentHP -= tDamage;
                     m_CurrentFriendlyAttacked = i;
-                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked);
+                    CombatManager.Instance.ChangeLifeValue(m_CurrentFriendlyStats, m_CurrentFriendlyAttacked + 1);
                     if(m_CurrentFriendlyStats.isDead == true)
                     {
                         m_CurrentFriendlyAnim.SetBool("isDead", true);
@@ -737,9 +764,7 @@ public class CombatController : MonoBehaviour
                         if(m_AliveFriendlies == 0)
                         {
                             ResetFighterValues();
-                            string LastScene = LevelManager.Instance.LastScene;
-                            StartCoroutine(Wait(2f));
-                            LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+                            StartCoroutine(WaitForMainMenu(2f));
                         }
                     }
                     m_CurrentEnnemyAnim.SetTrigger("Attack");
@@ -753,7 +778,7 @@ public class CombatController : MonoBehaviour
                 int tHealAmmount = tChosenSpell.m_Damage;
                 m_CurrentEnnemyStats.CurrentHP += tHealAmmount;
                 m_CurrentEnnemyAnim.SetBool("isIdle", true);
-                CombatManager.Instance.ChangeLifeValue(m_CurrentEnnemyStats, m_CurrentEnnemyAttacked);
+                CombatManager.Instance.ChangeLifeValue(m_CurrentEnnemyStats, 4);
                 Vector2 tDest = m_CurrentEnnemyGO.transform.position;
                 tDest.x -= 1;
                 Instantiate(tChosenSpell.m_SpellPrefab, tDest, Quaternion.identity);
@@ -772,9 +797,7 @@ public class CombatController : MonoBehaviour
                     if(m_AliveFriendlies == 0)
                     {
                         ResetFighterValues();
-                        string LastScene = LevelManager.Instance.LastScene;
-                        StartCoroutine(Wait(2f));
-                        LevelManager.Instance.ChangeLevel("MainMenu", true, 3);
+                        StartCoroutine(WaitForMainMenu(2f));
                     }
                 }
                 Vector2 tDest = m_CurrentEnnemyGO.transform.position + new Vector3(0,-0.5f);

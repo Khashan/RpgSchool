@@ -63,6 +63,10 @@ public class NPCController : MonoBehaviour, IFighter
             {
                 m_IsDead = true;
             }
+            else if(m_CurrentHP > m_MaxHP)
+            {
+                m_CurrentHP = m_MaxHP;
+            }
             else
             {
                 m_IsDead = false;

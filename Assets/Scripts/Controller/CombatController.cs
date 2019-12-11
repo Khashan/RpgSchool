@@ -710,10 +710,10 @@ public class CombatController : MonoBehaviour
                 if(m_IsBossFight)
                 {
                     ResetFighterValues();
-                    StartCoroutine(WaitForMainMenu(2f));
+                    LevelManager.Instance.ChangeLevel("MainMenu", true, 1f);
                 }
                 SetFighterValues();
-                StartCoroutine(WaitForGameplay(2f));
+                LevelManager.Instance.ChangeLevel(LevelManager.Instance.LastScene, true, 1f);
             }
         }
        //Animator EAnim = m_CurrentEnnemyGO.GetComponent<Animator>();

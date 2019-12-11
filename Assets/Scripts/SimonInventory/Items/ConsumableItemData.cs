@@ -13,6 +13,10 @@ public class ConsumableItemData : SimonItemData
 
     [SerializeField]
     private int m_EffectAmount;
+    public int EffectAmount
+    {
+        get { return m_EffectAmount;}
+    }
 
     public override void Use(FighterData aFigher)
     {

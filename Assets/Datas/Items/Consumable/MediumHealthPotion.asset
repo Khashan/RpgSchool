@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: MediumHealthPotion
   m_EditorClassIdentifier: 
   m_ItemName: Medium Health Potion
+  m_Icon: {fileID: 21300002, guid: 4a3ee551ca44eb244a07ba7f9912c476, type: 3}
   m_MaxStackSize: 10
   m_Cost: 150
   m_Type: 0

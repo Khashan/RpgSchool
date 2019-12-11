@@ -79,14 +79,25 @@ namespace Anderson.CustomWindows
 
         public virtual void Close()
         {
+
             CancelTransition();
 
             m_IsOpen = false;
             StartCoroutine(WaitForTransition());
+
+            if(GameManager.Instance != null && GameManager.Instance.Player != null)
+            {
+                GameManager.Instance.Player.m_IsWindowOpen = false;
+            }
         }
 
         public virtual void Open()
         {
+            if(GameManager.Instance != null && GameManager.Instance.Player != null)
+            {
+                GameManager.Instance.Player.m_IsWindowOpen = true;
+            }
+
             CancelTransition();
 
             m_IsOpen = true;

@@ -1,9 +1,5 @@
 ﻿using UnityEngine;
 
-public class CombatInventoryPanelUI : InventoryUI
+public class CombatInventoryPanelUI : CustomScrollerUI
 {
-    public override void LoadInventory()
-    {
-
-    }
 }

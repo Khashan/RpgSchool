@@ -6,13 +6,29 @@ public class InventoryUI : CustomScrollerUI
     [SerializeField]
     private ItemUI m_ItemUIPrefab;
 
-    public virtual void LoadInventory()
+    public void LoadInventory()
     {
+        ClearContainer();
+
+        for(int i = 0; i < SimonInventoryManager.Instance.Items.Count; i++)
+        {
+            SimonInventoryManager.Item item = SimonInventoryManager.Instance.Items[i];
+            ItemUI ui = Instantiate(m_ItemUIPrefab, m_Container);
+            ui.InitItemUI(item);
+        }
+    }
+
+    private void ClearContainer()
+    {
+        for(int i = 0; i < m_Container.childCount; i++)
+        {
+            Destroy(m_Container.GetChild(i).gameObject);
+        }
     }
 
     public override void Open()
     {
-        base.Open();
         LoadInventory();
+        base.Open();
     }
 }

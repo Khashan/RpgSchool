@@ -29,12 +29,13 @@ public class PlayerController : MonoBehaviour
     private float m_Timer = 2f;
 
     private float m_InitialHp = 0;
-    private bool m_IsInInventory = false;
-    
+
     private const float TIMER_TO_RETURN_TO_GAMPLAY = 1;
     private bool m_IsInCombat = false;
     private Vector2 m_Velocity;
     protected StateMachine m_SM = new StateMachine();
+
+    public bool m_IsWindowOpen = false;
 
     public void SetBool(bool aBool)
     {
@@ -44,7 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         return m_IsInCombat;
     }
-    
+
 
 
     public void SetDistanceTravelled(int aDistance)
@@ -55,9 +56,9 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         InitSM();
-        GameManager.Instance.PlayerController(this);
+        GameManager.Instance.Player = this;
         Vector3 lastPos = GameManager.Instance.GetLastPlayerPosition();
-        transform.position = lastPos != Vector3.zero ? lastPos : transform.position; 
+        transform.position = lastPos != Vector3.zero ? lastPos : transform.position;
         m_InitialHp = m_Hp;
     }
 
@@ -71,15 +72,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        
+
         m_SM.UpdateSM();
-        if(m_Hp <=0)
+        if (m_Hp <= 0)
         {
             HUDManager.Instance.ActivateGameOverHUD(true);
             m_Timer -= Time.deltaTime;
-            if(m_Timer <= 0)
+            if (m_Timer <= 0)
             {
-                LevelManager.Instance.ChangeLevel(LevelManager.Instance.LastScene,true,1);
+                LevelManager.Instance.ChangeLevel(LevelManager.Instance.LastScene, true, 1);
                 HUDManager.Instance.ActivateGameOverHUD(false);
                 m_Hp = m_InitialHp;
                 m_Timer = TIMER_TO_RETURN_TO_GAMPLAY;
@@ -89,7 +90,14 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        m_Rb.velocity = m_Velocity;
+        if (!m_IsWindowOpen)
+        {
+            m_Rb.velocity = m_Velocity;
+        }
+        else
+        {
+            m_Rb.velocity = Vector3.zero;
+        }
     }
 
 
@@ -104,7 +112,7 @@ public class PlayerController : MonoBehaviour
         m_SM.AddState((int)State.Attack);
         m_SM.OnEnter((int)State.Attack, OnAttackEnter);
         m_SM.OnUpdate((int)State.Attack, OnAttackUpdate);
-        
+
         m_SM.AddState((int)State.Run);
         m_SM.OnEnter((int)State.Run, OnRunEnter);
         m_SM.OnUpdate((int)State.Run, OnRunUpdate);
@@ -130,17 +138,19 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnIdleUpdate()
     {
-        if(m_IsInInventory == false)
+        if (m_IsWindowOpen)
         {
-            if(m_Velocity.x != 0 || m_Velocity.y != 0)
-            {
-                m_Animator.SetTrigger("Walk");
-                m_Animator.SetBool("isIdle", false);
-                ChangeState(State.Run);
-                return;
-            }
-            UpdateVelocity();
+            return;
         }
+
+        if (m_Velocity.x != 0 || m_Velocity.y != 0)
+        {
+            m_Animator.SetTrigger("Walk");
+            m_Animator.SetBool("isIdle", false);
+            ChangeState(State.Run);
+            return;
+        }
+        UpdateVelocity();
 
         UpdateInputs();
     }
@@ -164,7 +174,7 @@ public class PlayerController : MonoBehaviour
     private void OnAttackUpdate()
     {
         m_AttackTimer -= Time.deltaTime;
-        if(m_AttackTimer <= 0f)
+        if (m_AttackTimer <= 0f)
         {
             m_Animator.ResetTrigger("Attack");
             m_Animator.ResetTrigger("Attack");
@@ -173,7 +183,7 @@ public class PlayerController : MonoBehaviour
     }
 
     #endregion
-  
+
     #region Run State
     private void OnRunEnter()
     {
@@ -183,16 +193,13 @@ public class PlayerController : MonoBehaviour
 
     protected virtual void OnRunUpdate()
     {
-        if(m_IsInInventory == false)
+        if (m_Velocity.x == 0 && m_Velocity.y == 0)
         {
-            if(m_Velocity.x == 0 && m_Velocity.y == 0)
-            {
-                m_Animator.ResetTrigger("Walk");
-                ChangeState(State.Idle);
-                return;
-            }
-            UpdateVelocity();
+            m_Animator.ResetTrigger("Walk");
+            ChangeState(State.Idle);
+            return;
         }
+        UpdateVelocity();
 
         UpdateInputs();
     }
@@ -206,13 +213,18 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateVelocity()
     {
-        if(!m_IsInCombat)
+        if(m_IsWindowOpen)
+        {
+            return;
+        }
+
+        if (!m_IsInCombat)
         {
             m_Velocity = transform.right * Input.GetAxisRaw("Horizontal");
             m_Velocity += (Vector2)transform.up * Input.GetAxisRaw("Vertical");
             m_Velocity *= m_Speed;
 
-            if(m_Velocity != Vector2.zero)
+            if (m_Velocity != Vector2.zero)
             {
                 m_DistanceTravelled += Time.deltaTime;
                 GameManager.Instance.GetPlayerDistance(m_DistanceTravelled);
@@ -222,15 +234,10 @@ public class PlayerController : MonoBehaviour
 
     private void UpdateInputs()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             ChangeState(State.Attack);
             return;
-        }
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            m_IsInInventory = !m_IsInInventory;
         }
     }
 }

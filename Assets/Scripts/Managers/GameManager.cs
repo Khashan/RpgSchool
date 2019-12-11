@@ -11,24 +11,18 @@ public class GameManager : Singleton<GameManager>
     }
 
     private PlayerController m_Player;
+    public PlayerController Player
+    {
+        get{return m_Player;}
+        set{m_Player = value;}
+    }
+
     private float m_PlayerDistance = 0;
     [SerializeField]
     private int m_Odds = 900;
 
     private KeyValuePair<string, Vector3> m_PlayerOldScenePosition;
     private KeyValuePair<string, Vector3> m_EmptyKeyValue = new KeyValuePair<string, Vector3>();
-
-    #region Player's functions Access
-    public void PlayerController(PlayerController aPlayer)
-    {
-        m_Player = aPlayer;
-    }
-
-    private PlayerController Player
-    {
-        get { return m_Player; }
-    }
-    #endregion
 
     public void UpdateFighterData(string aName, int aHealth)
     {

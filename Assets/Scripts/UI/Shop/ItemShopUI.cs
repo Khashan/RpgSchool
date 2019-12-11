@@ -7,15 +7,15 @@ using UnityEngine.UI;
 public class ItemShopUI : MonoBehaviour
 {
     [SerializeField]
+    private Image m_Icon;
+    [SerializeField]
     private TextMeshProUGUI m_TextName;
     [SerializeField]
-    private Sprite m_Icon;
+    private TextMeshProUGUI m_TextCost;
     [SerializeField]
     private Button m_Btn;
-    [SerializeField]
 
     private SimonItemData m_Item;
-    private FighterData m_Caster;
 
     private void Start()
     {
@@ -27,10 +27,11 @@ public class ItemShopUI : MonoBehaviour
         SimonInventoryManager.Instance.Buy(m_Item);
     }
 
-    public void InitSpellUI(int aId, SimonItemData aItem, FighterData aFighter)
+    public void InitItemShopUI(SimonItemData aItem)
     {
-        m_TextName.name = aItem.ItemName;
+        m_TextName.text = aItem.ItemName;
+        m_Icon.sprite = aItem.Icon;
+        m_TextCost.text = aItem.Cost + "";
         m_Item = aItem;
-        m_Caster = aFighter;
     }
 }

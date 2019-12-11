@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SmallHealthPotion
   m_EditorClassIdentifier: 
   m_ItemName: Small Health Potions
+  m_Icon: {fileID: 21300000, guid: 4a3ee551ca44eb244a07ba7f9912c476, type: 3}
   m_MaxStackSize: 10
   m_Cost: 100
   m_Type: 0

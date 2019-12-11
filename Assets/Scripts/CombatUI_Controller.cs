@@ -165,6 +165,19 @@ public class CombatUI_Controller : MonoBehaviour
         m_Ability = aAbility;
     }
 
+    public void UsePotion(SimonItemData aItem)
+    {
+        if(aItem as ConsumableItemData)
+        {
+            m_PlayerTurns = false;
+            m_SafetyLoop = 0;
+            ActivatedEnemyButton(false);
+            m_AllyFighters[m_CurrentAlly].m_Position.SetActive(false);
+            ConsumableItemData cons = (ConsumableItemData)aItem;
+            CombatManager.Instance.UsePotion(m_CurrentAlly, cons.EffectAmount);
+        }
+    }
+
     public void NextRound()
     {
         m_PlayerTurns = true;
